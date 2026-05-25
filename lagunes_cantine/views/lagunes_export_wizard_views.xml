@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Wizard export commandes -->
+    <record id="view_lagunes_export_wizard_form" model="ir.ui.view">
+        <field name="name">lagunes.export.wizard.form</field>
+        <field name="model">lagunes.export.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Exporter les commandes">
+                <sheet>
+                    <group string="Filtres d'export">
+                        <field name="entreprise_id" options="{'no_create': True}" required="1"/>
+                        <field name="date_debut" widget="date" required="1"/>
+                        <field name="date_fin" widget="date" required="1"/>
+                    </group>
+                    <group string="Résumé">
+                        <field name="nb_commandes" readonly="1"/>
+                        <field name="montant_total" readonly="1" widget="monetary"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_export_excel" type="object"
+                            string="Exporter Excel" class="oe_highlight"
+                            icon="fa-file-excel-o"/>
+                    <button name="action_export_pdf" type="object"
+                            string="Exporter / Imprimer PDF" class="btn-primary"
+                            icon="fa-file-pdf-o"/>
+                    <button string="Fermer" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action pour ouvrir le wizard -->
+    <record id="action_lagunes_export_wizard" model="ir.actions.act_window">
+        <field name="name">Exporter les commandes</field>
+        <field name="res_model">lagunes.export.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- NOTE : le menuitem est défini dans lagunes_menus.xml -->
+
+</odoo>

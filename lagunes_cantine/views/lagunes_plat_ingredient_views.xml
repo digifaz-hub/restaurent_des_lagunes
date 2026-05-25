@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Vue formulaire pour lagunes.plat.ingredient -->
+    <record id="view_plat_ingredient_form" model="ir.ui.view">
+        <field name="name">lagunes.plat.ingredient.form</field>
+        <field name="model">lagunes.plat.ingredient</field>
+        <field name="arch" type="xml">
+            <form string="Ingrédient" class="o_lagunes_view">
+                <sheet>
+                    <group>
+                        <group string="Article du marché">
+                            <field name="market_article_id" options="{'no_create': True}"/>
+                            <field name="unit_id" options="{'no_create': True}"/>
+                        </group>
+                        <group string="Quantité">
+                            <field name="quantity"/>
+                            <field name="is_quantifiable" widget="boolean"
+                                   help="Déduire automatiquement du stock?"/>
+                        </group>
+                    </group>
+                    <group string="Notes">
+                        <field name="notes" nolabel="1" placeholder="Notes sur l'utilisation..."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vue liste pour lagunes.plat.ingredient (affichage dans plat) -->
+    <record id="view_plat_ingredient_inline_list" model="ir.ui.view">
+        <field name="name">lagunes.plat.ingredient.inline.list</field>
+        <field name="model">lagunes.plat.ingredient</field>
+        <field name="arch" type="xml">
+            <list editable="bottom" string="Ingrédients">
+                <field name="sequence" widget="handle"/>
+                <field name="market_article_id" options="{'no_create': True}"/>
+                <field name="quantity"/>
+                <field name="unit_id" options="{'no_create': True}"/>
+                <field name="is_quantifiable" widget="boolean"/>
+                <field name="notes" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+</odoo>

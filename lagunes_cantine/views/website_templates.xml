@@ -1,0 +1,611 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Template : Page d'accueil cantine -->
+    <template id="cantine_home" name="Accueil Cantine">
+        <t t-call="website.layout">
+            <t t-set="title">Ma Cantine — Restaurant des Lagunes</t>
+            <t t-set="meta_description">Accédez à votre espace cantine d'entreprise. Consultez le menu du jour et passez commande en quelques clics.</t>
+            <div id="wrap" class="lagunes-frontend">
+                
+                <div class="container py-5 mb-5">
+                    <div class="row justify-content-center">
+                        <div class="col-lg-8">
+                            <div class="glass-card shadow-2xl p-5 border-0 rounded-5 backdrop-blur-xl animate__animated animate__zoomIn">
+                                <div class="text-center mb-5">
+                                    <h2 class="display-5 fw-bold gradient-text mb-2">Espace MyCantine</h2>
+                                    <p class="text-muted fs-5">Entrez vos accès pour découvrir le menu et commander.</p>
+                                </div>
+
+                                    <form id="accessForm" class="needs-validation" novalidate="">
+
+                                        <!-- Étape 1 : Code entreprise -->
+                                        <div id="step1">
+                                            <div class="mb-4">
+                                                <label for="access_code" class="form-label fw-bold">
+                                                    Code entreprise
+                                                </label>
+                                                <input type="password"
+                                                       class="form-control form-control-lg"
+                                                       id="access_code"
+                                                       name="access_code"
+                                                       placeholder="Entrez le code d'accès"/>
+                                            </div>
+                                            <button type="submit"
+                                                    class="btn btn-primary btn-lg w-100 py-3">
+                                                <i class="fa fa-sign-in me-2" title="Connexion"/>
+                                                Accéder au menu du jour
+                                            </button>
+                                        </div>
+
+                                        <!-- Étape 2 : Email et Mot de passe (si requis) -->
+                                        <div id="step2" class="d-none">
+                                            <div class="alert alert-info mb-3">
+                                                <i class="fa fa-info-circle me-2" title="Info"/>
+                                                Veuillez confirmer votre identité avec votre adresse email et mot de passe.
+                                            </div>
+                                            <div class="mb-4">
+                                                <label for="employee_email" class="form-label fw-bold">
+                                                    Votre adresse email
+                                                </label>
+                                                <input type="email"
+                                                       class="form-control form-control-lg"
+                                                       id="employee_email"
+                                                       placeholder="votre.email@exemple.com"/>
+                                                <div class="form-text">
+                                                    L'email que vous avez utilisé lors de votre inscription.
+                                                </div>
+                                            </div>
+                                            <div class="mb-4">
+                                                <label for="employee_password" class="form-label fw-bold">
+                                                    Votre mot de passe
+                                                </label>
+                                                <input type="password"
+                                                       class="form-control form-control-lg"
+                                                       id="employee_password"
+                                                       placeholder="Votre mot de passe"/>
+                                                <div class="form-text">
+                                                    Le mot de passe que vous avez choisi lors de l'inscription.
+                                                </div>
+                                            </div>
+                                            <div class="d-flex gap-2">
+                                                <button type="button" id="btnRetour"
+                                                        class="btn btn-outline-secondary btn-lg flex-shrink-0">
+                                                    <i class="fa fa-arrow-left" title="Retour"/>
+                                                </button>
+                                                <button type="button" id="btnValidateEmail"
+                                                        class="btn btn-primary btn-lg flex-grow-1 py-3">
+                                                    <i class="fa fa-sign-in me-2" title="Valider"/>
+                                                    Valider et accéder
+                                                </button>
+                                            </div>
+                                            <div class="mt-3 text-center border-top pt-3">
+                                                <button type="button" id="btnForgotPassword"
+                                                        class="btn btn-link text-muted">
+                                                    <i class="fa fa-key me-1" title="Mot de passe"/> Mot de passe oublié ?
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <!-- Étape 3 : Réinitialisation rapide du mot de passe -->
+                                        <div id="step3" class="d-none">
+                                            <div class="alert alert-info mb-3">
+                                                <i class="fa fa-key me-2" title="Réinitialisation"/> Réinitialiser votre mot de passe
+                                            </div>
+                                            <input type="hidden" id="hidden_access_code" value=""/>
+                                            <div class="mb-4">
+                                                <label for="forgot_email" class="form-label fw-bold">
+                                                    Votre adresse email
+                                                </label>
+                                                <input type="email"
+                                                       class="form-control form-control-lg"
+                                                       id="forgot_email"
+                                                       placeholder="votre.email@exemple.com"/>
+                                                <div class="form-text">
+                                                    Entrez l'email associé à votre compte pour recevoir un lien de réinitialisation.
+                                                </div>
+                                            </div>
+                                            <div class="d-flex gap-2">
+                                                <button type="button" id="btnRetourForgot"
+                                                        class="btn btn-outline-secondary btn-lg flex-shrink-0">
+                                                    <i class="fa fa-arrow-left" title="Retour"/>
+                                                </button>
+                                                <button type="button" id="btnSendResetLink"
+                                                        class="btn btn-primary btn-lg flex-grow-1 py-3">
+                                                    <i class="fa fa-paper-plane me-2" title="Envoyer"/> Envoyer le lien de réinitialisation
+                                                </button>
+                                            </div>
+                                        </div>
+
+                                        <div id="error_message" class="alert alert-danger d-none mt-3" role="alert"/>
+                                    </form>
+
+                                    <script type="text/javascript">
+                                        document.addEventListener('DOMContentLoaded', function() {
+                                            const form = document.getElementById('accessForm');
+                                            const step1 = document.getElementById('step1');
+                                            const step2 = document.getElementById('step2');
+                                            const step3 = document.getElementById('step3');
+                                            const errorDiv = document.getElementById('error_message');
+                                            let currentAccessCode = '';
+
+                                            function showError(msg) {
+                                                errorDiv.textContent = msg;
+                                                errorDiv.classList.remove('d-none');
+                                            }
+                                            function hideError() {
+                                                errorDiv.classList.add('d-none');
+                                            }
+
+                                            function doVerify(accessCode, email, motDePasse) {
+                                                return fetch('/cantine/verify_access', {
+                                                    method: 'POST',
+                                                    headers: {'Content-Type': 'application/json'},
+                                                    body: JSON.stringify({
+                                                        jsonrpc: '2.0',
+                                                        method: 'call',
+                                                        params: {
+                                                            access_code: accessCode,
+                                                            email: email || null,
+                                                            mot_de_passe: motDePasse || null
+                                                        }
+                                                    })
+                                                }).then(r => r.json());
+                                            }
+
+                                            // Étape 1 : submit du formulaire (code entreprise)
+                                            form.addEventListener('submit', function(e) {
+                                                e.preventDefault();
+                                                hideError();
+
+                                                const accessCode = document.getElementById('access_code').value || '';
+                                                currentAccessCode = accessCode;
+
+                                                doVerify(accessCode, null, null).then(data => {
+                                                    const result = data.result || {};
+                                                    if (result.success) {
+                                                        window.location.href = '/cantine/menu';
+                                                    } else if (result.require_email) {
+                                                        // Basculer vers étape 2
+                                                        step1.classList.add('d-none');
+                                                        step2.classList.remove('d-none');
+                                                        document.getElementById('employee_email').focus();
+                                                    } else {
+                                                        showError(result.message || 'Erreur d\'accès');
+                                                    }
+                                                }).catch(() => showError('Erreur de connexion'));
+                                            });
+
+                                            // Étape 2 : valider email + mot de passe
+                                            document.getElementById('btnValidateEmail').addEventListener('click', function() {
+                                                hideError();
+                                                const email = document.getElementById('employee_email').value.trim();
+                                                const password = document.getElementById('employee_password').value.trim();
+
+                                                if (!email) {
+                                                    showError('Veuillez entrer votre adresse email.');
+                                                    return;
+                                                }
+
+                                                doVerify(currentAccessCode, email, password).then(data => {
+                                                    const result = data.result || {};
+                                                    if (result.success) {
+                                                        window.location.href = '/cantine/menu';
+                                                    } else {
+                                                        showError(result.message || 'Email ou mot de passe incorrect.');
+                                                    }
+                                                }).catch(() => showError('Erreur de connexion'));
+                                            });
+
+                                            // Retour étape 1
+                                            document.getElementById('btnRetour').addEventListener('click', function() {
+                                                hideError();
+                                                step2.classList.add('d-none');
+                                                step1.classList.remove('d-none');
+                                            });
+
+                                            // Mot de passe oublié - aller à étape 3
+                                            document.getElementById('btnForgotPassword').addEventListener('click', function() {
+                                                hideError();
+                                                document.getElementById('hidden_access_code').value = currentAccessCode;
+                                                step2.classList.add('d-none');
+                                                step3.classList.remove('d-none');
+                                                document.getElementById('forgot_email').focus();
+                                            });
+
+                                            // Retour de l'étape 3 vers étape 2
+                                            document.getElementById('btnRetourForgot').addEventListener('click', function() {
+                                                hideError();
+                                                step3.classList.add('d-none');
+                                                step2.classList.remove('d-none');
+                                                document.getElementById('employee_email').focus();
+                                            });
+
+                                            // Envoyer le lien de réinitialisation
+                                            document.getElementById('btnSendResetLink').addEventListener('click', function() {
+                                                hideError();
+                                                const accessCode = document.getElementById('hidden_access_code').value;
+                                                const email = document.getElementById('forgot_email').value.trim();
+
+                                                if (!email) {
+                                                    showError('Veuillez entrer votre adresse email.');
+                                                    return;
+                                                }
+
+                                                fetch('/cantine/forgot-password/send', {
+                                                    method: 'POST',
+                                                    headers: {'Content-Type': 'application/json'},
+                                                    body: JSON.stringify({
+                                                        jsonrpc: '2.0',
+                                                        method: 'call',
+                                                        params: {
+                                                            access_code: accessCode,
+                                                            email: email
+                                                        }
+                                                    })
+                                                }).then(r => r.json())
+                                                 .then(data => {
+                                                    const result = data.result || {};
+                                                    if (result.success) {
+                                                        showError('[OK] ' + result.message);
+                                                        errorDiv.classList.remove('alert-danger');
+                                                        errorDiv.classList.add('alert-success');
+                                                        document.getElementById('forgot_email').value = '';
+                                                        setTimeout(() => {
+                                                            step3.classList.add('d-none');
+                                                            step2.classList.remove('d-none');
+                                                            errorDiv.classList.remove('alert-success');
+                                                            errorDiv.classList.add('alert-danger');
+                                                            hideError();
+                                                        }, 3000);
+                                                    } else {
+                                                        showError(result.message || 'Une erreur s\'est produite.');
+                                                    }
+                                                }).catch(() => showError('Erreur de connexion'));
+                                            });
+                                        });
+                                    </script>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+        </t>
+    </template>
+
+    <!-- Template : Page d'accès entreprise -->
+    <template id="cantine_access" name="Accès Entreprise">
+        <t t-call="website.layout">
+            <div id="wrap" class="lagunes-frontend">
+                <div class="container mt-5 mb-5">
+                    <div class="row">
+                        <div class="col-lg-6 offset-lg-3">
+                            <div class="card shadow">
+                                <div class="card-header bg-primary text-white">
+                                    <h4 class="mb-0">
+                                        <i class="fa fa-building" title="Entreprise"/> <t t-esc="entreprise.name"/>
+                                    </h4>
+                                </div>
+                                <div class="card-body p-4">
+                                    <h5 class="mb-4">Accès au menu</h5>
+                                    <p class="text-muted">Veuillez entrer vos informations pour accéder au menu du jour</p>
+
+                                    <form id="accessForm" class="needs-validation" novalidate="">
+                                        <div class="mb-3">
+                                            <label for="access_code" class="form-label">Code d'accès *</label>
+                                            <input type="password"
+                                                   class="form-control"
+                                                   id="access_code"
+                                                   name="access_code"
+                                                   required=""
+                                                   placeholder="Entrez le code d'accès"/>
+                                        </div>
+                                        <input type="hidden" id="entreprise_id" t-att-value="entreprise.id"/>
+                                        <div id="error_message" class="alert alert-danger d-none" role="alert"/>
+                                        <button type="submit" class="btn btn-primary btn-lg w-100">
+                                            <i class="fa fa-sign-in" title="Accéder"/> Accéder au menu
+                                        </button>
+                                    </form>
+
+                                    <div class="mt-3 text-center">
+                                        <a href="/cantine" class="text-muted">
+                                            <i class="fa fa-arrow-left" title="Retour"/> Retour
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Template : Page d'erreur -->
+    <template id="error_page" name="Page d'erreur">
+        <t t-call="website.layout">
+            <div id="wrap" class="lagunes-frontend">
+                <div class="container mt-5 mb-5">
+                    <div class="row">
+                        <div class="col-lg-6 offset-lg-3 text-center">
+                            <div class="alert alert-danger">
+                                <h3><i class="fa fa-exclamation-triangle" title="Erreur"/> Erreur</h3>
+                                <p t-esc="error_message"/>
+                            </div>
+                            <a href="/cantine" class="btn btn-primary">
+                                <i class="fa fa-home" title="Accueil"/> Retour à l'accueil
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+    <!-- Template : Mot de passe oublié ? -->
+    <template id="forgot_password" name="Mot de passe oublié">
+        <t t-call="website.layout">
+            <div id="wrap" class="lagunes-frontend">
+                <div class="container mt-5 mb-5">
+                    <div class="row">
+                        <div class="col-lg-6 offset-lg-3">
+                            <div class="card shadow">
+                                <div class="card-header card-header-lagunes text-white">
+                                    <h4 class="mb-0">
+                                        <i class="fa fa-key" title="Mot de passe"/> Réinitialiser votre mot de passe
+                                    </h4>
+                                </div>
+                                <div class="card-body p-5">
+                                    <p class="text-muted mb-4">
+                                        Entrez le code d'accès de votre entreprise et votre adresse email pour recevoir un lien de réinitialisation (valide 2 heures).
+                                    </p>
+
+                                    <form id="forgotPasswordForm" class="needs-validation" novalidate="">
+                                        <div class="mb-4">
+                                            <label for="access_code" class="form-label fw-bold">
+                                                Code entreprise *
+                                            </label>
+                                            <input type="password"
+                                                   class="form-control form-control-lg"
+                                                   id="access_code"
+                                                   name="access_code"
+                                                   required=""
+                                                   placeholder="Entrez le code d'accès de votre entreprise"/>
+                                        </div>
+
+                                        <div class="mb-4">
+                                            <label for="email" class="form-label fw-bold">
+                                                Adresse email *
+                                            </label>
+                                            <input type="email"
+                                                   class="form-control form-control-lg"
+                                                   id="email"
+                                                   name="email"
+                                                   required=""
+                                                   placeholder="votre.email@exemple.com"/>
+                                        </div>
+
+                                        <div id="error_message" class="alert alert-danger d-none" role="alert"/>
+                                        <div id="success_message" class="alert alert-success d-none" role="alert"/>
+
+                                        <button type="submit" class="btn btn-primary btn-lg w-100 py-3">
+                                            <i class="fa fa-paper-plane me-2" title="Envoyer"/> Envoyer le lien de réinitialisation
+                                        </button>
+                                    </form>
+
+                                    <div class="mt-4 text-center">
+                                        <a href="/cantine" class="text-muted">
+                                            <i class="fa fa-arrow-left" title="Retour"/> Retour à la connexion
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script type="text/javascript">
+                document.addEventListener('DOMContentLoaded', function() {
+                    const form = document.getElementById('forgotPasswordForm');
+                    const errorDiv = document.getElementById('error_message');
+                    const successDiv = document.getElementById('success_message');
+
+                    function showError(msg) {
+                        errorDiv.textContent = msg;
+                        errorDiv.classList.remove('d-none');
+                        successDiv.classList.add('d-none');
+                    }
+
+                    function showSuccess(msg) {
+                        successDiv.textContent = msg;
+                        successDiv.classList.remove('d-none');
+                        errorDiv.classList.add('d-none');
+                    }
+
+                    function hideMessages() {
+                        errorDiv.classList.add('d-none');
+                        successDiv.classList.add('d-none');
+                    }
+
+                    form.addEventListener('submit', function(e) {
+                        e.preventDefault();
+                        hideMessages();
+
+                        const accessCode = document.getElementById('access_code').value.trim();
+                        const email = document.getElementById('email').value.trim();
+
+                        if (!accessCode || !email) {
+                            showError('Veuillez remplir tous les champs.');
+                            return;
+                        }
+
+                        fetch('/cantine/forgot-password/send', {
+                            method: 'POST',
+                            headers: {'Content-Type': 'application/json'},
+                            body: JSON.stringify({
+                                jsonrpc: '2.0',
+                                method: 'call',
+                                params: {
+                                    access_code: accessCode,
+                                    email: email
+                                }
+                            })
+                        }).then(r => r.json())
+                         .then(data => {
+                            const result = data.result || {};
+                            if (result.success) {
+                                showSuccess(result.message);
+                                // Réinitialiser le formulaire
+                                form.reset();
+                            } else {
+                                showError(result.message || 'Une erreur s\'est produite.');
+                            }
+                        }).catch(() => showError('Erreur de connexion'));
+                    });
+                });
+            </script>
+        </t>
+    </template>
+
+    <!-- Template : Réinitialisation de mot de passe -->
+    <template id="reset_password" name="Réinitialisation du mot de passe">
+        <t t-call="website.layout">
+            <div id="wrap" class="lagunes-frontend">
+                <div class="container mt-5 mb-5">
+                    <div class="row">
+                        <div class="col-lg-6 offset-lg-3">
+                            <div class="card shadow">
+                                <div class="card-header card-header-lagunes text-white">
+                                    <h4 class="mb-0">
+                                        <i class="fa fa-lock" title="Mot de passe"/> Nouveau mot de passe
+                                    </h4>
+                                </div>
+                                <div class="card-body p-5">
+                                    <p class="text-muted mb-4">
+                                        <strong>Employé :</strong> <t t-esc="employe.display_name_full"/><br/>
+                                        <strong>Entreprise :</strong> <t t-esc="employe.entreprise_id.name"/>
+                                    </p>
+
+                                    <form id="resetPasswordForm" class="needs-validation" novalidate="">
+                                        <input type="hidden" id="token" t-att-value="token"/>
+
+                                        <div class="mb-4">
+                                            <label for="new_password" class="form-label fw-bold">
+                                                Nouveau mot de passe *
+                                            </label>
+                                            <input type="password"
+                                                   class="form-control form-control-lg"
+                                                   id="new_password"
+                                                   name="new_password"
+                                                   required=""
+                                                   placeholder="Au moins 6 caractères"
+                                                   minlength="6"/>
+                                            <small class="form-text text-muted">
+                                                Minimum 6 caractères
+                                            </small>
+                                        </div>
+
+                                        <div class="mb-4">
+                                            <label for="confirm_password" class="form-label fw-bold">
+                                                Confirmer le mot de passe *
+                                            </label>
+                                            <input type="password"
+                                                   class="form-control form-control-lg"
+                                                   id="confirm_password"
+                                                   name="confirm_password"
+                                                   required=""
+                                                   placeholder="Répétez le mot de passe"
+                                                   minlength="6"/>
+                                        </div>
+
+                                        <div id="error_message" class="alert alert-danger d-none" role="alert"/>
+                                        <div id="success_message" class="alert alert-success d-none" role="alert"/>
+
+                                        <button type="submit" class="btn btn-primary btn-lg w-100 py-3">
+                                            <i class="fa fa-check me-2" title="Valider"/> Réinitialiser le mot de passe
+                                        </button>
+                                    </form>
+
+                                    <div class="mt-4 text-center text-muted">
+                                        <small>Ce formulaire expire dans 2 heures</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script type="text/javascript"><![CDATA[
+                document.addEventListener('DOMContentLoaded', function() {
+                    const form = document.getElementById('resetPasswordForm');
+                    const errorDiv = document.getElementById('error_message');
+                    const successDiv = document.getElementById('success_message');
+                    const token = document.getElementById('token').value;
+
+                    function showError(msg) {
+                        errorDiv.textContent = msg;
+                        errorDiv.classList.remove('d-none');
+                        successDiv.classList.add('d-none');
+                    }
+
+                    function showSuccess(msg) {
+                        successDiv.textContent = msg;
+                        successDiv.classList.remove('d-none');
+                        errorDiv.classList.add('d-none');
+                    }
+
+                    function hideMessages() {
+                        errorDiv.classList.add('d-none');
+                        successDiv.classList.add('d-none');
+                    }
+
+                    form.addEventListener('submit', function(e) {
+                        e.preventDefault();
+                        hideMessages();
+
+                        const newPassword = document.getElementById('new_password').value;
+                        const confirmPassword = document.getElementById('confirm_password').value;
+
+                        if (!newPassword || !confirmPassword) {
+                            showError('Veuillez remplir tous les champs.');
+                            return;
+                        }
+
+                        if (newPassword.length < 6) {
+                            showError('Le mot de passe doit contenir au moins 6 caractères.');
+                            return;
+                        }
+
+                        fetch('/cantine/forgot-password/reset/submit', {
+                            method: 'POST',
+                            headers: {'Content-Type': 'application/json'},
+                            body: JSON.stringify({
+                                jsonrpc: '2.0',
+                                method: 'call',
+                                params: {
+                                    token: token,
+                                    new_password: newPassword,
+                                    confirm_password: confirmPassword
+                                }
+                            })
+                        }).then(r => r.json())
+                         .then(data => {
+                            const result = data.result || {};
+                            if (result.success) {
+                                showSuccess(result.message);
+                                setTimeout(() => {
+                                    window.location.href = result.redirect_url || '/cantine';
+                                }, 2000);
+                            } else {
+                                showError(result.message || 'Une erreur s\'est produite.');
+                            }
+                        }).catch(() => showError('Erreur de connexion'));
+                    });
+                });
+            ]]></script>
+        </t>
+    </template>
+
+</odoo>

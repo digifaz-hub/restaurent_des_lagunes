@@ -1,0 +1,225 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_market_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="doc">
+                <t t-call="lagunes_market.report_lagunes_market_content"/>
+            </t>
+        </t>
+    </template>
+
+    <!-- Contenu du rapport -->
+    <template id="report_lagunes_market_content">
+        <t t-call="web.external_layout">
+            <!-- Styles d'impression pour PDF optimisé -->
+            <style>
+                @media print {
+                    body, .page {
+                        margin: 0;
+                        padding: 0.5cm;
+                        font-size: 10pt;
+                    }
+                    
+                    /* Forcer les couleurs pour l'impression */
+                    .lagunes-section-title {
+                        background: #f5f5f5 !important;
+                        -webkit-print-color-adjust: exact;
+                        print-color-adjust: exact;
+                        page-break-after: avoid;
+                    }
+                    
+                    /* Éviter les coupures de lignes dans les tableaux */
+                    .lagunes-lines-table tbody tr {
+                        page-break-inside: avoid;
+                    }
+                    
+                    /* Éviter les coupures après les titres de section */
+                    .lagunes-section-title {
+                        page-break-after: avoid;
+                    }
+                    
+                    /* Saut de page intelligente avant les gros blocs */
+                    .lagunes-total-block {
+                        page-break-inside: avoid;
+                    }
+                    
+                    /* Cacher les éléments non-imprimables */
+                    .no-print, .btn, .action-buttons {
+                        display: none !important;
+                    }
+                }
+            </style>
+            
+            <div class="page lagunes-market-report">
+
+                <!-- ═══ EN-TÊTE ═══════════════════════════════════ -->
+                <div class="lagunes-report-header">
+                    <div class="lagunes-report-title">
+                        <h2>Fiche de Marché</h2>
+                    </div>
+                    <div class="lagunes-report-meta">
+                        <table class="table table-sm lagunes-meta-table">
+                            <tbody>
+                                <tr>
+                                    <td class="lagunes-label">Référence</td>
+                                    <td><strong><t t-esc="doc.name"/></strong></td>
+                                    <td class="lagunes-label">Statut</td>
+                                    <td>
+                                        <span t-attf-class="lagunes-badge lagunes-badge-#{doc.state}">
+                                            <t t-if="doc.state == 'draft'">Brouillon</t>
+                                            <t t-elif="doc.state == 'validated'">Validé</t>
+                                            <t t-else="">Annulé</t>
+                                        </span>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td class="lagunes-label">Date du marché</td>
+                                    <td>
+                                        <t t-esc="doc.date"
+                                           t-options='{"widget": "date", "format": "dd/MM/yyyy"}'/>
+                                    </td>
+                                    <td class="lagunes-label">Responsable</td>
+                                    <td><t t-esc="doc.user_id.name"/></td>
+                                </tr>
+                                <t t-if="doc.move_id">
+                                    <tr>
+                                        <td class="lagunes-label">Écriture comptable</td>
+                                        <td colspan="3"><t t-esc="doc.move_id.name"/></td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- ═══ TABLEAU DES ARTICLES ACHETÉS ═════════════ -->
+                <div class="lagunes-section-title">Articles achetés</div>
+                <table class="table table-sm lagunes-lines-table">
+                    <thead>
+                        <tr class="lagunes-table-header">
+                            <th>#</th>
+                            <th>Article</th>
+                            <th>Catégorie</th>
+                            <th class="text-right">Stock avant</th>
+                            <th class="text-right">Quantité</th>
+                            <th>Unité</th>
+                            <th class="text-right">Stock après</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-foreach="doc.line_ids" t-as="line">
+                            <tr t-attf-class="#{line_index % 2 == 0 and 'lagunes-row-even' or ''}">
+                                <td><t t-esc="line_index + 1"/></td>
+                                <td><t t-esc="line.article_id.name"/></td>
+                                <td>
+                                    <t t-if="line.category_id">
+                                        <t t-esc="line.category_id.name"/>
+                                    </t>
+                                    <t t-else="">—</t>
+                                </td>
+                                <td class="text-right">
+                                    <t t-esc="line.stock_before"
+                                       t-options='{"widget": "float", "precision": 3}'/>
+                                </td>
+                                <td class="text-right">
+                                    <t t-esc="line.qty"
+                                       t-options='{"widget": "float", "precision": 3}'/>
+                                </td>
+                                <td><t t-esc="line.uom or ''"/></td>
+                                <td class="text-right">
+                                    <t t-esc="line.stock_after"
+                                       t-options='{"widget": "float", "precision": 3}'/>
+                                </td>
+                            </tr>
+                        </t>
+                        <t t-if="not doc.line_ids">
+                            <tr>
+                                <td colspan="5" class="text-center text-muted">
+                                    Aucun article enregistré
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+
+                <!-- ═══ STOCK INITIAL ════════════ -->
+                <t t-if="doc.leftover_ids">
+                    <div class="lagunes-section-title lagunes-section-leftover">
+                        Stock initial
+                    </div>
+                    <table class="table table-sm lagunes-lines-table">
+                        <thead>
+                            <tr class="lagunes-table-header">
+                                <th>#</th>
+                                <th>Article</th>
+                                <th>Catégorie</th>
+                                <th class="text-right">Stock avant</th>
+                                <th class="text-right">Qté restante</th>
+                                <th>Unité</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <t t-foreach="doc.leftover_ids" t-as="lo">
+                                <tr t-attf-class="#{lo_index % 2 == 0 and 'lagunes-row-even' or ''}">
+                                    <td><t t-esc="lo_index + 1"/></td>
+                                    <td><t t-esc="lo.article_id.name"/></td>
+                                    <td>
+                                        <t t-if="lo.category_id">
+                                            <t t-esc="lo.category_id.name"/>
+                                        </t>
+                                        <t t-else="">—</t>
+                                    </td>
+                                    <td class="text-right">
+                                        <t t-esc="lo.stock_current"
+                                           t-options='{"widget": "float", "precision": 3}'/>
+                                    </td>
+                                    <td class="text-right lagunes-leftover-qty">
+                                        <t t-esc="lo.qty_remaining"
+                                           t-options='{"widget": "float", "precision": 3}'/>
+                                    </td>
+                                    <td><t t-esc="lo.uom or ''"/></td>
+                                </tr>
+                            </t>
+                        </tbody>
+                    </table>
+                </t>
+
+                <!-- ═══ MONTANT TOTAL ══════════════════════════════ -->
+                <div class="lagunes-total-block">
+                    <table class="table lagunes-total-table">
+                        <tbody>
+                            <tr>
+                                <td class="lagunes-total-label">Montant total dépensé</td>
+                                <td class="lagunes-total-amount">
+                                    <t t-esc="doc.amount_total"
+                                       t-options='{"widget": "monetary", "display_currency": doc.currency_id}'/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- ═══ NOTES ═════════════════════════════════════ -->
+                <t t-if="doc.notes">
+                    <div class="lagunes-section-title">Notes et observations</div>
+                    <div class="lagunes-notes">
+                        <t t-esc="doc.notes"/>
+                    </div>
+                </t>
+
+                <!-- ═══ PIED DE PAGE ══════════════════════════════ -->
+                <div class="lagunes-report-footer">
+                    <div class="lagunes-footer-company">
+                        <t t-esc="doc.company_id.name"/>
+                    </div>
+                    <div class="lagunes-footer-date">
+                        Imprimé le
+                        <t t-esc="datetime.datetime.now().strftime('%d/%m/%Y %H:%M')"/>
+                    </div>
+                </div>
+
+            </div><!-- .page -->
+        </t><!-- web.external_layout -->
+    </template>
+
+</odoo>

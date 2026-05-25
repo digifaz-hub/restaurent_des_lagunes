@@ -1,0 +1,381 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="lagunes_market.MarketDashboard">
+        <div class="o_lagunes_dashboard o_market_dashboard p-0 h-100 overflow-auto bg-light">
+            <!-- Header modernisé (Style Lagunes) -->
+            <div class="ld-header mb-4">
+                <div class="ld-header-content d-flex justify-content-between align-items-center w-100">
+                    <div class="d-flex align-items-center gap-3">
+                        <div class="ld-header-icon-circle">
+                            <i class="fa fa-shopping-basket"/>
+                        </div>
+                        <div>
+                            <h1 class="text-white mb-0 h3 fw-bold">Tableau de bord Marché</h1>
+                            <p class="text-white-50 mb-0 small">Approvisionnement &amp; Stocks</p>
+                        </div>
+                    </div>
+                    <button class="ld-btn-glass" t-on-click="loadData">
+                        <i class="fa fa-refresh me-2"/> Actualiser
+                    </button>
+                </div>
+            </div>
+
+            <div class="px-4 pb-4">
+
+
+            <!-- KPIs Section -->
+            <div class="row g-4 mb-5">
+                <!-- KPI 1: Total Articles -->
+                <div class="col-md-3">
+                    <div class="kpi-card bg-white p-4 rounded-4 shadow-sm border-0 h-100 position-relative overflow-hidden transition-3d">
+                        <div class="position-absolute top-0 end-0 p-3 opacity-10">
+                            <i class="fa fa-list-alt fa-5x text-primary"/>
+                        </div>
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="icon-box bg-gradient-primary rounded-circle p-3 shadow-sm d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                <i class="fa fa-list-alt text-white fs-4"/>
+                            </div>
+                            <span class="text-muted fw-bold small text-uppercase ls-2">Articles en stock</span>
+                        </div>
+                        <h2 class="fw-bold mb-1 gradient-text-primary"><t t-esc="state.animated.total_articles"/></h2>
+                        <p class="text-muted small mb-0">Références cataloguées</p>
+                    </div>
+                </div>
+
+                <!-- KPI 2: Valeur Stock -->
+                <div class="col-md-3">
+                    <div class="kpi-card bg-white p-4 rounded-4 shadow-sm border-0 h-100 position-relative overflow-hidden transition-3d">
+                        <div class="position-absolute top-0 end-0 p-3 opacity-10">
+                            <i class="fa fa-money fa-5x text-success"/>
+                        </div>
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="icon-box bg-gradient-success rounded-circle p-3 shadow-sm d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                <i class="fa fa-money text-white fs-4"/>
+                            </div>
+                            <span class="text-muted fw-bold small text-uppercase ls-2">Valeur du stock</span>
+                        </div>
+                        <h2 class="fw-bold mb-1 text-success"><t t-esc="formatCurrency(state.animated.total_stock_value)"/></h2>
+                        <p class="text-muted small mb-0">Dernier prix d'achat</p>
+                    </div>
+                </div>
+
+                <!-- KPI 3: Monthly Expenses -->
+                <div class="col-md-3">
+                    <div class="kpi-card bg-white p-4 rounded-4 shadow-sm border-0 h-100 position-relative overflow-hidden transition-3d">
+                        <div class="position-absolute top-0 end-0 p-3 opacity-10">
+                            <i class="fa fa-shopping-cart fa-5x text-info"/>
+                        </div>
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="icon-box bg-gradient-info rounded-circle p-3 shadow-sm d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                <i class="fa fa-shopping-cart text-white fs-4"/>
+                            </div>
+                            <span class="text-muted fw-bold small text-uppercase ls-2">Dépenses ce mois</span>
+                        </div>
+                        <h2 class="fw-bold mb-1 text-info"><t t-esc="formatCurrency(state.animated.monthly_expenses)"/></h2>
+                        <p class="text-muted small mb-0">Marchés validés</p>
+                    </div>
+                </div>
+
+                <!-- KPI 4: Rotation -->
+                <div class="col-md-3">
+                    <div class="kpi-card bg-white p-4 rounded-4 shadow-sm border-0 h-100 position-relative overflow-hidden transition-3d">
+                        <div class="position-absolute top-0 end-0 p-3 opacity-10">
+                            <i class="fa fa-refresh fa-5x text-purple"/>
+                        </div>
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="icon-box bg-gradient-purple rounded-circle p-3 shadow-sm d-flex align-items-center justify-content-center" style="width: 50px; height: 50px;">
+                                <i class="fa fa-refresh text-white fs-4"/>
+                            </div>
+                            <span class="text-muted fw-bold small text-uppercase ls-2">Indice de Rotation</span>
+                        </div>
+                        <h2 class="fw-bold mb-1 text-purple"><t t-esc="state.animated.rotation_index"/>%</h2>
+                        <p class="text-muted small mb-0">Flux des 30 derniers jours</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ════════════════ Stock Alerts Section ════════════════ -->
+            <div t-if="state.data.kpis.low_stock_count > 0 || state.data.kpis.critical_stock_count > 0" class="row mb-4">
+                <div class="col-12">
+                    <div class="alert alert-warning d-flex align-items-start gap-3 mb-0" t-att-class="state.data.kpis.critical_stock_count > 0 ? 'alert-danger' : 'alert-warning'">
+                        <i class="fa fa-exclamation-triangle fs-4"/>
+                        <div class="flex-grow-1">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <strong class="fs-5">Alertes de Stock</strong>
+                                <div class="d-flex gap-2">
+                                    <span t-if="state.data.kpis.critical_stock_count > 0" class="badge bg-danger fs-6">
+                                        <t t-esc="state.data.kpis.critical_stock_count"/> Rupture(s)
+                                    </span>
+                                    <span t-if="state.data.kpis.low_stock_count > 0" class="badge bg-warning text-dark fs-6">
+                                        <t t-esc="state.data.kpis.low_stock_count"/> Stock faible
+                                    </span>
+                                </div>
+                            </div>
+                            <p class="mb-2">
+                                Certains articles ont des niveaux de stock critiques ou inférieurs au seuil minimum défini.
+                            </p>
+                            <button class="btn btn-sm" t-att-class="state.data.kpis.critical_stock_count > 0 ? 'btn-danger' : 'btn-warning'" 
+                                    t-on-click="() => this._openStockView()">
+                                <i class="fa fa-external-link me-1"/> Voir les stocks
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ════════════════ Stock Alerts Detail ════════════════ -->
+            <div t-if="state.data.stock_alerts.length > 0" class="row mb-4">
+                <div class="col-12">
+                    <div class="bg-white p-4 rounded-4 shadow-sm border-0 border-top border-4" t-att-class="state.data.kpis.critical_stock_count > 0 ? 'border-danger' : 'border-warning'">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h4 class="fw-bold m-0" t-att-class="state.data.kpis.critical_stock_count > 0 ? 'text-danger' : 'text-warning'">
+                                <i class="fa fa-bell me-2"/>Articles nécessitant réapprovisionnement
+                            </h4>
+                            <button class="btn btn-outline-primary btn-sm" t-on-click="() => this._openStockView()">
+                                Voir tout <i class="fa fa-chevron-right ms-1"/>
+                            </button>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Article</th>
+                                        <th>Catégorie</th>
+                                        <th class="text-center">Stock actuel</th>
+                                        <th class="text-center">Stock minimum</th>
+                                        <th class="text-center">Statut</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="state.data.stock_alerts" t-as="alert" t-key="alert.id"
+                                        t-att-class="alert.status == 'critical' ? 'table-danger' : 'table-warning'">
+                                        <td><strong><t t-esc="alert.article"/></strong></td>
+                                        <td><span class="badge bg-light text-dark"><t t-esc="alert.category"/></span></td>
+                                        <td class="text-center">
+                                            <span class="fw-bold" t-att-class="alert.status == 'critical' ? 'text-danger' : 'text-warning'">
+                                                <t t-esc="alert.qty"/> <t t-esc="alert.uom"/>
+                                            </span>
+                                        </td>
+                                        <td class="text-center text-muted">
+                                            <t t-esc="alert.reorder_point"/> <t t-esc="alert.uom"/>
+                                        </td>
+                                        <td class="text-center">
+                                            <span class="badge" t-att-class="alert.status == 'critical' ? 'bg-danger' : 'bg-warning text-dark'">
+                                                <t t-esc="alert.status_label"/>
+                                            </span>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ════════════════ Recent Deductions (Cantine) ════════════════ -->
+            <div t-if="state.data.recent_deductions_cantine.length > 0" class="row mb-4">
+                <div class="col-12">
+                    <div class="bg-white p-4 rounded-4 shadow-sm border-0 border-top border-primary border-4">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h4 class="fw-bold m-0 text-primary">
+                                <i class="fa fa-cutlery me-2"/>Dernières déductions Cantine
+                            </h4>
+                            <span class="badge bg-light text-muted rounded-pill px-3">Commandes</span>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Plat</th>
+                                        <th>Article</th>
+                                        <th>Quantité</th>
+                                        <th>Référence commande</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="state.data.recent_deductions_cantine" t-as="deduction" t-key="deduction.id">
+                                        <td><t t-esc="formatDateShort(deduction.date)"/></td>
+                                        <td><span class="badge bg-info text-white" t-if="deduction.plat"><t t-esc="deduction.plat"/></span><span t-else="" class="text-muted">—</span></td>
+                                        <td><strong><t t-esc="deduction.article"/></strong></td>
+                                        <td><span class="text-danger fw-bold">- <t t-esc="deduction.qty"/> <t t-esc="deduction.uom"/></span></td>
+                                        <td><span class="badge bg-light text-dark"><t t-esc="deduction.reference"/></span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- ════════════════ Recent Deductions (Traiteur) ════════════════ -->
+            <div t-if="state.data.recent_deductions_traiteur.length > 0" class="row mb-4">
+                <div class="col-12">
+                    <div class="bg-white p-4 rounded-4 shadow-sm border-0 border-top border-warning border-4">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h4 class="fw-bold m-0 text-warning">
+                                <i class="fa fa-glass me-2"/>Dernières déductions Traiteur
+                            </h4>
+                            <span class="badge bg-light text-muted rounded-pill px-3">Prestations</span>
+                        </div>
+                        <div class="table-responsive">
+                            <table class="table table-hover">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Date</th>
+                                        <th>Plat</th>
+                                        <th>Article</th>
+                                        <th>Quantité</th>
+                                        <th>Référence commande</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="state.data.recent_deductions_traiteur" t-as="deduction" t-key="deduction.id">
+                                        <td><t t-esc="formatDateShort(deduction.date)"/></td>
+                                        <td><span class="badge bg-info text-white" t-if="deduction.plat"><t t-esc="deduction.plat"/></span><span t-else="" class="text-muted">—</span></td>
+                                        <td><strong><t t-esc="deduction.article"/></strong></td>
+                                        <td><span class="text-danger fw-bold">- <t t-esc="deduction.qty"/> <t t-esc="deduction.uom"/></span></td>
+                                        <td><span class="badge bg-light text-dark"><t t-esc="deduction.reference"/></span></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row g-4">
+                <!-- Top Consumed Selection -->
+                <div class="col-lg-5 col-md-12">
+                    <div class="bg-white p-4 rounded-4 shadow-sm border-0 h-100 border-top border-primary border-4">
+                        <div class="d-flex justify-content-between align-items-center mb-4">
+                            <h4 class="fw-bold m-0"><i class="fa fa-star text-warning me-2"/>Articles les plus consommés</h4>
+                            <span class="badge bg-light text-muted rounded-pill px-3">Sorties Cantine</span>
+                        </div>
+                        <div class="top-items">
+                            <t t-if="state.data.top_consumed.length > 0">
+                                <div t-foreach="state.data.top_consumed" t-as="item" t-key="item_index" 
+                                     class="d-flex align-items-center justify-content-between p-3 mb-3 bg-light rounded-3 transition-hover border border-light">
+                                    <div class="d-flex align-items-center gap-3">
+                                        <div class="rounded-circle bg-white d-flex align-items-center justify-content-center shadow-sm fw-bold text-primary" style="width: 40px; height: 40px;">
+                                            <t t-esc="item_index + 1"/>
+                                        </div>
+                                        <div class="fw-bold"><t t-esc="item.name"/></div>
+                                    </div>
+                                    <div class="text-end">
+                                        <div class="fw-bold text-primary"><t t-esc="item.qty"/> <t t-esc="item.uom"/></div>
+                                        <div class="text-muted small">Total cumulé</div>
+                                    </div>
+                                </div>
+                            </t>
+                            <t t-else="">
+                                <div class="text-center py-5 text-muted">
+                                    <i class="fa fa-info-circle fa-3x mb-3 opacity-20"/>
+                                    <p>Aucune donnée de consommation disponible</p>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Recent Activities (Timeline) -->
+                <div class="col-lg-7 col-md-12">
+                    <div class="bg-white p-4 rounded-4 shadow-sm border-0 h-100 border-top border-info border-4">
+                        <h4 class="fw-bold mb-4"><i class="fa fa-history text-info me-2"/>Derniers mouvements de stock</h4>
+                        <div class="timeline position-relative ps-4 border-start border-2 border-light ms-2 overflow-auto pe-2"
+                             style="max-height: 420px;">
+                            <t t-if="state.data.recent_moves.length > 0">
+                                <div t-foreach="state.data.recent_moves" t-as="move" t-key="move.id" 
+                                     class="timeline-item mb-4 position-relative">
+                                    <div class="timeline-dot position-absolute start-0 translate-middle-x bg-white border border-3 p-1 rounded-circle" 
+                                         t-att-style="'left: -17px; top: 10px; width: 14px; height: 14px; border-color: ' + (move.type == 'in' ? '#2ecc71 !important' : '#e74c3c !important')">
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-start mb-1">
+                                        <div class="fw-bold">
+                                            <span t-att-class="'badge rounded-pill me-2 ' + (move.type == 'in' ? 'bg-success-subtle text-success' : 'bg-danger-subtle text-danger')">
+                                                <i t-att-class="'fa ' + (move.type == 'in' ? 'fa-arrow-down' : 'fa-arrow-up')"/>
+                                                <t t-esc="move.type == 'in' ? 'Entrée' : 'Sortie'"/>
+                                            </span>
+                                            <t t-esc="move.article"/>
+                                        </div>
+                                        <small class="text-muted"><t t-esc="move.time_ago"/></small>
+                                    </div>
+                                    <div class="ms-1 pt-1">
+                                        <div class="fw-bold h5 mb-1" t-att-class="move.type == 'in' ? 'text-success' : 'text-danger'">
+                                            <t t-esc="move.type == 'in' ? '+' : '-'"/> <t t-esc="move.qty"/>
+                                        </div>
+                                        <p class="text-muted small italic m-0"><t t-esc="move.note"/></p>
+                                    </div>
+                                </div>
+                            </t>
+                            <t t-else="">
+                                <div class="text-center py-5 text-muted">
+                                    <i class="fa fa-history fa-3x mb-3 opacity-20"/>
+                                    <p>Aucun mouvement récent enregistré</p>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- New Analytical Sections: Autonomy & Price Tracking -->
+            <div class="row g-4 mt-2">
+                <!-- Autonomy Alerts -->
+                <div class="col-lg-6">
+                    <div class="bg-white p-4 rounded-4 shadow-sm border-0 h-100 border-top border-warning border-4">
+                        <h4 class="fw-bold mb-4"><i class="fa fa-hourglass-half text-warning me-2"/>Autonomie de Stock Prédictive</h4>
+                        <div class="d-flex flex-column gap-3">
+                            <t t-foreach="state.data.autonomy_details" t-as="auto" t-key="auto.article">
+                                <div class="d-flex align-items-center justify-content-between p-3 rounded-3 bg-light border-start border-4" t-attf-class="border-{{auto.status}}">
+                                    <div class="fw-bold"><t t-esc="auto.article"/></div>
+                                    <div class="text-end">
+                                        <div t-attf-class="fw-bold h5 mb-0 text-{{auto.status}}"><t t-esc="auto.days"/> jours</div>
+                                        <small class="text-muted">restants</small>
+                                    </div>
+                                </div>
+                            </t>
+                            <div t-if="!state.data.autonomy_details.length" class="text-center py-4 text-muted small">
+                                Aucune alerte de rupture prédictive.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Price Variations -->
+                <div class="col-lg-6">
+                    <div class="bg-white p-4 rounded-4 shadow-sm border-0 h-100 border-top border-danger border-4">
+                        <h4 class="fw-bold mb-4"><i class="fa fa-line-chart text-danger me-2"/>Surveillance des Prix (Hausses)</h4>
+                        <div class="table-responsive">
+                            <table class="table table-sm table-hover">
+                                <thead>
+                                    <tr class="small text-muted">
+                                        <th>Article</th>
+                                        <th class="text-end">Dernier Prix</th>
+                                        <th class="text-end">Variation</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <t t-foreach="state.data.price_variations" t-as="v" t-key="v.name">
+                                        <tr>
+                                            <td><t t-esc="v.name"/></td>
+                                            <td class="text-end fw-bold"><t t-esc="v.current"/></td>
+                                            <td class="text-end">
+                                                <span class="text-danger fw-bold"><i class="fa fa-caret-up"/> <t t-esc="v.pct"/>%</span>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </tbody>
+                            </table>
+                            <div t-if="!state.data.price_variations.length" class="text-center py-4 text-muted small">
+                                Aucune hausse de prix significative détectée.
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+        </div>
+    </t>
+</templates>
+

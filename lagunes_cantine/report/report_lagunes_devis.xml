@@ -1,0 +1,506 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ============================================================
+         RAPPORT : Devis style Restaurant des Lagunes
+         Version : 2.1 - Fix nb_jours NoneType
+         ============================================================ -->
+
+    <!-- 1. Déclaration du rapport -->
+    <record id="report_lagunes_sale_order_devis" model="ir.actions.report">
+        <field name="name">Devis Lagunes</field>
+        <field name="model">sale.order</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">lagunes_cantine.report_lagunes_devis_document</field>
+        <field name="report_file">lagunes_cantine.report_lagunes_devis_document</field>
+        <field name="print_report_name">'Devis - %s' % object.name</field>
+        <field name="binding_model_id" ref="sale.model_sale_order"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="base.paperformat_euro"/>
+    </record>
+
+    <!-- 2. Template principal du document -->
+    <template id="report_lagunes_devis_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="lagunes_cantine.report_lagunes_devis_content"
+                   t-lang="o.partner_id.lang"/>
+            </t>
+        </t>
+    </template>
+
+    <!-- 3. Contenu du devis -->
+    <template id="report_lagunes_devis_content">
+        <t t-call="web.external_layout">
+            <div class="page">
+                <style>
+                    body, .page {
+                        font-family: Arial, Helvetica, sans-serif;
+                        font-size: 9.5pt;
+                        color: #000;
+                    }
+                    .lg-header-wrap {
+                        border: 2px solid #16166d;
+                        margin-bottom: 0;
+                    }
+                    .lg-top-row {
+                        display: table;
+                        width: 100%;
+                        padding: 6px 10px;
+                        background: #fff;
+                        border-bottom: 1px solid #16166d;
+                    }
+                    .lg-top-left {
+                        display: table-cell;
+                        vertical-align: middle;
+                        width: 60%;
+                    }
+                    .lg-top-right {
+                        display: table-cell;
+                        vertical-align: middle;
+                        text-align: right;
+                        width: 40%;
+                    }
+                    .lg-company-name {
+                        font-size: 18pt;
+                        font-weight: bold;
+                        color: #16166d;
+                        letter-spacing: 1px;
+                        text-transform: uppercase;
+                    }
+                    .lg-company-info {
+                        font-size: 7.5pt;
+                        color: #333;
+                        line-height: 1.5;
+                        margin-top: 2px;
+                    }
+                    .lg-logo img {
+                        max-height: 65px;
+                        max-width: 130px;
+                    }
+                    .lg-meta-table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        font-size: 8pt;
+                    }
+                    .lg-meta-table th {
+                        background: #16166d;
+                        color: #fff;
+                        font-weight: bold;
+                        border: 1px solid #16166d;
+                        padding: 4px 6px;
+                        text-align: center;
+                        vertical-align: middle;
+                    }
+                    .lg-meta-table td {
+                        border: 1px solid #16166d;
+                        padding: 4px 6px;
+                        text-align: center;
+                        vertical-align: middle;
+                        font-size: 8.5pt;
+                    }
+                    .lg-fao-table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        font-size: 8pt;
+                        margin-top: -1px;
+                    }
+                    .lg-fao-table th {
+                        background: #16166d;
+                        color: #fff;
+                        font-weight: bold;
+                        border: 1px solid #16166d;
+                        padding: 4px 8px;
+                        text-align: center;
+                        vertical-align: middle;
+                    }
+                    .lg-fao-table td {
+                        border: 1px solid #16166d;
+                        padding: 4px 8px;
+                        vertical-align: middle;
+                        font-size: 8.5pt;
+                    }
+                    .lg-activite-bar {
+                        background: #16166d;
+                        color: #fff;
+                        font-weight: bold;
+                        font-size: 9pt;
+                        text-align: center;
+                        padding: 4px 0;
+                        border: 1px solid #16166d;
+                        border-top: none;
+                        margin-top: -1px;
+                        letter-spacing: 1px;
+                    }
+                    .lg-activite-content {
+                        border: 1px solid #16166d;
+                        border-top: none;
+                        padding: 5px 10px;
+                        font-style: italic;
+                        font-size: 8.5pt;
+                        color: #16166d;
+                        font-weight: bold;
+                    }
+                    .lg-lines-table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        margin-top: 8px;
+                        font-size: 8.5pt;
+                    }
+                    .lg-lines-table thead th {
+                        background: #16166d;
+                        color: #fff;
+                        font-weight: bold;
+                        border: 1px solid #16166d;
+                        padding: 5px 6px;
+                        text-align: center;
+                        vertical-align: middle;
+                    }
+                    .lg-lines-table thead th.th-desc {
+                        text-align: left;
+                        width: 42%;
+                    }
+                    .lg-lines-table thead th.th-qty   { width: 10%; }
+                    .lg-lines-table thead th.th-days  { width: 12%; }
+                    .lg-lines-table thead th.th-price { width: 18%; }
+                    .lg-lines-table thead th.th-total { width: 18%; }
+                    .lg-lines-table tbody tr td {
+                        border: 1px solid #bbb;
+                        padding: 4px 6px;
+                        vertical-align: top;
+                    }
+                    .lg-lines-table tbody tr:nth-child(even) td {
+                        background: #fafafa;
+                    }
+                    .lg-lines-table td.td-desc { vertical-align: top; }
+                    .lg-lines-table td.td-desc .plat-title {
+                        font-weight: bold;
+                        font-size: 9pt;
+                        color: #000;
+                    }
+                    .lg-lines-table td.td-desc ul.sub-items {
+                        margin: 2px 0 0 14px;
+                        padding: 0;
+                        list-style-type: disc;
+                    }
+                    .lg-lines-table td.td-desc ul.sub-items li {
+                        margin-bottom: 1px;
+                        font-size: 8pt;
+                        color: #222;
+                    }
+                    .lg-lines-table td.td-desc .plat-note {
+                        font-size: 7.5pt;
+                        color: #555;
+                        margin-top: 2px;
+                        font-style: italic;
+                    }
+                    .lg-lines-table td.td-center {
+                        text-align: center;
+                        vertical-align: middle;
+                    }
+                    .lg-lines-table td.td-right {
+                        text-align: right;
+                        vertical-align: middle;
+                        white-space: nowrap;
+                    }
+                    .lg-lines-table tr.cat-row td {
+                        background: #e0e1f0;
+                        color: #16166d;
+                        font-weight: bold;
+                        font-size: 8.5pt;
+                        padding: 3px 6px;
+                        border: 1px solid #bbb;
+                    }
+                    .lg-totaux-table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        margin-top: 0;
+                        font-size: 9pt;
+                    }
+                    .lg-totaux-table td {
+                        border: 1px solid #bbb;
+                        padding: 4px 8px;
+                    }
+                    .lg-totaux-table td.tot-label {
+                        text-align: right;
+                        font-weight: bold;
+                        width: 62%;
+                        background: #f0f0f8;
+                        color: #16166d;
+                    }
+                    .lg-totaux-table td.tot-value {
+                        text-align: right;
+                        width: 38%;
+                        white-space: nowrap;
+                    }
+                    .lg-totaux-table tr.tva-row td { color: #555; font-style: italic; }
+                    .lg-totaux-table tr.total-row td {
+                        font-weight: bold;
+                        font-size: 10pt;
+                        background: #e0e1f0;
+                        color: #16166d;
+                    }
+                    .lg-arrete {
+                        background: #e0e1f0;
+                        border: 1px solid #16166d;
+                        padding: 5px 10px;
+                        font-size: 8.5pt;
+                        margin-top: 8px;
+                    }
+                    .lg-arrete strong { color: #16166d; }
+                    .lg-footer {
+                        margin-top: 10px;
+                        display: table;
+                        width: 100%;
+                    }
+                    .lg-footer-left {
+                        display: table-cell;
+                        vertical-align: bottom;
+                        width: 50%;
+                    }
+                    .lg-footer-right {
+                        display: table-cell;
+                        vertical-align: bottom;
+                        text-align: right;
+                        width: 50%;
+                        font-size: 8pt;
+                        color: #333;
+                    }
+                    .lg-merci {
+                        font-style: italic;
+                        font-weight: bold;
+                        color: #16166d;
+                        font-size: 12pt;
+                    }
+                </style>
+
+                <!-- EN-TÊTE -->
+                <div class="lg-header-wrap">
+                    <div class="lg-top-row">
+                        <div class="lg-top-left">
+                            <div class="lg-company-name">
+                                <t t-esc="o.company_id.name or 'RESTAURANT DES LAGUNES'"/>
+                            </div>
+                            <div class="lg-company-info">
+                                <t t-if="o.company_id.street">
+                                    <t t-esc="o.company_id.street"/><br/>
+                                </t>
+                                <t t-if="o.company_id.city">
+                                    <t t-esc="o.company_id.city"/>
+                                    <t t-if="o.company_id.zip"> <t t-esc="o.company_id.zip"/></t><br/>
+                                </t>
+                                <t t-if="o.company_id.phone">
+                                    Tél : <t t-esc="o.company_id.phone"/>&#160;
+                                </t>
+                                <t t-if="o.company_id.email">
+                                    e-mail : <t t-esc="o.company_id.email"/>
+                                </t>
+                                <t t-if="o.company_id.company_registry">
+                                    <br/>RCCM N° : <t t-esc="o.company_id.company_registry"/>
+                                </t>
+                            </div>
+                        </div>
+                        <!-- <div class="lg-top-right lg-logo">
+                            <t t-if="o.company_id.logo">
+                                <img t-att-src="image_data_uri(o.company_id.logo)" alt="Logo"/>
+                            </t>
+                        </div> -->
+                    </div>
+
+                    <!-- Tableau méta -->
+                    <table class="lg-meta-table">
+                        <thead>
+                            <tr>
+                                <th style="width:33%">DÉLAIS RÈGLEMENT</th>
+                                <th style="width:33%">PROPOSITION</th>
+                                <th style="width:33%">DATE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <t t-if="o.payment_term_id">
+                                        <t t-esc="o.payment_term_id.name"/>
+                                    </t>
+                                    <t t-else="">7 Jours Après Facturation</t>
+                                </td>
+                                <td><t t-esc="o.name"/></td>
+                                <td>
+                                    <span t-esc="o.date_order"
+                                          t-options='{"widget": "date", "format": "dd/MM/yyyy"}'/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Ligne FAO -->
+                    <table class="lg-fao-table">
+                        <thead>
+                            <tr>
+                                <th style="width:40%"><t t-esc="o.partner_id.name"/></th>
+                                <th style="width:20%">REF CLIENT</th>
+                                <th style="width:40%">SECTION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <t t-if="o.partner_id.street">
+                                        <t t-esc="o.partner_id.street"/><br/>
+                                    </t>
+                                    <t t-if="o.partner_id.city">
+                                        <t t-esc="o.partner_id.zip"/> <t t-esc="o.partner_id.city"/>
+                                    </t>
+                                </td>
+                                <td style="text-align:center; font-weight:bold;">
+                                    <t t-if="o.partner_id.ref">
+                                        <t t-esc="o.partner_id.ref"/>
+                                    </t>
+                                    <t t-else="">
+                                        <t t-esc="'%04d' % o.partner_id.id"/>
+                                    </t>
+                                </td>
+                                <td>
+                                    <t t-if="o.partner_id.function">
+                                        <t t-esc="o.partner_id.function"/>
+                                    </t>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            <!-- ACTIVITÉ -->
+            <div class="lg-activite-bar">ACTIVITÉ</div>
+            <div class="lg-activite-content">
+                <t t-if="o.note">
+                    <t t-foreach="o.note.split('\n')" t-as="line">
+                        <t t-esc="line"/><br t-if="not line_last"/>
+                    </t>
+                </t>
+                <t t-else="">
+                    <t t-esc="o.name"/> — <t t-esc="o.partner_id.name"/>
+                </t>
+            </div>
+
+                <!-- TABLEAU DES LIGNES -->
+                <table class="lg-lines-table">
+                    <thead>
+                        <tr>
+                            <th class="th-desc">DESCRIPTIONS</th>
+                            <th class="th-qty">QUANTITÉ</th>
+                            <th class="th-days">NOMBRE DE<br/>JOUR</th>
+                            <th class="th-price">PRIX<br/>UNITAIRE</th>
+                            <th class="th-total">MONTANT</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <t t-set="current_cat" t-value="''"/>
+                        <t t-foreach="o.order_line" t-as="line">
+
+                            <!-- Catégorie -->
+                            <t t-set="line_cat" t-value="line.product_id.categ_id.name if line.product_id and line.product_id.categ_id else ''"/>
+                            <t t-if="line_cat and line_cat != current_cat">
+                                <tr class="cat-row">
+                                    <td colspan="5"><t t-esc="line_cat"/></td>
+                                </tr>
+                                <t t-set="current_cat" t-value="line_cat"/>
+                            </t>
+
+                            <!-- FIX : nb_jours sécurisé — on utilise getattr avec default 0,
+                                 puis on force à 1 si la valeur est falsy -->
+                            <t t-set="nb_j" t-value="line.nb_jours or 1"/>
+
+                            <!-- Montant = qty × nb_jours × prix_unit -->
+                            <t t-set="montant" t-value="line.product_uom_qty * nb_j * line.price_unit"/>
+
+                            <tr>
+                                <!-- Description -->
+                                <td class="td-desc">
+                                    <div class="plat-title">
+                                        <t t-esc="line.product_id.name if line.product_id else line.name"/>
+                                    </div>
+                                </td>
+
+                                <!-- Quantité -->
+                                <td class="td-center">
+                                    <t t-esc="int(line.product_uom_qty)
+                                              if line.product_uom_qty == int(line.product_uom_qty)
+                                              else line.product_uom_qty"/>
+                                </td>
+
+                                <!-- Nombre de jours — TOUJOURS un entier grâce à nb_j -->
+                                <td class="td-center">
+                                    <t t-esc="nb_j"/>
+                                </td>
+
+                                <!-- Prix unitaire -->
+                                <td class="td-right">
+                                    <t t-esc="'{:,.0f}'.format(line.price_unit).replace(',', ' ')"/>
+                                </td>
+
+                                <!-- Montant -->
+                                <td class="td-right">
+                                    <t t-esc="'{:,.0f}'.format(montant).replace(',', ' ')"/>
+                                </td>
+                            </tr>
+                        </t>
+                    </tbody>
+                </table>
+
+                <!-- TOTAUX -->
+                <table class="lg-totaux-table">
+                    <tr>
+                        <td class="tot-label">SOUS TOTAL</td>
+                        <td class="tot-value">
+                            <t t-esc="'{:,.0f}'.format(o.amount_untaxed).replace(',', ' ')"/> XOF
+                        </td>
+                    </tr>
+                    <tr class="tva-row">
+                        <td class="tot-label">TVA 18 %</td>
+                        <td class="tot-value">NON FACTURÉE</td>
+                    </tr>
+                    <tr class="total-row">
+                        <td class="tot-label">TOTAL</td>
+                        <td class="tot-value">
+                            <t t-esc="'{:,.0f}'.format(o.amount_untaxed).replace(',', ' ')"/> XOF
+                        </td>
+                    </tr>
+                </table>
+
+                <!-- MONTANT EN LETTRES -->
+                <div class="lg-arrete">
+                    <strong>Arrêter du devis à la somme :</strong>
+                    <t t-if="o.amount_to_text">
+                        <t t-esc="o.amount_to_text"/>
+                    </t>
+                    <t t-else="">
+                        <t t-esc="'{:,.0f}'.format(o.amount_untaxed).replace(',', ' ')"/> francs CFA
+                    </t>
+                </div>
+
+                <!-- PIED DE PAGE -->
+                <div class="lg-footer">
+                    <div class="lg-footer-left">
+                        <div class="lg-merci"><i>Merci pour votre confiance !</i></div>
+                    </div>
+                    <div class="lg-footer-right">
+                        Si vous avez des questions concernant cette offre, veuillez nous contacter.<br/>
+                        <t t-if="o.user_id">
+                            <strong><t t-esc="o.user_id.name"/></strong>
+                            <t t-if="o.user_id.mobile"> , Cel: <t t-esc="o.user_id.mobile"/></t>
+                            <t t-elif="o.user_id.phone"> , Tél: <t t-esc="o.user_id.phone"/></t>
+                            <t t-if="o.user_id.email"> , email: <t t-esc="o.user_id.email"/></t>
+                        </t>
+                        <t t-else="">
+                            <t t-if="o.company_id.phone">Tél: <t t-esc="o.company_id.phone"/></t>
+                            <t t-if="o.company_id.email"> , email: <t t-esc="o.company_id.email"/></t>
+                        </t>
+                    </div>
+                </div>
+
+            </div>
+        </t>
+    </template>
+
+</odoo>

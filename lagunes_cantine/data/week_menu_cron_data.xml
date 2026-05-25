@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="1">
+
+    <!--
+        Clôture automatique des menus hebdomadaires expirés.
+        Tourne chaque jour à 02:30.
+        Bascule tous les menus 'published' dont week_end_date < aujourd'hui
+        vers l'état 'closed'.
+    -->
+    <record id="ir_cron_auto_close_past_week_menus" model="ir.cron">
+        <field name="name">Cantine : clôture automatique des menus hebdomadaires expirés</field>
+        <field name="model_id" ref="model_lagunes_week_menu"/>
+        <field name="state">code</field>
+        <field name="code">model._cron_auto_close_past_menus()</field>
+        <field name="interval_number">1</field>
+        <field name="interval_type">days</field>
+        <field name="active" eval="True"/>
+    </record>
+
+</odoo>

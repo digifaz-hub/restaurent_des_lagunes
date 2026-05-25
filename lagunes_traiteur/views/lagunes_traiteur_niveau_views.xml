@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vue Formulaire détaillée pour un Niveau (accessible depuis le Type) -->
+    <record id="view_traiteur_niveau_form" model="ir.ui.view">
+        <field name="name">lagunes.traiteur.niveau.form</field>
+        <field name="model">lagunes.traiteur.niveau</field>
+        <field name="arch" type="xml">
+            <form string="Niveau de prestation">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1><field name="name" placeholder="ex: Formule Standard"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="type_prestation_ids" widget="many2many_tags" options="{'no_create': True}"/>
+                        </group>
+                        <group>
+                            <field name="is_recommended"/>
+                            <field name="active"/>
+                        </group>
+                    </group>
+                    <notebook>
+
+                        <page string="Grille Tarifaire" name="prix">
+                            <p class="text-muted small mb-3">
+                                <strong>Important :</strong> Définissez ici les prix spécifiques par type de prestation pour ce niveau. 
+                                Le système utilisera ces prix pour remplir automatiquement les devis.
+                            </p>
+                            <field name="prix_grid_ids">
+                                <list editable="bottom" create="0">
+                                    <field name="type_id" readonly="1"/>
+                                    <field name="prix_par_personne" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                                    <field name="currency_id" invisible="1"/>
+                                </list>
+
+                            </field>
+                        </page>
+                        <page string="Composition du menu" name="composition">
+
+                            <p class="text-muted small mb-3">
+                                <strong>Aide :</strong> Les lignes sans "Type de prestation" sont appliquées à tous les types. 
+                                Les lignes avec un "Type de prestation" spécifique ne s'appliquent qu'à ce type.
+                                Utilisez les types spécifiques pour adapter les quantités selon le type de prestation.
+                            </p>
+                            <field name="ligne_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="type_ligne"/>
+                                    <field name="description"/>
+                                    <field name="type_prestation_id" options="{'no_create': True}" help="Si renseigné, cette ligne ne s'applique qu'à ce type de prestation. Laissez vide pour appliquer à tous les types."/>
+                                    <field name="quantite_par_personne" help="Quantité par personne. Peut varier selon le type de prestation si une ligne spécifique est créée."/>
+                                    <field name="unite"/>
+                                    <field name="is_client_choice" help="Si coché, le client pourra choisir ses plats dans le wizard"/>
+                                    <field name="nb_choix" invisible="not is_client_choice" help="Nombre de choix possibles si le client doit choisir"/>
+                                    <field name="plat_type_id" invisible="type_ligne != 'plat'" help="Type de plat pour lier aux plats existants de la cantine"/>
+                                    <field name="plat_id" invisible="type_ligne != 'plat'" domain="[('plat_type_id', '=', plat_type_id)]" help="Plat spécifique à utiliser (prioritaire sur le type de plat)"/>
+                                    <field name="logistique_id" invisible="type_ligne != 'equipement'" help="Élément logistique spécifique"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Inclusions (Portail)" name="description">
+                            <field name="description" placeholder="Détaillez ici ce qui est inclus dans cette formule pour le client sur le portail..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action pour ouvrir un niveau spécifiquement (optionnel) -->
+    <record id="action_traiteur_niveau" model="ir.actions.act_window">
+        <field name="name">Niveaux de prestation</field>
+        <field name="res_model">lagunes.traiteur.niveau</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

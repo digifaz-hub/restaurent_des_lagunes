@@ -1,0 +1,216 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ════════════════════════════════════════════════════════════════════════
+         MENU PRINCIPAL - Restaurant des Lagunes
+         Navigation moderne et intuitive avec descriptions claires
+    ════════════════════════════════════════════════════════════════════════ -->
+    
+    <menuitem id="menu_lagunes_cantine_root"
+              name="Cantine"
+              sequence="10"
+              web_icon="lagunes_cantine,static/description/icon.png"/>
+
+    <!-- ════════════════════════════════════════════════════════════════════════
+         SECTION 1 : GESTION DES CLIENTS
+         Gérez vos entreprises clientes et leurs employés
+    ════════════════════════════════════════════════════════════════════════ -->
+    <menuitem id="menu_lagunes_gestion"
+              name="Gestion Clients"
+              parent="menu_lagunes_cantine_root"
+              sequence="10"/>
+
+    <menuitem id="menu_lagunes_entreprises"
+              name="Entreprises Clientes"
+              parent="menu_lagunes_gestion"
+              action="action_partner_cantine"
+              sequence="10"/>
+
+    <menuitem id="menu_lagunes_employes"
+              name="Employés"
+              parent="menu_lagunes_gestion"
+              action="action_lagunes_employe"
+              sequence="20"
+              groups="lagunes_cantine.group_lagunes_manager"/>
+
+    <!-- ════════════════════════════════════════════════════════════════════════
+         SECTION 2 : MENUS ET PLATS
+         Configurez vos menus hebdomadaires et gérez vos plats
+    ════════════════════════════════════════════════════════════════════════ -->
+    <menuitem id="menu_lagunes_menus_plats"
+              name="Menus et Plats"
+              parent="menu_lagunes_cantine_root"
+              sequence="20"/>
+
+    <!-- PRINCIPAL : Menu hebdomadaire (nouveau système) -->
+    <menuitem id="menu_lagunes_week_menu"
+              name="Menus de la semaine"
+              parent="menu_lagunes_menus_plats"
+              action="action_week_menu"
+              sequence="10"/>
+
+    <!-- Types de plats et catégories -->
+    <menuitem id="menu_lagunes_plat_type_cfg"
+              name="Types de plats"
+              parent="menu_lagunes_menus_plats"
+              action="action_plat_type"
+              sequence="20"
+              groups="lagunes_cantine.group_lagunes_manager"/>
+
+    <menuitem id="menu_lagunes_menu_category_cfg"
+              name="Catégories de menus"
+              parent="menu_lagunes_menus_plats"
+              action="action_menu_category"
+              sequence="25"
+              groups="lagunes_cantine.group_lagunes_manager"/>
+
+    <!-- Plats -->
+    <menuitem id="menu_lagunes_plat"
+              name="Plats"
+              parent="menu_lagunes_menus_plats"
+              action="action_lagunes_plat"
+              sequence="30"/>
+
+    <menuitem id="menu_lagunes_plat_option"
+              name="Options de plats"
+              parent="menu_lagunes_menus_plats"
+              action="action_lagunes_plat_option"
+              sequence="40"/>
+
+    <!--
+        "Modèles de menus" (packs) : SUPPRIMÉ du module.
+        Le modèle lagunes.menu.pack et toutes ses références ont été
+        supprimés. Les menus utilisent maintenant uniquement les
+        menus hebdomadaires (lagunes.week.menu).
+    -->
+
+    <!--
+        Anciens menus journaliers (masqués aussi, conservés pour compatibilité)
+    -->
+
+    <!-- ════════════════════════════════════════════════════════════════════════
+         SECTION 3 : COMMANDES ET FACTURATION
+         Suivez les commandes et gérez la facturation mensuelle
+    ════════════════════════════════════════════════════════════════════════ -->
+    <menuitem id="menu_lagunes_commandes"
+              name="Commandes &amp; Facturation"
+              parent="menu_lagunes_cantine_root"
+              sequence="30"/>
+
+    <menuitem id="menu_lagunes_commande"
+              name="Toutes les commandes"
+              parent="menu_lagunes_commandes"
+              action="action_lagunes_commande"
+              sequence="10"/>
+
+    <menuitem id="menu_lagunes_commande_history"
+              name="Historique"
+              parent="menu_lagunes_commandes"
+              action="action_lagunes_commande_history"
+              sequence="20"
+              groups="lagunes_cantine.group_lagunes_manager"/>
+
+    <menuitem id="menu_lagunes_bulk_change"
+              name="Changer statut en masse"
+              parent="menu_lagunes_commandes"
+              action="action_commande_bulk_state_change"
+              sequence="25"
+              groups="lagunes_cantine.group_lagunes_manager"/>
+
+    <menuitem id="menu_lagunes_facturation_periode"
+              name="Facturation Mensuelle"
+              parent="menu_lagunes_commandes"
+              action="action_lagunes_facturation_periode"
+              sequence="30"
+              groups="lagunes_cantine.group_lagunes_manager"/>
+
+    <menuitem id="menu_lagunes_export"
+              name="Exporter les commandes"
+              parent="menu_lagunes_commandes"
+              action="action_lagunes_export_wizard"
+              sequence="40"
+              groups="lagunes_cantine.group_lagunes_manager"/>
+
+    <!-- ════════════════════════════════════════════════════════════════════════
+         SECTION 4 : CUISINE
+         Espace dédié à l'équipe de préparation
+    ════════════════════════════════════════════════════════════════════════ -->
+    <menuitem id="menu_lagunes_cuisine"
+              name="Cuisine"
+              parent="menu_lagunes_cantine_root"
+              sequence="40"
+              groups="lagunes_cantine.group_lagunes_cuisine"/>
+
+    <menuitem id="menu_lagunes_commande_cuisine"
+              name="Commandes du jour"
+              parent="menu_lagunes_cuisine"
+              action="action_lagunes_commande_cuisine"
+              sequence="10"/>
+
+    <!-- ════════════════════════════════════════════════════════════════════════
+         SECTION 5 : STATISTIQUES ET ANALYSES
+         Visualisez les performances et les tendances
+    ════════════════════════════════════════════════════════════════════════ -->
+    <menuitem id="menu_lagunes_stats"
+              name="Statistiques"
+              parent="menu_lagunes_cantine_root"
+              sequence="50"
+              groups="lagunes_cantine.group_lagunes_manager"/>
+
+    <record id="action_lagunes_stats_commandes" model="ir.actions.act_window">
+        <field name="name">Statistiques Commandes</field>
+        <field name="res_model">lagunes.commande</field>
+        <field name="view_mode">pivot,graph,list</field>
+        <field name="context">{'search_default_this_month': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Aucune donnée à analyser</p>
+            <p>
+                Cette vue vous permet d'analyser les performances de vos commandes :
+            </p>
+            <ul>
+                <li><strong>Vue Pivot :</strong> Analysez les volumes par entreprise, plat ou période</li>
+                <li><strong>Vue Graphique :</strong> Visualisez les tendances et évolutions</li>
+                <li><strong>Vue Liste :</strong> Consultez le détail des commandes</li>
+            </ul>
+            <p class="text-muted mt-2">
+                <i class="fa fa-lightbulb-o text-warning me-1"/> 
+                Astuce : Utilisez les filtres prédéfinis pour analyser une période spécifique.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_lagunes_stats_commandes"
+              name="Commandes"
+              parent="menu_lagunes_stats"
+              action="action_lagunes_stats_commandes"
+              sequence="10"/>
+
+    <record id="action_lagunes_stats_menus" model="ir.actions.act_window">
+        <field name="name">Statistiques Menus</field>
+        <field name="res_model">lagunes.week.menu</field>
+        <field name="view_mode">pivot,graph,list</field>
+        <field name="context">{'search_default_this_month': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Aucune donnée à analyser</p>
+            <p>
+                Analysez la performance de vos menus hebdomadaires et plats :
+            </p>
+            <ul>
+                <li><strong>Vue Pivot :</strong> Comparez les menus les plus populaires</li>
+                <li><strong>Vue Graphique :</strong> Identifiez les tendances saisonnières</li>
+                <li><strong>Vue Liste :</strong> Consultez les détails par période</li>
+            </ul>
+            <p class="text-muted mt-2">
+                <i class="fa fa-lightbulb-o text-warning me-1"/> 
+                Astuce : Analysez les données sur plusieurs mois pour identifier les préférences client.
+            </p>
+        </field>
+    </record>
+
+    <menuitem id="menu_lagunes_stats_menus"
+              name="Menus"
+              parent="menu_lagunes_stats"
+              action="action_lagunes_stats_menus"
+              sequence="20"/>
+
+</odoo>

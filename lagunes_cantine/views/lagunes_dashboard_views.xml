@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!--
+        NOTE: Le template QWeb du dashboard est dans:
+        static/src/xml/dashboard_templates.xml (chargé via assets_backend)
+    -->
+
+    <!-- ════════════════════════════════════════════════════════════════
+         ACTION CLIENT : charge le composant OWL
+    ════════════════════════════════════════════════════════════════ -->
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         ACTION CLIENT : charge le composant OWL
+         ═══════════════════════════════════════════════════════════════ -->
+
+    <record id="action_lagunes_dashboard" model="ir.actions.client">
+        <field name="name">Dashboard</field>
+        <field name="tag">lagunes_cantine.Dashboard</field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════════════
+         MENUITEM
+         ═══════════════════════════════════════════════════════════════ -->
+
+    <menuitem id="menu_lagunes_dashboard"
+              name="Dashboard"
+              parent="menu_lagunes_cantine_root"
+              action="action_lagunes_dashboard"
+              sequence="1"/>
+
+</odoo>

@@ -1,0 +1,53 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Vue liste pour lagunes.partner.plat.type.rule -->
+    <record id="view_partner_plat_type_rule_list" model="ir.ui.view">
+        <field name="name">lagunes.partner.plat.type.rule.list</field>
+        <field name="model">lagunes.partner.plat.type.rule</field>
+        <field name="arch" type="xml">
+            <list string="Règles d'affichage des types de plats" class="o_lagunes_view">
+                <field name="partner_id"/>
+                <field name="plat_type_id"/>
+                <field name="is_mandatory" widget="boolean"/>
+                <field name="is_proposed" widget="boolean"/>
+                <field name="max_choices"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Vue formulaire pour lagunes.partner.plat.type.rule -->
+    <record id="view_partner_plat_type_rule_form" model="ir.ui.view">
+        <field name="name">lagunes.partner.plat.type.rule.form</field>
+        <field name="model">lagunes.partner.plat.type.rule</field>
+        <field name="arch" type="xml">
+            <form string="Règle d'affichage" class="o_lagunes_view">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="partner_id" readonly="1" options="{'no_create': True}"/> 
+                            → <field name="plat_type_id" readonly="1" options="{'no_create': True}"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Options d'affichage">
+                            <field name="is_proposed" widget="boolean"
+                                   help="Si coché, ce type est visible pour cette entreprise"/>
+                            <field name="is_mandatory" widget="boolean"
+                                   help="Si coché, l'employé doit choisir dans ce type"/>
+                            <field name="max_choices"
+                                   help="Nombre de plats à choisir dans ce type"/>
+                        </group>
+                        <group string="Organisation">
+                            <field name="sequence"/>
+                        </group>
+                    </group>
+                    <group string="Notes">
+                        <field name="notes" nolabel="1" placeholder="Notes spécifiques..."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+</odoo>

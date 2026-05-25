@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Types de prestations -->
+        <record id="type_pause_cafe" model="lagunes.traiteur.type.prestation">
+            <field name="name">Pause-café</field>
+            <field name="code">PCAFE</field>
+            <field name="icon">fa-coffee</field>
+            <field name="heure_service">10h00</field>
+            <field name="color">#8B4513</field>
+            <field name="description">Un assortiment de viennoiseries fraîches, café pur arabica, thé et jus de fruits pour dynamiser vos matinées de travail.</field>
+        </record>
+
+        <record id="type_pause_dejeuner" model="lagunes.traiteur.type.prestation">
+            <field name="name">Pause déjeuner</field>
+            <field name="code">PDEJ</field>
+            <field name="icon">fa-utensils</field>
+            <field name="heure_service">12h30</field>
+            <field name="color">#16166d</field>
+            <field name="description">Un buffet complet ou des plateaux repas gourmands pour une pause méridienne conviviale et équilibrée.</field>
+        </record>
+
+        <record id="type_cocktail" model="lagunes.traiteur.type.prestation">
+            <field name="name">Cocktail dînatoire</field>
+            <field name="code">COCKTAIL</field>
+            <field name="icon">fa-glass</field>
+            <field name="heure_service">19h00</field>
+            <field name="color">#E67E22</field>
+            <field name="description">Une sélection raffinée de pièces salées et sucrées, idéale pour vos lancements de produits ou fins de séminaires.</field>
+        </record>
+    </data>
+</odoo>

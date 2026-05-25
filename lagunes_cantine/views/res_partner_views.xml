@@ -1,0 +1,222 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Vue formulaire étendue pour res.partner -->
+    <record id="view_partner_form_cantine" model="ir.ui.view">
+        <field name="name">res.partner.form.cantine</field>
+        <field name="model">res.partner</field>
+        <field name="inherit_id" ref="base.view_partner_form"/>
+        <field name="arch" type="xml">
+
+            <xpath expr="//notebook" position="inside">
+                <page string="Cantine" invisible="not is_cantine_client" class="o_lagunes_view">
+                    <div class="row mt-3">
+                        <!-- Configuration Card -->
+                        <div class="col-md-6 mb-4">
+                            <div class="lui-card h-100">
+                                <div class="lui-card-icon lui-icon-primary">
+                                    <i class="fa fa-sliders" title="Paramètres"/>
+                                </div>
+                                <h4 class="fw-bold mb-3">Configuration &amp; Accès</h4>
+                                <group>
+                                    <field name="is_cantine_client" widget="boolean_toggle"/>
+                                    <field name="cantine_access_code" password="True" invisible="not is_cantine_client"/>
+                                    <field name="max_orders_per_session" invisible="not is_cantine_client"/>
+                                </group>
+                            </div>
+                        </div>
+
+                        <!-- Heure Limite Card -->
+                        <div class="col-md-6 mb-4">
+                            <div class="lui-card h-100">
+                                <div class="lui-card-icon lui-icon-secondary">
+                                    <i class="fa fa-clock" title="Horaires"/>
+                                </div>
+                                <h4 class="fw-bold mb-3">Heure Limite de Commande</h4>
+                                <group>
+                                    <field name="heure_limite_active" widget="boolean_toggle"/>
+                                    <field name="heure_limite_commande"
+                                           invisible="not heure_limite_active"
+                                           widget="float_time"
+                                           help="Saisissez l'heure au format HH:MM — ex: 10:30"/>
+                                    <field name="heure_limite_display" readonly="1" invisible="not heure_limite_active"/>
+                                </group>
+                            </div>
+                        </div>
+
+                        <!-- Inscription Card -->
+                        <div class="col-md-12 mb-4">
+                            <div class="lui-card">
+                                <div class="lui-card-icon lui-icon-success">
+                                    <i class="fa fa-user-plus" title="Inscription"/>
+                                </div>
+                                <h4 class="fw-bold mb-3">Inscription des employés</h4>
+                                <div class="d-flex flex-column gap-3">
+                                    <group>
+                                        <field name="inscription_active" widget="boolean_toggle"/>
+                                    </group>
+                                    
+                                    <div class="alert alert-info py-2 px-3 border-0 border-start border-primary border-4 rounded-0 shadow-sm"
+                                         invisible="not inscription_active or not inscription_token" role="alert">
+                                        <div class="d-flex align-items-center gap-2 mb-1">
+                                            <i class="fa fa-link text-primary" title="Lien"/>
+                                            <strong class="text-primary small uppercase">Lien d'inscription actif</strong>
+                                        </div>
+                                        <field name="inscription_url" readonly="1" widget="url" class="text-break fw-bold"/>
+                                        <div class="mt-1 small text-muted">Partagez ce lien avec vos employés pour qu'ils s'inscrivent.</div>
+                                    </div>
+
+                                    <div class="d-flex gap-2">
+                                        <button name="action_generer_token_inscription" type="object"
+                                                string="Générer / Régénérer"
+                                                class="btn btn-primary btn-sm"
+                                                invisible="not is_cantine_client">
+                                            <i class="fa fa-refresh me-1" title="Rafraîchir"/>
+                                        </button>
+                                        <button name="action_desactiver_inscription" type="object"
+                                                string="Désactiver"
+                                                class="btn btn-outline-danger btn-sm"
+                                                invisible="not inscription_active"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Menu & Rules Section -->
+                        <div class="col-md-6 mb-4">
+                            <div class="lui-card h-100">
+                                <div class="lui-card-icon" style="background: #f1f5f9; color: #475569;">
+                                    <i class="fa fa-list-check" title="Règles"/>
+                                </div>
+                                <h4 class="fw-bold mb-3">Restrictions de menus</h4>
+                                <field name="menu_category_ids"
+                                       widget="many2many_tags"
+                                       options="{'no_create': True}"
+                                       placeholder="Toutes les catégories autorisées si vide..."/>
+                            </div>
+                        </div>
+
+                        <!-- Stats Card -->
+                        <div class="col-md-6 mb-4">
+                            <div class="lui-card h-100">
+                                <div class="lui-card-icon" style="background: #fdf2f8; color: #db2777;">
+                                    <i class="fa fa-chart-line" title="Statistiques"/>
+                                </div>
+                                <h4 class="fw-bold mb-3">Statistiques d'activité</h4>
+                                <div class="d-flex flex-column gap-3">
+                                    <button name="action_view_employes" type="object"
+                                            class="btn btn-light d-flex justify-content-between align-items-center border"
+                                            invisible="not is_cantine_client">
+                                        <span><i class="fa fa-users me-2 text-primary" title="Employés"/> Employés inscrits</span>
+                                        <span class="badge rounded-pill text-bg-primary"><field name="employe_count"/></span>
+                                    </button>
+                                    <div class="d-flex justify-content-between align-items-center p-2 border-bottom">
+                                        <span><i class="fa fa-calendar me-2 text-muted" title="Calendrier"/> Menus hebdo</span>
+                                        <span class="fw-bold"><field name="week_menu_count"/></span>
+                                    </div>
+                                    <div class="d-flex justify-content-between align-items-center p-2">
+                                        <span><i class="fa fa-shopping-cart me-2 text-muted" title="Panier"/> Commandes totales</span>
+                                        <span class="fw-bold"><field name="commande_count"/></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Plat Types Configuration -->
+                        <div class="col-md-12 mb-4">
+                            <div class="lui-card">
+                                <div class="lui-card-icon" style="background: #e0f2fe; color: #0284c7;">
+                                    <i class="fa fa-utensils" title="Cuisine"/>
+                                </div>
+                                <h4 class="fw-bold mb-3">Règles par type de plat</h4>
+                                <field name="plat_type_rule_ids" widget="one2many" mode="list">
+                                    <list editable="bottom" class="border rounded shadow-sm">
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="plat_type_id" options="{'no_create': True}"/>
+                                        <field name="is_proposed" widget="boolean_toggle"/>
+                                        <field name="is_mandatory" widget="boolean_toggle"/>
+                                        <field name="max_choices" decoration-info="max_choices &gt; 0"/>
+                                    </list>
+                                </field>
+                                <div class="mt-2 small text-muted italic">
+                                    <i class="fa fa-info-circle me-1" title="Info"/> Configurez ici les types de plats (Entrée, Plat, Dessert...) proposés aux employés de cette entreprise.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </page>
+            </xpath>
+
+        </field>
+    </record>
+
+    <!-- Vue liste des entreprises clientes - DESIGN MODERNE -->
+    <record id="view_partner_tree_cantine" model="ir.ui.view">
+        <field name="name">res.partner.list.cantine</field>
+        <field name="model">res.partner</field>
+        <field name="arch" type="xml">
+            <list string="Entreprises Clientes Cantine" 
+                  class="o_lagunes_view"
+                  decoration-success="is_cantine_client == True">
+                <!-- Informations principales -->
+                <field name="name" width="200" string="Entreprise"/>
+                <field name="phone" width="130" string="Téléphone"/>
+                <field name="email" width="180" string="Email"/>
+                
+                <!-- Configuration cantine -->
+                <field name="cantine_access_code" password="True" width="120" string="Code accès"/>
+                <field name="heure_limite_active" widget="boolean" optional="show" width="100" string="Limite active"/>
+                <field name="heure_limite_display" optional="show" width="100" string="Heure limite"/>
+                
+                <!-- Statistiques -->
+                <field name="employe_count" optional="show" width="100" string="Employés" sum="Total"/>
+                <field name="commande_count" optional="show" width="100" string="Commandes" sum="Total"/>
+                
+                <!-- Statut -->
+                <field name="is_cantine_client" widget="boolean" width="80" string="Active"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Action pour les entreprises clientes cantine - DESIGN MODERNE -->
+    <record id="action_partner_cantine" model="ir.actions.act_window">
+        <field name="name">Entreprises Clientes</field>
+        <field name="res_model">res.partner</field>
+        <field name="view_mode">list,form</field>
+        <field name="domain">[('is_cantine_client', '=', True)]</field>
+        <field name="context">{'default_is_cantine_client': True, 'default_customer_rank': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Aucune entreprise cliente enregistrée</p>
+            <div class="p-3 bg-light rounded">
+                <h5 class="mb-3"><i class="fa fa-building text-primary me-2"/>Gérez vos entreprises clientes</h5>
+                <p>Les entreprises inscrites peuvent :</p>
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-start gap-2">
+                            <i class="fa fa-cutlery text-success mt-1"/>
+                            <div>
+                                <strong>Accéder aux menus</strong>
+                                <p class="small text-muted mb-0">Visualiser les menus de la semaine</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-start gap-2">
+                            <i class="fa fa-shopping-cart text-info mt-1"/>
+                            <div>
+                                <strong>Passer des commandes</strong>
+                                <p class="small text-muted mb-0">Leurs employés commandent en ligne</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="alert alert-info mb-0 py-2">
+                    <i class="fa fa-lightbulb text-warning me-2"/>
+                    <strong>Pour commencer :</strong> Créez une entreprise avec son code d'accès et communiquez le lien d'inscription aux employés
+                </div>
+            </div>
+        </field>
+    </record>
+
+</odoo>

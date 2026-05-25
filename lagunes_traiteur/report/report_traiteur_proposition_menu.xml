@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Paperformat A4 portrait pour la proposition de menu -->
+    <record id="paperformat_a4_portrait_menu" model="report.paperformat">
+        <field name="name">A4 Portrait - Proposition Menu</field>
+        <field name="default" eval="False"/>
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Portrait</field>
+        <field name="margin_top">15</field>
+        <field name="margin_bottom">15</field>
+        <field name="margin_left">12</field>
+        <field name="margin_right">12</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">0</field>
+        <field name="dpi">96</field>
+    </record>
+
+    <!-- Action du rapport Proposition de Menu (modèle proposition) -->
+    <record id="action_report_traiteur_proposition_menu" model="ir.actions.report">
+        <field name="name">Proposition de Menu</field>
+        <field name="model">lagunes.traiteur.proposition</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">lagunes_traiteur.report_traiteur_proposition_menu_template</field>
+        <field name="report_file">lagunes_traiteur.report_traiteur_proposition_menu_template</field>
+        <field name="print_report_name">'Proposition Menu - %s' % (object.name)</field>
+        <field name="binding_model_id" ref="lagunes_traiteur.model_lagunes_traiteur_proposition"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="lagunes_traiteur.paperformat_a4_portrait_menu"/>
+    </record>
+
+    <template id="report_traiteur_proposition_menu_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="proposition">
+
+                <!-- Forcer l'encodage UTF-8 (wkhtmltopdf peut sinon rendre en Latin-1) -->
+                <meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+
+                <!-- Regroupement des lignes par jour (avec un bucket "sans jour") -->
+                <t t-set="lines_by_day" t-value="{}"/>
+                <t t-foreach="proposition.line_ids" t-as="line">
+                    <t t-set="day_key" t-value="line.jour_id.id or 0"/>
+                    <t t-if="day_key not in lines_by_day">
+                        <t t-set="dummy" t-value="lines_by_day.update({day_key: {'jour': line.jour_id, 'lines': []}})"/>
+                    </t>
+                    <t t-set="dummy" t-value="lines_by_day[day_key]['lines'].append(line)"/>
+                </t>
+
+                <!-- Index du jour (JOUR 1, JOUR 2, ...) basé sur l'ordre d'apparition -->
+                <t t-set="day_index" t-value="0"/>
+
+                <t t-foreach="lines_by_day.values()" t-as="day_block">
+                    <t t-set="jour" t-value="day_block['jour']"/>
+                    <t t-set="day_lines" t-value="day_block['lines']"/>
+                    <t t-set="day_index" t-value="day_index + 1"/>
+
+                    <!-- Regroupement par prestation -->
+                    <t t-set="prestations_by_id" t-value="{}"/>
+                    <t t-foreach="day_lines" t-as="line">
+                        <t t-set="prest_key" t-value="line.prestation_id.id or 0"/>
+                        <t t-if="prest_key not in prestations_by_id">
+                            <t t-set="dummy" t-value="prestations_by_id.update({prest_key: {'prestation': line.prestation_id, 'lines': []}})"/>
+                        </t>
+                        <t t-set="dummy" t-value="prestations_by_id[prest_key]['lines'].append(line)"/>
+                    </t>
+
+                    <div class="page menu-page">
+                        <style>
+                            .menu-page{
+                                font-family:'DejaVu Sans','Helvetica',Arial,sans-serif;
+                                color:#2c2c2c;
+                                font-size:11px;
+                                page-break-after:always;
+                            }
+                            .menu-page table.menu-table{
+                                border-collapse:collapse;
+                                width:100%;
+                                margin-bottom:28px;
+                                table-layout:fixed;
+                            }
+                            .menu-page table.menu-table td{
+                                border:1px solid #5B9BD5;
+                                padding:16px 18px;
+                                vertical-align:middle;
+                            }
+                            .menu-page .menu-header td{
+                                background:#5B9BD5;
+                                color:#ffffff;
+                                font-weight:bold;
+                                font-size:13px;
+                                letter-spacing:0.5px;
+                                text-transform:uppercase;
+                                padding:14px 18px;
+                                border:1px solid #5B9BD5;
+                            }
+                            .menu-page .menu-header .header-right{
+                                font-size:11px;
+                                font-weight:normal;
+                                letter-spacing:0.3px;
+                            }
+                            .menu-page .cat-cell{
+                                width:28%;
+                                background:#EAF2FB;
+                                color:#16166D;
+                                font-weight:bold;
+                                font-size:12px;
+                                letter-spacing:0.8px;
+                                text-transform:uppercase;
+                                text-align:center;
+                                vertical-align:middle;
+                            }
+                            .menu-page .plats-cell{
+                                width:72%;
+                                background:#ffffff;
+                                font-size:11.5px;
+                                line-height:1.7;
+                            }
+                            .menu-page .plats-cell ul{
+                                list-style:none;
+                                padding:0;
+                                margin:0;
+                            }
+                            .menu-page .plats-cell li{
+                                padding:3px 0;
+                            }
+                            .menu-page .plats-cell li .bullet{
+                                color:#5B9BD5;
+                                font-weight:bold;
+                                margin-right:8px;
+                            }
+                            .menu-page .doc-title{
+                                text-align:center;
+                                margin:0 0 22px 0;
+                                padding-bottom:12px;
+                                border-bottom:2px solid #16166D;
+                            }
+                            .menu-page .doc-title h1{
+                                color:#16166D;
+                                font-size:22px;
+                                margin:0;
+                                letter-spacing:1px;
+                            }
+                            .menu-page .doc-title .subtitle{
+                                color:#666;
+                                font-size:11px;
+                                margin-top:4px;
+                            }
+                            .menu-page .doc-footer{
+                                text-align:center;
+                                margin-top:24px;
+                                font-size:9.5px;
+                                color:#888;
+                                font-style:italic;
+                            }
+                            @page{ size:A4 portrait; margin:1cm; }
+                        </style>
+
+                        <!-- ENTÊTE DU DOCUMENT -->
+                        <div class="doc-title">
+                            <h1>PROPOSITION DE MENU</h1>
+                            <div class="subtitle">
+                                <span t-esc="proposition.name"/>
+                                <t t-if="proposition.demande_id">
+                                    — <span t-esc="((proposition.prenom_contact or '') + ' ' + (proposition.nom_contact or '')).strip()"/>
+                                </t>
+                            </div>
+                        </div>
+
+                        <!-- BOUCLE PAR PRESTATION -->
+                        <t t-foreach="prestations_by_id.values()" t-as="prest_block">
+                            <t t-set="prestation" t-value="prest_block['prestation']"/>
+                            <t t-set="prest_lines" t-value="prest_block['lines']"/>
+
+                            <!-- Détection : la prestation contient-elle un plat de résistance ? -->
+                            <t t-set="has_main_course" t-value="False"/>
+                            <t t-foreach="prest_lines" t-as="line">
+                                <t t-set="type_name" t-value="(line.plat_type_id.name or '').lower()"/>
+                                <t t-if="'sist' in type_name or 'principal' in type_name">
+                                    <t t-set="has_main_course" t-value="True"/>
+                                </t>
+                            </t>
+
+                            <!-- Regroupement des lignes par catégorie -->
+                            <t t-set="entrees" t-value="[]"/>
+                            <t t-set="plats" t-value="[]"/>
+                            <t t-set="accompagnements" t-value="[]"/>
+                            <t t-set="desserts" t-value="[]"/>
+                            <t t-set="collation_items" t-value="[]"/>
+                            <t t-foreach="prest_lines" t-as="line">
+                                <t t-set="type_name" t-value="(line.plat_type_id.name or '').lower()"/>
+                                <t t-set="label" t-value="line.description or ''"/>
+                                <t t-if="has_main_course">
+                                    <t t-if="'entr' in type_name">
+                                        <t t-set="dummy" t-value="entrees.append(label)"/>
+                                    </t>
+                                    <t t-elif="'sist' in type_name or 'principal' in type_name">
+                                        <t t-set="dummy" t-value="plats.append(label)"/>
+                                        <t t-if="line.accompagnement_id">
+                                            <t t-set="dummy" t-value="accompagnements.append(line.accompagnement_id.name)"/>
+                                        </t>
+                                    </t>
+                                    <t t-elif="'accompagnement' in type_name">
+                                        <t t-set="dummy" t-value="accompagnements.append(label)"/>
+                                    </t>
+                                    <t t-elif="'dessert' in type_name">
+                                        <t t-set="dummy" t-value="desserts.append(label)"/>
+                                    </t>
+                                </t>
+                                <t t-else="">
+                                    <t t-set="dummy" t-value="collation_items.append(label)"/>
+                                </t>
+                            </t>
+
+                            <!-- TABLEAU REPAS COMPLET -->
+                            <t t-if="has_main_course">
+                                <table class="menu-table">
+                                    <tr class="menu-header">
+                                        <td style="width:28%;">PRESTATIONS</td>
+                                        <td class="header-right" style="text-align:right;">
+                                            JOUR <t t-esc="day_index"/>
+                                            <t t-if="jour and jour.date">
+                                                &#160;|&#160;
+                                                <span t-field="jour.date" t-options='{"widget":"date","format":"dd/MM/yyyy"}'/>
+                                            </t>
+                                            &#160;|&#160;
+                                            (<t t-esc="prestation.nb_personnes or proposition.nb_personnes or 0"/> personnes)
+                                        </td>
+                                    </tr>
+
+                                    <t t-if="entrees">
+                                        <tr>
+                                            <td class="cat-cell">ENTRÉES</td>
+                                            <td class="plats-cell">
+                                                <ul>
+                                                    <t t-foreach="entrees" t-as="item">
+                                                        <li><span class="bullet">•</span><t t-esc="item"/></li>
+                                                    </t>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                    </t>
+
+                                    <t t-if="plats">
+                                        <tr>
+                                            <td class="cat-cell">PLATS DE RÉSISTANCE</td>
+                                            <td class="plats-cell">
+                                                <ul>
+                                                    <t t-foreach="plats" t-as="item">
+                                                        <li><span class="bullet">•</span><t t-esc="item"/></li>
+                                                    </t>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                    </t>
+
+                                    <t t-if="accompagnements">
+                                        <tr>
+                                            <td class="cat-cell">ACCOMPAGNEMENTS</td>
+                                            <td class="plats-cell">
+                                                <ul>
+                                                    <t t-foreach="accompagnements" t-as="item">
+                                                        <li><span class="bullet">•</span><t t-esc="item"/></li>
+                                                    </t>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                    </t>
+
+                                    <t t-if="desserts">
+                                        <tr>
+                                            <td class="cat-cell">DESSERTS</td>
+                                            <td class="plats-cell">
+                                                <ul>
+                                                    <t t-foreach="desserts" t-as="item">
+                                                        <li><span class="bullet">•</span><t t-esc="item"/></li>
+                                                    </t>
+                                                </ul>
+                                            </td>
+                                        </tr>
+                                    </t>
+                                </table>
+                            </t>
+
+                            <!-- TABLEAU PAUSE / COLLATION -->
+                            <t t-if="not has_main_course">
+                                <table class="menu-table">
+                                    <tr class="menu-header">
+                                        <td style="width:28%;">
+                                            <t t-esc="(prestation.type_prestation_id.name or 'PRESTATION').upper()"/>
+                                        </td>
+                                        <td class="header-right" style="text-align:right;">
+                                            JOUR <t t-esc="day_index"/>
+                                            <t t-if="jour and jour.date">
+                                                &#160;|&#160;
+                                                <span t-field="jour.date" t-options='{"widget":"date","format":"dd/MM/yyyy"}'/>
+                                            </t>
+                                            &#160;|&#160;
+                                            (<t t-esc="prestation.nb_personnes or proposition.nb_personnes or 0"/> personnes)
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td class="cat-cell">
+                                            <t t-esc="(prestation.type_prestation_id.name or 'Prestation').upper()"/>
+                                            <t t-if="prestation and prestation.heure_prestation">
+                                                <div style="font-size:10px;font-weight:normal;margin-top:6px;color:#16166D;">
+                                                    <t t-esc="('%02d'%int(prestation.heure_prestation))+'h'+('%02d'%int((prestation.heure_prestation%1)*60)) if prestation.heure_prestation%1 else ('%02d'%int(prestation.heure_prestation))+'h'"/>
+                                                </div>
+                                            </t>
+                                        </td>
+                                        <td class="plats-cell">
+                                            <ul>
+                                                <t t-foreach="collation_items" t-as="item">
+                                                    <li><span class="bullet">•</span><t t-esc="item"/></li>
+                                                </t>
+                                                <t t-if="not collation_items">
+                                                    <li style="color:#999;font-style:italic;">Aucun élément renseigné</li>
+                                                </t>
+                                            </ul>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </t>
+                        </t>
+
+                        <!-- PIED DE PAGE -->
+                        <div class="doc-footer">
+                            <strong>Restaurant des Lagunes</strong> — Proposition générée le
+                            <t t-esc="datetime.datetime.now().strftime('%d/%m/%Y')"/>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

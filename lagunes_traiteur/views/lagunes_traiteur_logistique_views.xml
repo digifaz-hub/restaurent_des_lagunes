@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_traiteur_logistique_list" model="ir.ui.view">
+        <field name="name">lagunes.traiteur.logistique.list</field>
+        <field name="model">lagunes.traiteur.logistique</field>
+        <field name="arch" type="xml">
+            <list string="Logistique" editable="bottom">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="prix_unitaire"/>
+                <field name="unite"/>
+                <field name="is_default_included"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_traiteur_logistique_form" model="ir.ui.view">
+        <field name="name">lagunes.traiteur.logistique.form</field>
+        <field name="model">lagunes.traiteur.logistique</field>
+        <field name="arch" type="xml">
+            <form string="Élément logistique">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name" class="oe_edit_only"/>
+                        <h1><field name="name" placeholder="ex: Nappe blanche"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="prix_unitaire"/>
+                            <field name="unite"/>
+                            <field name="product_id"/>
+                        </group>
+                        <group>
+                            <field name="is_default_included"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                            <field name="active"/>
+                        </group>
+                        <group string="Paramètres Techniques (Admin)" groups="base.group_no_one">
+                            <field name="icon"/>
+                        </group>
+
+                    </group>
+                    <group string="Description">
+                        <field name="description" nolabel="1" placeholder="Informations pour le portail client..."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_traiteur_logistique" model="ir.actions.act_window">
+        <field name="name">Logistique / Matériel</field>
+        <field name="res_model">lagunes.traiteur.logistique</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

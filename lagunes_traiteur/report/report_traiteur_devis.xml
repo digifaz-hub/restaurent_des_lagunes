@@ -1,0 +1,518 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ============================================================
+         RAPPORT : Devis Traiteur style Restaurant des Lagunes
+         Basé sur le modèle cantine report_lagunes_devis.xml
+         ============================================================ -->
+
+    <!-- 1. Déclaration du rapport -->
+    <record id="report_traiteur_devis_lagunes" model="ir.actions.report">
+        <field name="name">Devis Traiteur Lagunes</field>
+        <field name="model">lagunes.traiteur.devis</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">lagunes_traiteur.report_traiteur_devis_document</field>
+        <field name="report_file">lagunes_traiteur.report_traiteur_devis_document</field>
+        <field name="print_report_name">'Devis Traiteur - %s' % object.name</field>
+        <field name="binding_model_id" ref="lagunes_traiteur.model_lagunes_traiteur_devis"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="base.paperformat_euro"/>
+    </record>
+
+    <!-- 2. Template principal du document -->
+    <template id="report_traiteur_devis_document">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="lagunes_traiteur.report_traiteur_devis_content"
+                   t-lang="o.sale_order_id.partner_id.lang if o.sale_order_id and o.sale_order_id.partner_id else 'fr_FR'"/>
+            </t>
+        </t>
+    </template>
+
+    <!-- 3. Contenu du devis -->
+    <template id="report_traiteur_devis_content">
+        <t t-call="web.external_layout">
+            <div class="page">
+                <style>
+                    body, .page {
+                        font-family: Arial, Helvetica, sans-serif;
+                        font-size: 9.5pt;
+                        color: #000;
+                    }
+                    .lg-header-wrap {
+                        border: 2px solid #16166d;
+                        margin-bottom: 0;
+                    }
+                    .lg-top-row {
+                        display: table;
+                        width: 100%;
+                        padding: 6px 10px;
+                        background: #fff;
+                        border-bottom: 1px solid #16166d;
+                    }
+                    .lg-top-left {
+                        display: table-cell;
+                        vertical-align: middle;
+                        width: 60%;
+                    }
+                    .lg-top-right {
+                        display: table-cell;
+                        vertical-align: middle;
+                        text-align: right;
+                        width: 40%;
+                    }
+                    .lg-company-name {
+                        font-size: 18pt;
+                        font-weight: bold;
+                        color: #16166d;
+                        letter-spacing: 1px;
+                        text-transform: uppercase;
+                    }
+                    .lg-company-info {
+                        font-size: 7.5pt;
+                        color: #333;
+                        line-height: 1.5;
+                        margin-top: 2px;
+                    }
+                    .lg-logo img {
+                        max-height: 65px;
+                        max-width: 130px;
+                    }
+                    .lg-meta-table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        font-size: 8pt;
+                    }
+                    .lg-meta-table th {
+                        background: #16166d;
+                        color: #fff;
+                        font-weight: bold;
+                        border: 1px solid #16166d;
+                        padding: 4px 6px;
+                        text-align: center;
+                        vertical-align: middle;
+                    }
+                    .lg-meta-table td {
+                        border: 1px solid #16166d;
+                        padding: 4px 6px;
+                        text-align: center;
+                        vertical-align: middle;
+                        font-size: 8.5pt;
+                    }
+                    .lg-fao-table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        font-size: 8pt;
+                        margin-top: -1px;
+                    }
+                    .lg-fao-table th {
+                        background: #16166d;
+                        color: #fff;
+                        font-weight: bold;
+                        border: 1px solid #16166d;
+                        padding: 4px 8px;
+                        text-align: center;
+                        vertical-align: middle;
+                    }
+                    .lg-fao-table td {
+                        border: 1px solid #16166d;
+                        padding: 4px 8px;
+                        vertical-align: middle;
+                        font-size: 8.5pt;
+                    }
+                    .lg-activite-bar {
+                        background: #16166d;
+                        color: #fff;
+                        font-weight: bold;
+                        font-size: 9pt;
+                        text-align: center;
+                        padding: 4px 0;
+                        border: 1px solid #16166d;
+                        border-top: none;
+                        margin-top: -1px;
+                        letter-spacing: 1px;
+                    }
+                    .lg-activite-content {
+                        border: 1px solid #16166d;
+                        border-top: none;
+                        padding: 5px 10px;
+                        font-style: italic;
+                        font-size: 8.5pt;
+                        color: #16166d;
+                        font-weight: bold;
+                    }
+                    .lg-lines-table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        margin-top: 8px;
+                        font-size: 8.5pt;
+                    }
+                    .lg-lines-table thead th {
+                        background: #16166d;
+                        color: #fff;
+                        font-weight: bold;
+                        border: 1px solid #16166d;
+                        padding: 5px 6px;
+                        text-align: center;
+                        vertical-align: middle;
+                    }
+                    .lg-lines-table thead th.th-desc {
+                        text-align: left;
+                        width: 42%;
+                    }
+                    .lg-lines-table thead th.th-qty   { width: 10%; }
+                    .lg-lines-table thead th.th-days  { width: 12%; }
+                    .lg-lines-table thead th.th-price { width: 18%; }
+                    .lg-lines-table thead th.th-total { width: 18%; }
+                    .lg-lines-table tbody tr td {
+                        border: 1px solid #bbb;
+                        padding: 4px 6px;
+                        vertical-align: top;
+                    }
+                    .lg-lines-table tbody tr:nth-child(even) td {
+                        background: #fafafa;
+                    }
+                    .lg-lines-table td.td-desc { vertical-align: top; }
+                    .lg-lines-table td.td-desc .plat-title {
+                        font-weight: bold;
+                        font-size: 9pt;
+                        color: #000;
+                    }
+                    .lg-lines-table td.td-desc ul.sub-items {
+                        margin: 2px 0 0 14px;
+                        padding: 0;
+                        list-style-type: disc;
+                    }
+                    .lg-lines-table td.td-desc ul.sub-items li {
+                        margin-bottom: 1px;
+                        font-size: 8pt;
+                        color: #222;
+                    }
+                    .lg-lines-table td.td-desc .plat-note {
+                        font-size: 7.5pt;
+                        color: #555;
+                        margin-top: 2px;
+                        font-style: italic;
+                    }
+                    .lg-lines-table td.td-center {
+                        text-align: center;
+                        vertical-align: middle;
+                    }
+                    .lg-lines-table td.td-right {
+                        text-align: right;
+                        vertical-align: middle;
+                        white-space: nowrap;
+                    }
+                    .lg-lines-table tr.cat-row td {
+                        background: #e0e1f0;
+                        color: #16166d;
+                        font-weight: bold;
+                        font-size: 8.5pt;
+                        padding: 3px 6px;
+                        border: 1px solid #bbb;
+                    }
+                    .lg-totaux-table {
+                        width: 100%;
+                        border-collapse: collapse;
+                        margin-top: 0;
+                        font-size: 9pt;
+                    }
+                    .lg-totaux-table td {
+                        border: 1px solid #bbb;
+                        padding: 4px 8px;
+                    }
+                    .lg-totaux-table td.tot-label {
+                        text-align: right;
+                        font-weight: bold;
+                        width: 62%;
+                        background: #f0f0f8;
+                        color: #16166d;
+                    }
+                    .lg-totaux-table td.tot-value {
+                        text-align: right;
+                        width: 38%;
+                        white-space: nowrap;
+                    }
+                    .lg-totaux-table tr.tva-row td { color: #555; font-style: italic; }
+                    .lg-totaux-table tr.total-row td {
+                        font-weight: bold;
+                        font-size: 10pt;
+                        background: #e0e1f0;
+                        color: #16166d;
+                    }
+                    .lg-arrete {
+                        background: #e0e1f0;
+                        border: 1px solid #16166d;
+                        padding: 5px 10px;
+                        font-size: 8.5pt;
+                        margin-top: 8px;
+                    }
+                    .lg-arrete strong { color: #16166d; }
+                    .lg-footer {
+                        margin-top: 10px;
+                        display: table;
+                        width: 100%;
+                    }
+                    .lg-footer-left {
+                        display: table-cell;
+                        vertical-align: bottom;
+                        width: 50%;
+                    }
+                    .lg-footer-right {
+                        display: table-cell;
+                        vertical-align: bottom;
+                        text-align: right;
+                        width: 50%;
+                        font-size: 8pt;
+                        color: #333;
+                    }
+                    .lg-merci {
+                        font-style: italic;
+                        font-weight: bold;
+                        color: #16166d;
+                        font-size: 12pt;
+                    }
+                </style>
+
+                <!-- Calcul du nombre de jours -->
+                <t t-set="nb_jours" t-value="(o.demande_id.date_fin - o.demande_id.date_debut).days + 1 if o.demande_id and o.demande_id.date_debut and o.demande_id.date_fin else 1"/>
+
+                <!-- EN-TÊTE -->
+                <div class="lg-header-wrap">
+                    <div class="lg-top-row">
+                        <div class="lg-top-left">
+                            <div class="lg-company-name">
+                                <t t-esc="o.sale_order_id.company_id.name if o.sale_order_id and o.sale_order_id.company_id else 'RESTAURANT DES LAGUNES'"/>
+                            </div>
+                            <div class="lg-company-info">
+                                <t t-if="o.sale_order_id and o.sale_order_id.company_id">
+                                    <t t-if="o.sale_order_id.company_id.street">
+                                        <t t-esc="o.sale_order_id.company_id.street"/><br/>
+                                    </t>
+                                    <t t-if="o.sale_order_id.company_id.city">
+                                        <t t-esc="o.sale_order_id.company_id.city"/>
+                                        <t t-if="o.sale_order_id.company_id.zip"> <t t-esc="o.sale_order_id.company_id.zip"/></t><br/>
+                                    </t>
+                                    <t t-if="o.sale_order_id.company_id.phone">
+                                        Tél : <t t-esc="o.sale_order_id.company_id.phone"/>&#160;
+                                    </t>
+                                    <t t-if="o.sale_order_id.company_id.email">
+                                        e-mail : <t t-esc="o.sale_order_id.company_id.email"/>
+                                    </t>
+                                    <t t-if="o.sale_order_id.company_id.company_registry">
+                                        <br/>RCCM N° : <t t-esc="o.sale_order_id.company_id.company_registry"/>
+                                    </t>
+                                </t>
+                            </div>
+                        </div>
+                        <!-- <div class="lg-top-right lg-logo">
+                            <t t-if="o.sale_order_id and o.sale_order_id.company_id and o.sale_order_id.company_id.logo">
+                                <img t-att-src="image_data_uri(o.sale_order_id.company_id.logo)" alt="Logo"/>
+                            </t>
+                        </div> -->
+                    </div>
+
+                    <!-- Tableau méta -->
+                    <table class="lg-meta-table">
+                        <thead>
+                            <tr>
+                                <th style="width:33%">DÉLAIS RÈGLEMENT</th>
+                                <th style="width:33%">PROPOSITION</th>
+                                <th style="width:33%">DATE</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <t t-if="o.sale_order_id and o.sale_order_id.payment_term_id">
+                                        <t t-esc="o.sale_order_id.payment_term_id.name"/>
+                                    </t>
+                                    <t t-else="">7 Jours Après Facturation</t>
+                                </td>
+                                <td><t t-esc="o.name"/></td>
+                                <td>
+                                    <span t-esc="o.sale_order_id.date_order if o.sale_order_id else o.create_date"
+                                          t-options='{"widget": "date", "format": "dd/MM/yyyy"}'/>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- Ligne FAO -->
+                    <table class="lg-fao-table">
+                        <thead>
+                            <tr>
+                                <th style="width:40%"><t t-esc="o.sale_order_id.partner_id.name if o.sale_order_id and o.sale_order_id.partner_id else 'Client'"/></th>
+                                <th style="width:20%">REF CLIENT</th>
+                                <th style="width:40%">SECTION</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <t t-if="o.sale_order_id and o.sale_order_id.partner_id">
+                                        <t t-if="o.sale_order_id.partner_id.street">
+                                            <t t-esc="o.sale_order_id.partner_id.street"/><br/>
+                                        </t>
+                                        <t t-if="o.sale_order_id.partner_id.city">
+                                            <t t-esc="o.sale_order_id.partner_id.zip"/> <t t-esc="o.sale_order_id.partner_id.city"/>
+                                        </t>
+                                    </t>
+                                </td>
+                                <td style="text-align:center; font-weight:bold;">
+                                    <t t-if="o.sale_order_id and o.sale_order_id.partner_id and o.sale_order_id.partner_id.ref">
+                                        <t t-esc="o.sale_order_id.partner_id.ref"/>
+                                    </t>
+                                    <t t-else="">
+                                        <t t-esc="'%04d' % (o.sale_order_id.partner_id.id if o.sale_order_id and o.sale_order_id.partner_id else 0)"/>
+                                    </t>
+                                </td>
+                                <td>
+                                    <t t-if="o.sale_order_id and o.sale_order_id.partner_id and o.sale_order_id.partner_id.function">
+                                        <t t-esc="o.sale_order_id.partner_id.function"/>
+                                    </t>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- ACTIVITÉ -->
+                <div class="lg-activite-bar">ACTIVITÉ</div>
+                <div class="lg-activite-content">
+                    <t t-if="o.sale_order_id and o.sale_order_id.note">
+                        <t t-foreach="o.sale_order_id.note.split('\n')" t-as="line">
+                            <t t-esc="line"/><br t-if="not line_last"/>
+                        </t>
+                    </t>
+                    <t t-elif="o.demande_id and o.demande_id.notes_client">
+                        <t t-foreach="o.demande_id.notes_client.split('\n')" t-as="line">
+                            <t t-esc="line"/><br t-if="not line_last"/>
+                        </t>
+                    </t>
+                    <t t-else="">
+                        <t t-esc="o.name"/> — <t t-esc="o.sale_order_id.partner_id.name if o.sale_order_id and o.sale_order_id.partner_id else 'Client'"/>
+                    </t>
+                </div>
+
+                <!-- TABLEAU DES LIGNES -->
+                <table class="lg-lines-table">
+                    <thead>
+                        <tr>
+                            <th class="th-desc">DESCRIPTIONS</th>
+                            <th class="th-qty">QUANTITÉ</th>
+                            <th class="th-days">NOMBRE DE<br/>JOUR</th>
+                            <th class="th-price">PRIX<br/>UNITAIRE</th>
+                            <th class="th-total">MONTANT</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- Boucle sur les lignes du Bon de Commande -->
+                        <t t-if="o.sale_order_id">
+                            <t t-set="last_prestation" t-value="None"/>
+                            <t t-foreach="o.sale_order_id.order_line" t-as="line">
+                                <!-- Gestion des Sections (Titres de jours/prestations) -->
+                                <t t-if="line.display_type == 'line_section'">
+                                    <tr class="cat-row">
+                                        <td colspan="5"><span t-field="line.name"/></td>
+                                    </tr>
+                                </t>
+                                
+                                <!-- Gestion des Lignes de Produits avec Prix (Forfaits ou Logistique) -->
+                                <t t-if="not line.display_type and line.price_unit > 0">
+                                    <tr>
+                                        <td class="td-desc">
+                                            <div class="plat-title"><span t-field="line.name"/></div>
+                                            <!-- Si c'est une prestation, on affiche les plats associés en puces -->
+                                            <t t-if="line.traiteur_prestation_id">
+                                                <ul class="sub-items">
+                                                    <t t-foreach="line.traiteur_prestation_id.plat_line_ids" t-as="plat">
+                                                        <t t-if="not plat.logistique_id">
+                                                            <li><t t-esc="plat.description"/> <t t-if="plat.quantite > 1">(x<t t-esc="int(plat.quantite)"/>)</t></li>
+                                                        </t>
+                                                    </t>
+                                                </ul>
+                                            </t>
+                                        </td>
+                                        <td class="td-center"><t t-esc="int(line.product_uom_qty)"/></td>
+                                        <td class="td-center"><t t-esc="line.traiteur_nb_jours"/></td>
+                                        <td class="td-right">
+                                            <t t-set="unit_price" t-value="line.price_unit / line.traiteur_nb_jours if line.traiteur_nb_jours > 0 else line.price_unit"/>
+                                            <t t-esc="'{:,.0f}'.format(unit_price).replace(',', ' ')"/>
+                                        </td>
+                                        <td class="td-right">
+                                            <t t-esc="'{:,.0f}'.format(line.price_subtotal).replace(',', ' ')"/>
+                                        </td>
+                                    </tr>
+                                </t>
+
+                                <!-- Note: Les lignes à 0 FCFA sont déjà affichées en "puces" au-dessus, on les ignore ici pour ne pas doubler -->
+                            </t>
+                        </t>
+
+                    </tbody>
+                </table>
+
+                <!-- TOTAUX -->
+                <table class="lg-totaux-table">
+                    <t t-if="o.sale_order_id">
+                        <tr>
+                            <td class="tot-label">SOUS TOTAL</td>
+                            <td class="tot-value">
+                                <t t-esc="'{:,.0f}'.format(o.sale_order_id.amount_untaxed).replace(',', ' ')"/> XOF
+                            </td>
+                        </tr>
+                        <tr class="tva-row">
+                            <td class="tot-label">TVA 18 %</td>
+                            <td class="tot-value">
+                                <t t-if="o.sale_order_id.amount_tax > 0">
+                                    <t t-esc="'{:,.0f}'.format(o.sale_order_id.amount_tax).replace(',', ' ')"/> XOF
+                                </t>
+                                <t t-else="">NON FACTURÉE</t>
+                            </td>
+                        </tr>
+                        <tr class="total-row">
+                            <td class="tot-label">TOTAL</td>
+                            <td class="tot-value">
+                                <t t-esc="'{:,.0f}'.format(o.sale_order_id.amount_total).replace(',', ' ')"/> XOF
+                            </td>
+                        </tr>
+                    </t>
+                </table>
+
+                <!-- MONTANT EN LETTRES -->
+                <div class="lg-arrete">
+                    <strong>Arrêter du devis à la somme :</strong>
+                    <t t-if="o.sale_order_id and o.sale_order_id.amount_to_text">
+                        <t t-esc="o.sale_order_id.amount_to_text"/>
+                    </t>
+                    <t t-elif="o.sale_order_id">
+                        <t t-esc="'{:,.0f}'.format(o.sale_order_id.amount_total).replace(',', ' ')"/> francs CFA
+                    </t>
+                </div>
+
+                <!-- PIED DE PAGE -->
+                <div class="lg-footer">
+                    <div class="lg-footer-left">
+                        <div class="lg-merci"><i>Merci pour votre confiance !</i></div>
+                    </div>
+                    <div class="lg-footer-right">
+                        Si vous avez des questions concernant cette offre, veuillez nous contacter.<br/>
+                        <t t-if="o.sale_order_id and o.sale_order_id.user_id">
+                            <strong><t t-esc="o.sale_order_id.user_id.name"/></strong>
+                            <t t-if="o.sale_order_id.user_id.mobile"> , Cel: <t t-esc="o.sale_order_id.user_id.mobile"/></t>
+                            <t t-elif="o.sale_order_id.user_id.phone"> , Tél: <t t-esc="o.sale_order_id.user_id.phone"/></t>
+                            <t t-if="o.sale_order_id.user_id.email"> , email: <t t-esc="o.sale_order_id.user_id.email"/></t>
+                        </t>
+                        <t t-elif="o.sale_order_id and o.sale_order_id.company_id">
+                            <t t-if="o.sale_order_id.company_id.phone">Tél: <t t-esc="o.sale_order_id.company_id.phone"/></t>
+                            <t t-if="o.sale_order_id.company_id.email"> , email: <t t-esc="o.sale_order_id.company_id.email"/></t>
+                        </t>
+                    </div>
+                </div>
+
+            </div>
+        </t>
+    </template>
+
+</odoo>

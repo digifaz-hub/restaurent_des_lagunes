@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ═══════════════════════════════════════════════════════════
+         MENU PRINCIPAL
+    ═══════════════════════════════════════════════════════════ -->
+    <menuitem id="menu_market_root"
+              name="Gestion des marchés"
+              sequence="50"
+              groups="lagunes_market.group_market_user"
+              web_icon="lagunes_market,static/description/icon.png"/>
+
+    <menuitem id="menu_market_dashboard"
+              name="Dashboard"
+              parent="menu_market_root"
+              action="lagunes_market.action_market_dashboard"
+              sequence="5"
+              groups="lagunes_market.group_market_user"/>
+
+    <!-- ─── Marchés ─────────────────────────────────────────── -->
+    <menuitem id="menu_market_markets"
+              name="Marchés"
+              parent="menu_market_root"
+              sequence="10"
+              groups="lagunes_market.group_market_user"/>
+
+    <menuitem id="menu_market_all"
+              name="Tous les marchés"
+              parent="menu_market_markets"
+              action="lagunes_market.action_market"
+              sequence="10"
+              groups="lagunes_market.group_market_user"/>
+
+    <menuitem id="menu_market_leftover"
+              name="Stock initial (consultation)"
+              parent="menu_market_markets"
+              action="lagunes_market.action_market_leftover"
+              sequence="20"
+              groups="lagunes_market.group_market_manager"/>
+
+    <!-- ─── Stock ────────────────────────────────────────────── -->
+    <menuitem id="menu_market_stock_root"
+              name="Stock"
+              parent="menu_market_root"
+              sequence="20"
+              groups="lagunes_market.group_market_user"/>
+
+    <menuitem id="menu_market_stock"
+              name="Stock des articles"
+              parent="menu_market_stock_root"
+              action="lagunes_market.action_market_stock"
+              sequence="10"
+              groups="lagunes_market.group_market_user"/>
+
+    <menuitem id="menu_market_stock_move"
+              name="Historique des mouvements"
+              parent="menu_market_stock_root"
+              action="lagunes_market.action_market_stock_move"
+              sequence="20"
+              groups="lagunes_market.group_market_user"/>
+
+    <!-- Note: Stock initial déplacé sous Marchés (saisie dans formulaire Marché, lecture ici) -->
+
+    <menuitem id="menu_market_stock_alerts"
+              name="Alertes stock faible"
+              parent="menu_market_stock_root"
+              action="lagunes_market.action_market_stock_alerts"
+              sequence="25"
+              groups="lagunes_market.group_market_user"/>
+
+    <menuitem id="menu_market_deductions"
+              name="Consommation Cantine"
+              parent="menu_market_stock_root"
+              action="lagunes_market.action_market_stock_deductions"
+              sequence="40"
+              groups="lagunes_market.group_market_user"/>
+
+    <menuitem id="menu_market_traiteur_deductions"
+              name="Consommation Service Traiteur"
+              parent="menu_market_stock_root"
+              action="lagunes_market.action_market_stock_traiteur_deductions"
+              sequence="45"
+              groups="lagunes_market.group_market_user"/>
+
+    <!-- ─── Analyse ──────────────────────────────────────────── -->
+    <menuitem id="menu_market_analysis_root"
+              name="Analyse"
+              parent="menu_market_root"
+              sequence="30"
+              groups="lagunes_market.group_market_user"/>
+
+    <menuitem id="menu_market_analysis"
+              name="Dépenses par mois"
+              parent="menu_market_analysis_root"
+              action="lagunes_market.action_market_analysis"
+              sequence="10"
+              groups="lagunes_market.group_market_user"/>
+
+    <!-- ─── Configuration (gestionnaires uniquement) ─────────── -->
+    <menuitem id="menu_market_config_root"
+              name="Configuration"
+              parent="menu_market_root"
+              sequence="100"
+              groups="lagunes_market.group_market_manager"/>
+
+    <menuitem id="menu_market_articles"
+              name="Articles"
+              parent="menu_market_config_root"
+              action="lagunes_market.action_market_article"
+              sequence="10"
+              groups="lagunes_market.group_market_manager"/>
+
+    <menuitem id="menu_market_categories"
+              name="Catégories d'articles"
+              parent="menu_market_config_root"
+              action="lagunes_market.action_market_article_category"
+              sequence="20"
+              groups="lagunes_market.group_market_manager"/>
+
+    <menuitem id="menu_market_uom_category"
+              name="Catégories d'unités"
+              parent="menu_market_config_root"
+              action="lagunes_market.action_market_uom_category"
+              sequence="28"
+              groups="lagunes_market.group_market_manager"/>
+
+    <menuitem id="menu_market_uom"
+              name="Unités de mesure"
+              parent="menu_market_config_root"
+              action="lagunes_market.action_market_uom"
+              sequence="30"
+              groups="lagunes_market.group_market_manager"/>
+
+    <menuitem id="menu_market_settings"
+              name="Paramètres comptables"
+              parent="menu_market_config_root"
+              action="lagunes_market.action_market_config_settings"
+              sequence="30"
+              groups="lagunes_market.group_market_manager"/>
+</odoo>

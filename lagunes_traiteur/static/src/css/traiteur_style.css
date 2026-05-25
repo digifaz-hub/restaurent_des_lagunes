@@ -1,0 +1,121 @@
+/* Custom Premium Styles for Lagunes Traiteur */
+
+:root {
+    --traiteur-primary: #16166d;
+    --traiteur-accent: #f8c12c;
+    --glass-bg: rgba(22, 22, 109, 0.4);
+}
+
+.glass-card {
+    background: rgba(22, 22, 109, 0.35);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    border-radius: 28px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+}
+
+.shadow-text {
+    text-shadow: 0 4px 8px rgba(0, 0, 0, 0.6), 0 0 20px rgba(0, 0, 0, 0.4);
+}
+
+.gradient-text {
+    background: linear-gradient(90deg, var(--traiteur-primary) 0%, #3f3f9f 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.transition-3d {
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.transition-3d:hover {
+    transform: translateY(-5px) scale(1.02);
+    box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2) !important;
+}
+
+.ls-2 {
+    letter-spacing: 2px;
+}
+
+.animate__fadeInLeft {
+    animation-duration: 1.2s;
+}
+
+/* Hover effects for prestation cards */
+.transition-hover {
+    transition: all 0.4s ease;
+}
+
+.transition-hover:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1) !important;
+}
+
+.transition-hover:hover img {
+    transform: scale(1.1);
+}
+
+.transition-hover img {
+    transition: transform 0.6s ease;
+}
+
+/* Animations Reveal on scroll */
+.reveal {
+    opacity: 0;
+    transform: translateY(30px);
+    transition: all 0.8s ease-out;
+}
+
+.reveal.active {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+/* Hero traiteur — hauteur responsive */
+.traiteur-hero .carousel-item {
+    height: 85vh;
+    min-height: 600px;
+}
+@media (max-width: 991.98px) {
+    .traiteur-hero .carousel-item { height: 70vh; min-height: 500px; }
+    .traiteur-hero .display-2 { font-size: 2.4rem; }
+    .traiteur-hero .fs-4 { font-size: 1.05rem !important; }
+}
+@media (max-width: 575.98px) {
+    .traiteur-hero .carousel-item { height: 60vh; min-height: 420px; }
+    .traiteur-hero .display-2 { font-size: 1.8rem; }
+    .traiteur-hero .btn-lg { padding: .6rem 1.2rem; font-size: .95rem; }
+}
+
+/* <picture> couvre toute la carte */
+.traiteur-hero .carousel-item picture {
+    display: block;
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+}
+.traiteur-hero .carousel-item picture img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+/* Specific Carousel Animation (zoom lent) */
+.traiteur-hero .carousel-item img {
+    transition: transform 8s linear;
+}
+.traiteur-hero .carousel-item.active img {
+    transform: scale(1.08);
+}
+.carousel-fade .carousel-item {
+    transition-duration: 1.2s;
+}
+
+/* Respect du reduced-motion */
+@media (prefers-reduced-motion: reduce) {
+    .traiteur-hero .carousel-item img,
+    .traiteur-hero .carousel-item.active img { transition: none; transform: none; }
+    .carousel-fade .carousel-item { transition: none; }
+}

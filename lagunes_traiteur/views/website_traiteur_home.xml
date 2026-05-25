@@ -1,0 +1,219 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="website_traiteur_home" name="Accueil Traiteur">
+        <t t-call="website.layout">
+            <t t-set="title">Service Traiteur — Restaurant des Lagunes</t>
+            <t t-set="meta_description">Découvrez l'excellence culinaire du Restaurant des Lagunes pour vos événements privés et professionnels.</t>
+            <div id="wrap" class="oe_structure oe_empty">
+                
+                <!-- Hero Section Carousel Premium -->
+                <section class="s_carousel s_carousel_default traiteur-hero overflow-hidden">
+                    <div id="traiteurHeroCarousel" class="carousel slide carousel-fade"
+                         data-bs-ride="carousel" data-bs-interval="6000"
+                         data-bs-pause="false" data-bs-touch="true" data-bs-wrap="true">
+                        <div class="carousel-indicators">
+                            <button type="button" data-bs-target="#traiteurHeroCarousel" data-bs-slide-to="0" class="active" aria-current="true" aria-label="Slide 1"></button>
+                            <button type="button" data-bs-target="#traiteurHeroCarousel" data-bs-slide-to="1" aria-label="Slide 2"></button>
+                            <button type="button" data-bs-target="#traiteurHeroCarousel" data-bs-slide-to="2" aria-label="Slide 3"></button>
+                            <button type="button" data-bs-target="#traiteurHeroCarousel" data-bs-slide-to="3" aria-label="Slide 4"></button>
+                        </div>
+                        <div class="carousel-inner">
+                            <!-- Slide 1 -->
+                            <div class="carousel-item active">
+                                <div class="position-absolute w-100 h-100 bg-black opacity-25" style="z-index: 1;"/>
+                                <picture>
+                                    <source type="image/webp" srcset="/lagunes_traiteur/static/src/img/traiteur_hero_1.webp"/>
+                                    <img src="/lagunes_traiteur/static/src/img/traiteur_hero_1.jpg" class="d-block w-100 h-100 object-fit-cover" alt="Excellence Traiteur" fetchpriority="high"/>
+                                </picture>
+                                <div class="carousel-caption d-flex align-items-center h-100 text-start" style="z-index: 2;">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-lg-7 glass-card p-4 p-md-5 animate__animated animate__fadeInLeft">
+                                                <h1 class="display-2 fw-bold mb-4 text-white shadow-text">L'Excellence Traiteur</h1>
+                                                <p class="lead mb-5 text-white shadow-text fs-4 opacity-75">
+                                                    Sublimez vos événements avec une gastronomie raffinée et un service d'exception sur mesure.
+                                                </p>
+                                                <div class="d-flex flex-wrap gap-3">
+                                                    <a href="/traiteur/demande" class="btn btn-warning btn-lg px-5 py-3 rounded-pill fw-bold shadow-lg transition-3d">
+                                                        Faire une demande <i class="fa fa-chevron-right ms-2"/>
+                                                    </a>
+                                                    <a href="#prestations" class="btn btn-outline-light btn-lg px-5 py-3 rounded-pill fw-bold shadow-lg transition-3d">
+                                                        Découvrir nos services <i class="fa fa-arrow-down ms-2"/>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <!-- Slide 2 -->
+                            <div class="carousel-item">
+                                <div class="position-absolute w-100 h-100 bg-black opacity-25" style="z-index: 1;"/>
+                                <picture>
+                                    <source type="image/webp" srcset="/lagunes_traiteur/static/src/img/traiteur_hero_2.webp"/>
+                                    <img src="/lagunes_traiteur/static/src/img/traiteur_hero_2.jpg" class="d-block w-100 h-100 object-fit-cover" alt="Service Premium" loading="lazy"/>
+                                </picture>
+                                <div class="carousel-caption d-flex align-items-center h-100 text-start" style="z-index: 2;">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-lg-7 glass-card p-4 p-md-5 animate__animated animate__fadeInLeft">
+                                                <h1 class="display-2 fw-bold mb-4 text-white shadow-text">Service Clé en Main</h1>
+                                                <p class="lead mb-5 text-white shadow-text fs-4 opacity-75">
+                                                    De la logistique à l'assiette, nous gérons chaque détail pour votre sérénité.
+                                                </p>
+                                                <a href="/traiteur/demande" class="btn btn-outline-light btn-lg px-5 py-3 rounded-pill fw-bold shadow-lg transition-3d">
+                                                    Découvrir nos services <i class="fa fa-arrow-right ms-2"/>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Slide 3 -->
+                            <div class="carousel-item">
+                                <div class="position-absolute w-100 h-100 bg-black opacity-25" style="z-index: 1;"/>
+                                <picture>
+                                    <source type="image/webp" srcset="/lagunes_traiteur/static/src/img/traiteur_hero_3.webp"/>
+                                    <img src="/lagunes_traiteur/static/src/img/traiteur_hero_3.jpg" class="d-block w-100 h-100 object-fit-cover" alt="Gastronomie" loading="lazy"/>
+                                </picture>
+                                <div class="carousel-caption d-flex align-items-center h-100 text-start" style="z-index: 2;">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-lg-7 glass-card p-4 p-md-5 animate__animated animate__fadeInLeft">
+                                                <h1 class="display-2 fw-bold mb-4 text-white shadow-text">Saveurs Authentiques</h1>
+                                                <p class="lead mb-5 text-white shadow-text fs-4 opacity-75">
+                                                    Une cuisine créative qui célèbre les produits locaux et les talents culinaires.
+                                                </p>
+                                                <a href="/traiteur/demande" class="btn btn-warning btn-lg px-5 py-3 rounded-pill fw-bold shadow-lg transition-3d">
+                                                    Demander un Devis <i class="fa fa-calculator ms-2"/>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Slide 4 -->
+                            <div class="carousel-item">
+                                <div class="position-absolute w-100 h-100 bg-black opacity-25" style="z-index: 1;"/>
+                                <picture>
+                                    <source type="image/webp" srcset="/lagunes_traiteur/static/src/img/traiteur_hero_4.webp"/>
+                                    <img src="/lagunes_traiteur/static/src/img/traiteur_hero_4.jpg" class="d-block w-100 h-100 object-fit-cover" alt="Professionnalisme" loading="lazy"/>
+                                </picture>
+                                <div class="carousel-caption d-flex align-items-center h-100 text-start" style="z-index: 2;">
+                                    <div class="container">
+                                        <div class="row">
+                                            <div class="col-lg-7 glass-card p-4 p-md-5 animate__animated animate__fadeInLeft">
+                                                <h1 class="display-2 fw-bold mb-4 text-white shadow-text">Discrétion &amp; Élégance</h1>
+                                                <p class="lead mb-5 text-white shadow-text fs-4 opacity-75">
+                                                    Un personnel qualifié pour un service impeccable lors de vos réceptions.
+                                                </p>
+                                                <a href="/contactus" class="btn btn-outline-light btn-lg px-5 py-3 rounded-pill fw-bold shadow-lg transition-3d">
+                                                    Nous Contacter <i class="fa fa-envelope ms-2"/>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <button class="carousel-control-prev" type="button" data-bs-target="#traiteurHeroCarousel" data-bs-slide="prev" style="z-index: 3;">
+                            <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Précédent</span>
+                        </button>
+                        <button class="carousel-control-next" type="button" data-bs-target="#traiteurHeroCarousel" data-bs-slide="next" style="z-index: 3;">
+                            <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                            <span class="visually-hidden">Suivant</span>
+                        </button>
+                    </div>
+                </section>
+
+                <!-- Prestations Section -->
+                <section id="prestations" class="py-5 bg-light">
+                    <div class="container py-4">
+                        <div class="text-center mb-5 reveal">
+                            <span class="badge bg-primary-light text-primary text-uppercase ls-2 mb-2 px-3 py-2">Nos Services</span>
+                            <h2 class="display-4 fw-bold gradient-text">Découvrez nos Prestations</h2>
+                            <div class="mx-auto bg-primary rounded-pill mb-4" style="width: 80px; height: 4px;"></div>
+                            <p class="text-muted mx-auto fs-5" style="max-width: 700px;">
+                                Une sélection rigoureuse pour répondre à toutes vos exigences gastronomiques.
+                            </p>
+                        </div>
+                        <div class="row g-4 justify-content-center">
+                            <t t-foreach="types" t-as="type">
+                                <div class="col-md-4">
+                                    <div class="card h-100 border-0 shadow-sm rounded-4 overflow-hidden transition-hover">
+                                        <div class="position-relative" style="height: 200px;">
+                                            <t t-if="type.image">
+                                                <img t-att-src="'/web/image/lagunes.traiteur.type.prestation/%s/image' % type.id"
+                                                     t-att-alt="type.name"
+                                                     class="w-100 h-100 object-fit-cover"
+                                                     loading="lazy"/>
+                                            </t>
+                                            <t t-else="">
+                                                <div class="w-100 h-100 d-flex align-items-center justify-content-center bg-secondary-subtle">
+                                                    <i t-attf-class="fa #{type.icon or 'fa-cutlery'} fa-4x opacity-25"/>
+                                                </div>
+                                            </t>
+                                            <div class="position-absolute top-0 end-0 p-3">
+                                                <span class="badge rounded-pill px-3 py-2" t-attf-style="background-color: #{type.color or '#16166d'};">
+                                                    <t t-esc="type.name"/>
+                                                </span>
+                                            </div>
+                                        </div>
+                                        <div class="card-body p-4 text-center">
+                                            <h4 class="fw-bold mb-3"><t t-esc="type.name"/></h4>
+                                            <p class="text-muted small mb-4">
+                                                <t t-esc="type.description[:120] if type.description else 'Service de restauration personnalisé pour vos réunions et événements.'"/>...
+                                            </p>
+                                            <div class="d-flex justify-content-between align-items-center mt-auto border-top pt-3">
+                                                <span class="text-muted small">
+                                                    <i class="fa fa-clock-o me-1"/> <t t-esc="type.heure_service"/>
+                                                </span>
+                                                <a t-attf-href="/traiteur/demande?type=#{type.id}" class="text-primary fw-bold text-decoration-none">
+                                                    Choisir <i class="fa fa-arrow-right ms-1"/>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+                    </div>
+                </section>
+
+                <!-- Steps Section -->
+                <section class="py-5 bg-white border-top">
+                    <div class="container py-4">
+                        <div class="row g-5 text-center">
+                            <div class="col-md-4">
+                                <div class="bg-primary-subtle rounded-circle d-flex align-items-center justify-content-center mx-auto mb-4" style="width: 80px; height: 80px;">
+                                    <span class="h2 fw-bold text-primary mb-0">1</span>
+                                </div>
+                                <h5 class="fw-bold">Configurez</h5>
+                                <p class="text-muted small">Choisissez vos dates, le nombre de convives et votre formule.</p>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="bg-primary-subtle rounded-circle d-flex align-items-center justify-content-center mx-auto mb-4" style="width: 80px; height: 80px;">
+                                    <span class="h2 fw-bold text-primary mb-0">2</span>
+                                </div>
+                                <h5 class="fw-bold">Personnalisez</h5>
+                                <p class="text-muted small">Sélectionnez vos plats préférés depuis nos menus hebdomadaires.</p>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="bg-primary-subtle rounded-circle d-flex align-items-center justify-content-center mx-auto mb-4" style="width: 80px; height: 80px;">
+                                    <span class="h2 fw-bold text-primary mb-0">3</span>
+                                </div>
+                                <h5 class="fw-bold">Recevez</h5>
+                                <p class="text-muted small">Validez votre devis et profitez de votre événement en toute sérénité.</p>
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+            </div>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,152 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Template email : Réinitialisation du mot de passe -->
+    <record id="email_reset_password" model="mail.template">
+        <field name="name">Cantine - Réinitialisation mot de passe</field>
+        <field name="model_id" ref="model_lagunes_employe"/>
+        <field name="subject">Réinitialisation de votre mot de passe MyCantine</field>
+        <field name="email_to">{{ object.email }}</field>
+        <field name="email_from">{{ (user.email_formatted or 'noreply@example.com') }}</field>
+        <field name="body_html"><![CDATA[
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; background-color: #f8f9fa; }
+        .header { background: linear-gradient(135deg, #16166d 0%, #0f0f52 100%); color: white; padding: 30px 20px; text-align: center; }
+        .header h1 { margin: 0; font-size: 28px; font-weight: 600; }
+        .header p { margin: 5px 0 0 0; font-size: 14px; opacity: 0.9; }
+        .content { background-color: white; padding: 40px 30px; }
+        .greeting { color: #16166d; font-size: 18px; font-weight: 600; margin-bottom: 20px; }
+        .message { color: #555; font-size: 14px; margin-bottom: 30px; line-height: 1.8; }
+        .cta-button { display: inline-block; background-color: #16166d; color: white; padding: 14px 35px; text-decoration: none; border-radius: 5px; font-weight: 600; margin: 30px 0; transition: all 0.3s ease; }
+        .cta-button:hover { background-color: #0f0f52; }
+        .warning { background-color: #fff3cd; border-left: 4px solid #f5a821; padding: 15px; margin: 20px 0; color: #856404; font-size: 13px; border-radius: 4px; }
+        .expiry { color: #787b2b; font-weight: 600; font-size: 13px; }
+        .footer { background-color: #f8f9fa; padding: 30px 20px; text-align: center; color: #666; font-size: 12px; border-top: 1px solid #e0e0e0; }
+        .footer a { color: #16166d; text-decoration: none; }
+        .divider { background-color: #f5a821; height: 3px; margin: 20px 0; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🍽️ Restaurant des Lagunes</h1>
+            <p>Cantine d'entreprise</p>
+        </div>
+        
+        <div class="content">
+            <p class="greeting">Bonjour {{ object.display_name_full }},</p>
+            
+            <p class="message">
+                Vous avez demandé une réinitialisation de mot de passe pour votre compte 
+                <strong>MyCantine</strong> de <strong>{{ object.entreprise_id.name }}</strong>.
+            </p>
+            
+            <div style="text-align: center;">
+                <a href="{{ '%s/cantine/forgot-password/reset/%s' % (
+                    env['ir.config_parameter'].sudo().get_param('web.base.url'),
+                    object.reset_password_token
+                ) }}" class="cta-button">
+                    🔐 Réinitialiser mon mot de passe
+                </a>
+            </div>
+            
+            <div class="divider"></div>
+            
+            <div class="warning">
+                <strong>Sécurité ⚠️</strong><br/>
+                <span class="expiry">Ce lien expire dans 2 heures.</span>
+                Si vous n'êtes pas à l'origine de cette demande, 
+                ignorez ce message et votre mot de passe restera inchangé.
+            </div>
+            
+            <p style="color: #999; font-size: 12px; margin-top: 30px;">
+                Vous ne pouvez pas cliquer sur le bouton ? Copiez ce lien dans votre navigateur :<br/>
+                <code style="background-color: #f0f0f0; padding: 8px; display: inline-block; border-radius: 3px; color: #666; word-break: break-all;">
+                    {{ '%s/cantine/forgot-password/reset/%s' % (
+                        env['ir.config_parameter'].sudo().get_param('web.base.url'),
+                        object.reset_password_token
+                    ) }}
+                </code>
+            </p>
+        </div>
+        
+        <div class="footer">
+            <p>
+                © 2026 <strong>Restaurant des Lagunes</strong> — Cantine d'entreprise<br/>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
+        ]]></field>
+        <field name="auto_delete" eval="True"/>
+    </record>
+
+    <!-- Template email : Confirmation de changement de mot de passe -->
+    <record id="email_password_changed" model="mail.template">
+        <field name="name">Cantine - Confirmation changement mot de passe</field>
+        <field name="model_id" ref="model_lagunes_employe"/>
+        <field name="subject">Votre mot de passe a été modifié</field>
+        <field name="email_to">{{ object.email }}</field>
+        <field name="email_from">{{ (user.email_formatted or 'noreply@example.com') }}</field>
+        <field name="body_html"><![CDATA[
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; }
+        .container { max-width: 600px; margin: 0 auto; background-color: #f8f9fa; }
+        .header { background: linear-gradient(135deg, #16166d 0%, #0f0f52 100%); color: white; padding: 30px 20px; text-align: center; }
+        .header h1 { margin: 0; font-size: 28px; font-weight: 600; }
+        .header p { margin: 5px 0 0 0; font-size: 14px; opacity: 0.9; }
+        .content { background-color: white; padding: 40px 30px; }
+        .greeting { color: #16166d; font-size: 18px; font-weight: 600; margin-bottom: 20px; }
+        .message { color: #555; font-size: 14px; margin-bottom: 30px; line-height: 1.8; }
+        .warning { background-color: #fff3cd; border-left: 4px solid #f5a821; padding: 15px; margin: 20px 0; color: #856404; font-size: 13px; border-radius: 4px; }
+        .footer { background-color: #f8f9fa; padding: 30px 20px; text-align: center; color: #666; font-size: 12px; border-top: 1px solid #e0e0e0; }
+        .timestamp { color: #999; font-size: 12px; }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🍽️ Restaurant des Lagunes</h1>
+            <p>Cantine d'entreprise</p>
+        </div>
+        
+        <div class="content">
+            <p class="greeting">Bonjour {{ object.display_name_full }},</p>
+            
+            <p class="message">
+                Votre mot de passe MyCantine a été <strong>modifié avec succès</strong> pour votre compte 
+                <strong>{{ object.entreprise_id.name }}</strong>.
+            </p>
+            
+            <div class="warning">
+                <strong>⚠️ Sécurité</strong><br/>
+                Si vous n'êtes pas à l'origine de cette modification, contactez immédiatement votre responsable.
+            </div>
+            
+            <p style="color: #999; font-size: 13px; margin-top: 30px;">
+                <span class="timestamp">{{ context_timestamp(user) }}</span>
+            </p>
+        </div>
+        
+        <div class="footer">
+            <p>
+                © 2026 <strong>Restaurant des Lagunes</strong> — Cantine d'entreprise<br/>
+            </p>
+        </div>
+    </div>
+</body>
+</html>
+        ]]></field>
+        <field name="auto_delete" eval="True"/>
+    </record>
+
+</odoo>

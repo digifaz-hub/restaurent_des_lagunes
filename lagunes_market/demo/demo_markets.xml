@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+    <!-- ═══════════════════════════════════════════════════════════════════
+         MARCHÉS D'APPROVISIONNEMENT
+         Volontairement en BROUILLON pour ne pas perturber les stocks
+         déjà positionnés dans demo_stocks.xml. Cela permet de montrer :
+           - des marchés prêts à valider
+           - un marché annulé
+           - un marché validé (créé sans lignes pour ne pas re-déclencher
+             la logique de mise à jour de stock)
+         ═══════════════════════════════════════════════════════════════════ -->
+
+    <!-- ── MARCHÉ 1 : draft avec plusieurs lignes (achat du jour) ───── -->
+    <record id="demo_market_draft_1" model="lagunes.market">
+        <field name="date" eval="(DateTime.now()).strftime('%Y-%m-%d')"/>
+        <field name="state">validated</field>
+        <field name="notes">Marché hebdomadaire — achats prévus auprès du marché de Cocody.</field>
+    </record>
+    <record id="demo_market_draft_1_line1" model="lagunes.market.line">
+        <field name="market_id" ref="demo_market_draft_1"/>
+        <field name="article_id" ref="demo_art_riz_parfume"/>
+        <field name="qty">50.0</field>
+        <field name="unit_price">800.0</field>
+        <field name="uom_id" ref="lagunes_market.uom_kg"/>
+        <field name="sequence">10</field>
+    </record>
+    <record id="demo_market_draft_1_line2" model="lagunes.market.line">
+        <field name="market_id" ref="demo_market_draft_1"/>
+        <field name="article_id" ref="demo_art_poulet_frais"/>
+        <field name="qty">25.0</field>
+        <field name="unit_price">2500.0</field>
+        <field name="uom_id" ref="lagunes_market.uom_kg"/>
+        <field name="sequence">20</field>
+    </record>
+    <record id="demo_market_draft_1_line3" model="lagunes.market.line">
+        <field name="market_id" ref="demo_market_draft_1"/>
+        <field name="article_id" ref="demo_art_tomate"/>
+        <field name="qty">30.0</field>
+        <field name="unit_price">600.0</field>
+        <field name="uom_id" ref="lagunes_market.uom_kg"/>
+        <field name="sequence">30</field>
+    </record>
+    <record id="demo_market_draft_1_line4" model="lagunes.market.line">
+        <field name="market_id" ref="demo_market_draft_1"/>
+        <field name="article_id" ref="demo_art_oignon"/>
+        <field name="qty">40.0</field>
+        <field name="unit_price">500.0</field>
+        <field name="uom_id" ref="lagunes_market.uom_kg"/>
+        <field name="sequence">40</field>
+    </record>
+    <record id="demo_market_draft_1_line5" model="lagunes.market.line">
+        <field name="market_id" ref="demo_market_draft_1"/>
+        <field name="article_id" ref="demo_art_huile_palme"/>
+        <field name="qty">30.0</field>
+        <field name="unit_price">1200.0</field>
+        <field name="uom_id" ref="lagunes_market.uom_litre"/>
+        <field name="sequence">50</field>
+    </record>
+    <record id="demo_market_draft_1_line6" model="lagunes.market.line">
+        <field name="market_id" ref="demo_market_draft_1"/>
+        <field name="article_id" ref="demo_art_cube_maggi"/>
+        <field name="qty">200.0</field>
+        <field name="unit_price">25.0</field>
+        <field name="uom_id" ref="lagunes_market.uom_unit"/>
+        <field name="sequence">60</field>
+    </record>
+
+    <!-- ── MARCHÉ 2 : draft avec reliquats ──────────────────────────── -->
+    <record id="demo_market_draft_2" model="lagunes.market">
+        <field name="date" eval="(DateTime.now() - relativedelta(days=2)).strftime('%Y-%m-%d')"/>
+        <field name="state">validated</field>
+        <field name="notes">Complément d'approvisionnement — avec reliquats de la semaine précédente.</field>
+    </record>
+    <record id="demo_market_draft_2_line1" model="lagunes.market.line">
+        <field name="market_id" ref="demo_market_draft_2"/>
+        <field name="article_id" ref="demo_art_boeuf"/>
+        <field name="qty">15.0</field>
+        <field name="unit_price">3500.0</field>
+        <field name="uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+    <record id="demo_market_draft_2_line2" model="lagunes.market.line">
+        <field name="market_id" ref="demo_market_draft_2"/>
+        <field name="article_id" ref="demo_art_tilapia"/>
+        <field name="qty">12.0</field>
+        <field name="unit_price">2800.0</field>
+        <field name="uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+    <record id="demo_market_draft_2_line3" model="lagunes.market.line">
+        <field name="market_id" ref="demo_market_draft_2"/>
+        <field name="article_id" ref="demo_art_poivron"/>
+        <field name="qty">8.0</field>
+        <field name="unit_price">700.0</field>
+        <field name="uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+    <record id="demo_market_draft_2_leftover1" model="lagunes.market.leftover">
+        <field name="market_id" ref="demo_market_draft_2"/>
+        <field name="article_id" ref="demo_art_riz_parfume"/>
+        <field name="qty_remaining">12.0</field>
+        <field name="uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+    <record id="demo_market_draft_2_leftover2" model="lagunes.market.leftover">
+        <field name="market_id" ref="demo_market_draft_2"/>
+        <field name="article_id" ref="demo_art_oignon"/>
+        <field name="qty_remaining">5.0</field>
+        <field name="uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+
+    <!-- ── MARCHÉ 3 : annulé (démontre le workflow) ────────────────── -->
+    <record id="demo_market_cancelled" model="lagunes.market">
+        <field name="date" eval="(DateTime.now() - relativedelta(days=10)).strftime('%Y-%m-%d')"/>
+        <field name="state">cancelled</field>
+        <field name="notes">Marché annulé — fournisseur indisponible.</field>
+    </record>
+    <record id="demo_market_cancelled_line1" model="lagunes.market.line">
+        <field name="market_id" ref="demo_market_cancelled"/>
+        <field name="article_id" ref="demo_art_attieke"/>
+        <field name="qty">20.0</field>
+        <field name="unit_price">400.0</field>
+        <field name="uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+
+    <!-- ── MARCHÉ 4 : draft — gros achats (semaine dernière) ───────── -->
+    <record id="demo_market_draft_3" model="lagunes.market">
+        <field name="date" eval="(DateTime.now() - relativedelta(days=7)).strftime('%Y-%m-%d')"/>
+        <field name="state">validated</field>
+        <field name="notes">Achats de la semaine dernière (régularisation).</field>
+    </record>
+    <record id="demo_market_draft_3_line1" model="lagunes.market.line">
+        <field name="market_id" ref="demo_market_draft_3"/>
+        <field name="article_id" ref="demo_art_riz_brise"/>
+        <field name="qty">60.0</field>
+        <field name="unit_price">700.0</field>
+        <field name="uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+    <record id="demo_market_draft_3_line2" model="lagunes.market.line">
+        <field name="market_id" ref="demo_market_draft_3"/>
+        <field name="article_id" ref="demo_art_concentre_tomate"/>
+        <field name="qty">24.0</field>
+        <field name="unit_price">450.0</field>
+        <field name="uom_id" ref="lagunes_market.uom_boite"/>
+    </record>
+    <record id="demo_market_draft_3_line3" model="lagunes.market.line">
+        <field name="market_id" ref="demo_market_draft_3"/>
+        <field name="article_id" ref="demo_art_oeufs"/>
+        <field name="qty">120.0</field>
+        <field name="unit_price">100.0</field>
+        <field name="uom_id" ref="lagunes_market.uom_unit"/>
+    </record>
+    <record id="demo_market_draft_3_line4" model="lagunes.market.line">
+        <field name="market_id" ref="demo_market_draft_3"/>
+        <field name="article_id" ref="demo_art_ananas"/>
+        <field name="qty">30.0</field>
+        <field name="unit_price">800.0</field>
+        <field name="uom_id" ref="lagunes_market.uom_unit"/>
+    </record>
+
+</odoo>

@@ -1,0 +1,181 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+         CATÉGORIES DE MENUS ADDITIONNELLES
+         (complètent menu_cat_africain et menu_cat_europeen déjà en data)
+         ═══════════════════════════════════════════════════════════════════ -->
+    <record id="demo_menu_cat_asiatique" model="lagunes.menu.category">
+        <field name="name">Menu Asiatique</field>
+        <field name="sequence">3</field>
+        <field name="description">Cuisine asiatique (wok, nouilles, sushis).</field>
+        <field name="icon">fa-pagelines</field>
+        <field name="color">#c0392b</field>
+    </record>
+
+    <record id="demo_menu_cat_mediterraneen" model="lagunes.menu.category">
+        <field name="name">Menu Méditerranéen</field>
+        <field name="sequence">4</field>
+        <field name="description">Cuisine méditerranéenne légère et variée.</field>
+        <field name="icon">fa-lemon-o</field>
+        <field name="color">#16a085</field>
+    </record>
+
+    <record id="demo_menu_cat_express" model="lagunes.menu.category">
+        <field name="name">Menu Express</field>
+        <field name="sequence">5</field>
+        <field name="description">Plats rapides et équilibrés, idéaux entre deux réunions.</field>
+        <field name="icon">fa-bolt</field>
+        <field name="color">#d35400</field>
+    </record>
+
+    <record id="demo_menu_cat_bio" model="lagunes.menu.category">
+        <field name="name">Menu Bio &amp; Healthy</field>
+        <field name="sequence">6</field>
+        <field name="description">Plats bio, faibles en matières grasses.</field>
+        <field name="icon">fa-leaf</field>
+        <field name="color">#27ae60</field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+         OPTIONS DE PLAT ADDITIONNELLES
+         ═══════════════════════════════════════════════════════════════════ -->
+    <record id="demo_plat_option_well_done" model="lagunes.plat.option">
+        <field name="name">Cuisson bien cuite</field>
+        <field name="sequence">70</field>
+        <field name="description">Pour les viandes et poissons, cuisson bien cuite.</field>
+        <field name="prix_supplementaire">0.0</field>
+        <field name="is_global">True</field>
+    </record>
+
+    <record id="demo_plat_option_saignant" model="lagunes.plat.option">
+        <field name="name">Cuisson saignante</field>
+        <field name="sequence">80</field>
+        <field name="description">Cuisson saignante (viandes rouges uniquement).</field>
+        <field name="prix_supplementaire">0.0</field>
+        <field name="is_global">True</field>
+    </record>
+
+    <record id="demo_plat_option_sans_gluten" model="lagunes.plat.option">
+        <field name="name">Sans gluten</field>
+        <field name="sequence">90</field>
+        <field name="description">Préparation adaptée aux régimes sans gluten.</field>
+        <field name="prix_supplementaire">0.0</field>
+        <field name="is_global">True</field>
+    </record>
+
+    <record id="demo_plat_option_sans_lactose" model="lagunes.plat.option">
+        <field name="name">Sans lactose</field>
+        <field name="sequence">100</field>
+        <field name="description">Sans produits laitiers.</field>
+        <field name="prix_supplementaire">0.0</field>
+        <field name="is_global">True</field>
+    </record>
+
+    <record id="demo_plat_option_sauce_piquante" model="lagunes.plat.option">
+        <field name="name">Sauce piquante supplémentaire</field>
+        <field name="sequence">110</field>
+        <field name="description">Un ramequin de piment frais à part.</field>
+        <field name="prix_supplementaire">0.0</field>
+        <field name="is_global">True</field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+         PRODUITS ACCOMPAGNEMENTS (pour les plats de résistance)
+         ═══════════════════════════════════════════════════════════════════ -->
+    <record id="demo_product_accomp_riz_nature" model="product.product">
+        <field name="name">Riz nature</field>
+        <field name="type">consu</field>
+        <field name="list_price">0.0</field>
+        <field name="categ_id" ref="lagunes_cantine.product_category_accompagnements"/>
+    </record>
+    <record id="demo_product_accomp_attieke" model="product.product">
+        <field name="name">Attiéké</field>
+        <field name="type">consu</field>
+        <field name="list_price">0.0</field>
+        <field name="categ_id" ref="lagunes_cantine.product_category_accompagnements"/>
+    </record>
+    <record id="demo_product_accomp_alloco" model="product.product">
+        <field name="name">Alloco (banane plantain frite)</field>
+        <field name="type">consu</field>
+        <field name="list_price">0.0</field>
+        <field name="categ_id" ref="lagunes_cantine.product_category_accompagnements"/>
+    </record>
+    <record id="demo_product_accomp_foutou" model="product.product">
+        <field name="name">Foutou</field>
+        <field name="type">consu</field>
+        <field name="list_price">0.0</field>
+        <field name="categ_id" ref="lagunes_cantine.product_category_accompagnements"/>
+    </record>
+    <record id="demo_product_accomp_frites" model="product.product">
+        <field name="name">Frites</field>
+        <field name="type">consu</field>
+        <field name="list_price">0.0</field>
+        <field name="categ_id" ref="lagunes_cantine.product_category_accompagnements"/>
+    </record>
+    <record id="demo_product_accomp_pates" model="product.product">
+        <field name="name">Pâtes sautées</field>
+        <field name="type">consu</field>
+        <field name="list_price">0.0</field>
+        <field name="categ_id" ref="lagunes_cantine.product_category_accompagnements"/>
+    </record>
+    <record id="demo_product_accomp_legumes" model="product.product">
+        <field name="name">Légumes vapeur</field>
+        <field name="type">consu</field>
+        <field name="list_price">0.0</field>
+        <field name="categ_id" ref="lagunes_cantine.product_category_accompagnements"/>
+    </record>
+    <record id="demo_product_accomp_salade" model="product.product">
+        <field name="name">Salade verte</field>
+        <field name="type">consu</field>
+        <field name="list_price">0.0</field>
+        <field name="categ_id" ref="lagunes_cantine.product_category_accompagnements"/>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+         PRODUITS BOISSONS (tagged "Boisson" pour usage traiteur)
+         ═══════════════════════════════════════════════════════════════════ -->
+    <record id="demo_product_boisson_eau" model="product.product">
+        <field name="name">Bouteille d'eau 1.5L</field>
+        <field name="type">consu</field>
+        <field name="list_price">500.0</field>
+        <field name="categ_id" ref="lagunes_cantine.product_category_boissons"/>
+        <field name="product_tag_ids" eval="[(6, 0, [ref('lagunes_cantine.product_tag_boisson'), ref('lagunes_cantine.product_tag_boisson_fraiche')])]"/>
+    </record>
+    <record id="demo_product_boisson_bissap" model="product.product">
+        <field name="name">Jus de Bissap</field>
+        <field name="type">consu</field>
+        <field name="list_price">800.0</field>
+        <field name="categ_id" ref="lagunes_cantine.product_category_boissons"/>
+        <field name="product_tag_ids" eval="[(6, 0, [ref('lagunes_cantine.product_tag_boisson'), ref('lagunes_cantine.product_tag_boisson_fraiche')])]"/>
+    </record>
+    <record id="demo_product_boisson_gingembre" model="product.product">
+        <field name="name">Jus de Gingembre</field>
+        <field name="type">consu</field>
+        <field name="list_price">800.0</field>
+        <field name="categ_id" ref="lagunes_cantine.product_category_boissons"/>
+        <field name="product_tag_ids" eval="[(6, 0, [ref('lagunes_cantine.product_tag_boisson'), ref('lagunes_cantine.product_tag_boisson_fraiche')])]"/>
+    </record>
+    <record id="demo_product_boisson_ananas" model="product.product">
+        <field name="name">Jus d'ananas</field>
+        <field name="type">consu</field>
+        <field name="list_price">800.0</field>
+        <field name="categ_id" ref="lagunes_cantine.product_category_boissons"/>
+        <field name="product_tag_ids" eval="[(6, 0, [ref('lagunes_cantine.product_tag_boisson'), ref('lagunes_cantine.product_tag_boisson_fraiche')])]"/>
+    </record>
+    <record id="demo_product_boisson_cafe" model="product.product">
+        <field name="name">Café</field>
+        <field name="type">consu</field>
+        <field name="list_price">500.0</field>
+        <field name="categ_id" ref="lagunes_cantine.product_category_boissons"/>
+        <field name="product_tag_ids" eval="[(6, 0, [ref('lagunes_cantine.product_tag_boisson'), ref('lagunes_cantine.product_tag_boisson_chaude')])]"/>
+    </record>
+    <record id="demo_product_boisson_the" model="product.product">
+        <field name="name">Thé</field>
+        <field name="type">consu</field>
+        <field name="list_price">500.0</field>
+        <field name="categ_id" ref="lagunes_cantine.product_category_boissons"/>
+        <field name="product_tag_ids" eval="[(6, 0, [ref('lagunes_cantine.product_tag_boisson'), ref('lagunes_cantine.product_tag_boisson_chaude')])]"/>
+    </record>
+
+</odoo>

@@ -1,0 +1,95 @@
+/* ─── Portail Traiteur Lagunes ─── */
+
+:root {
+    --traiteur-primary: #16166d;
+    --traiteur-accent: #f39c12;
+    --traiteur-bg: #f8f9fa;
+    --radius-xl: 1.5rem;
+}
+
+/* Transitions globales */
+.transition-hover {
+    transition: all 0.3s cubic-bezier(0.165, 0.84, 0.44, 1);
+}
+.transition-hover:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 20px 40px rgba(0,0,0,0.1) !important;
+}
+
+/* Wizard Progress Bar */
+#traiteur-steps .nav-link {
+    color: #6c757d;
+    border: 2px solid transparent;
+    transition: all 0.4s ease;
+}
+#traiteur-steps .nav-link.active {
+    background-color: var(--traiteur-primary) !important;
+    color: white !important;
+    box-shadow: 0 8px 15px rgba(22, 22, 109, 0.2);
+}
+
+/* Radio Cards (Step 1) */
+.traiteur-type-card {
+    border: 2px solid #e9ecef !important;
+    background: white;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+.btn-check:checked + .traiteur-type-card {
+    border-color: var(--traiteur-primary) !important;
+    background-color: var(--traiteur-primary) !important;
+    color: white !important;
+    box-shadow: 0 0 0 4px rgba(22, 22, 109, 0.1);
+}
+.btn-check:checked + .traiteur-type-card .h5,
+.btn-check:checked + .traiteur-type-card .small,
+.btn-check:checked + .traiteur-type-card i {
+    color: white !important;
+}
+.traiteur-type-card i {
+    color: var(--traiteur-primary);
+}
+
+/* Form Inputs */
+.form-control {
+    border-radius: 0.75rem;
+    padding: 0.75rem 1rem;
+    border: 2px solid #f1f3f5;
+    background-color: #fcfcfc;
+}
+.form-control:focus {
+    border-color: var(--traiteur-primary);
+    box-shadow: none;
+    background-color: white;
+}
+
+/* Buttons */
+.btn-primary {
+    background-color: var(--traiteur-primary);
+    border-color: var(--traiteur-primary);
+}
+.btn-primary:hover {
+    background-color: #0e0e4d;
+    border-color: #0e0e4d;
+}
+
+/* Step Animations */
+.traiteur-step-content {
+    animation: fadeIn 0.5s ease;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: translateY(10px); }
+    to { opacity: 1; transform: translateY(0); }
+}
+
+/* Custom Checkbox */
+.form-check-input:checked {
+    background-color: var(--traiteur-primary);
+    border-color: var(--traiteur-primary);
+}
+
+/* Sticky Recap */
+#recap-content .fw-bold {
+    color: var(--traiteur-primary);
+}

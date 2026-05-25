@@ -1,0 +1,383 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+         NIVEAUX DE PRESTATION TRAITEUR (4 formules)
+         Chaque niveau contient des lignes de composition détaillées
+         Liés aux 3 types de prestation existants
+         ═══════════════════════════════════════════════════════════════════ -->
+
+    <!-- ╔═════════════════════════════════════════════════════════════════╗
+         ║  NIVEAU 1 : STANDARD                                          ║
+         ╚═════════════════════════════════════════════════════════════════╝ -->
+    <record id="demo_niveau_standard" model="lagunes.traiteur.niveau">
+        <field name="name">Standard</field>
+        <field name="sequence">10</field>
+        <field name="description">Formule essentielle : entrée, plat principal avec accompagnement, dessert et eau minérale. Idéal pour les repas d'affaires quotidiens.</field>
+        <field name="type_prestation_ids" eval="[(6, 0, [
+            ref('lagunes_traiteur.type_pause_dejeuner'),
+        ])]"/>
+    </record>
+
+    <!-- Lignes Standard -->
+    <record id="demo_niveau_std_l1" model="lagunes.traiteur.niveau.ligne">
+        <field name="niveau_id" ref="demo_niveau_standard"/>
+        <field name="sequence">10</field>
+        <field name="type_ligne">plat</field>
+        <field name="description">Entrée au choix</field>
+        <field name="quantite_par_personne">1</field>
+        <field name="unite">pièce</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_entree"/>
+        <field name="is_client_choice">True</field>
+        <field name="nb_choix">1</field>
+    </record>
+    <record id="demo_niveau_std_l2" model="lagunes.traiteur.niveau.ligne">
+        <field name="niveau_id" ref="demo_niveau_standard"/>
+        <field name="sequence">20</field>
+        <field name="type_ligne">plat</field>
+        <field name="description">Plat de résistance au choix</field>
+        <field name="quantite_par_personne">1</field>
+        <field name="unite">pièce</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_plat_resistance"/>
+        <field name="is_client_choice">True</field>
+        <field name="nb_choix">1</field>
+    </record>
+    <record id="demo_niveau_std_l3" model="lagunes.traiteur.niveau.ligne">
+        <field name="niveau_id" ref="demo_niveau_standard"/>
+        <field name="sequence">30</field>
+        <field name="type_ligne">plat</field>
+        <field name="description">Dessert</field>
+        <field name="quantite_par_personne">1</field>
+        <field name="unite">pièce</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_dessert"/>
+        <field name="is_client_choice">True</field>
+        <field name="nb_choix">1</field>
+    </record>
+    <record id="demo_niveau_std_l4" model="lagunes.traiteur.niveau.ligne">
+        <field name="niveau_id" ref="demo_niveau_standard"/>
+        <field name="sequence">40</field>
+        <field name="type_ligne">boisson</field>
+        <field name="description">Eau minérale 1.5L (1 pour 2 personnes)</field>
+        <field name="quantite_par_personne">0.5</field>
+        <field name="unite">bouteille</field>
+    </record>
+
+    <!-- ╔═════════════════════════════════════════════════════════════════╗
+         ║  NIVEAU 2 : RENFORCÉE                                         ║
+         ╚═════════════════════════════════════════════════════════════════╝ -->
+    <record id="demo_niveau_renforcee" model="lagunes.traiteur.niveau">
+        <field name="name">Renforcée</field>
+        <field name="sequence">20</field>
+        <field name="description">Formule complète : entrée, 2 choix de plats, dessert, jus frais et eau. Service en nappe blanche.</field>
+        <field name="type_prestation_ids" eval="[(6, 0, [
+            ref('lagunes_traiteur.type_pause_dejeuner'),
+            ref('lagunes_traiteur.type_pause_cafe'),
+        ])]"/>
+    </record>
+
+    <!-- Lignes Renforcée -->
+    <record id="demo_niveau_renf_l1" model="lagunes.traiteur.niveau.ligne">
+        <field name="niveau_id" ref="demo_niveau_renforcee"/>
+        <field name="sequence">10</field>
+        <field name="type_ligne">plat</field>
+        <field name="description">Entrée au choix</field>
+        <field name="quantite_par_personne">1</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_entree"/>
+        <field name="is_client_choice">True</field>
+        <field name="nb_choix">2</field>
+    </record>
+    <record id="demo_niveau_renf_l2" model="lagunes.traiteur.niveau.ligne">
+        <field name="niveau_id" ref="demo_niveau_renforcee"/>
+        <field name="sequence">20</field>
+        <field name="type_ligne">plat</field>
+        <field name="description">Plat de résistance au choix</field>
+        <field name="quantite_par_personne">1</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_plat_resistance"/>
+        <field name="is_client_choice">True</field>
+        <field name="nb_choix">2</field>
+    </record>
+    <record id="demo_niveau_renf_l3" model="lagunes.traiteur.niveau.ligne">
+        <field name="niveau_id" ref="demo_niveau_renforcee"/>
+        <field name="sequence">30</field>
+        <field name="type_ligne">plat</field>
+        <field name="description">Dessert au choix</field>
+        <field name="quantite_par_personne">1</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_dessert"/>
+        <field name="is_client_choice">True</field>
+        <field name="nb_choix">2</field>
+    </record>
+    <record id="demo_niveau_renf_l4" model="lagunes.traiteur.niveau.ligne">
+        <field name="niveau_id" ref="demo_niveau_renforcee"/>
+        <field name="sequence">40</field>
+        <field name="type_ligne">boisson</field>
+        <field name="description">Jus frais du jour (bissap / gingembre)</field>
+        <field name="quantite_par_personne">1</field>
+        <field name="unite">verre</field>
+    </record>
+    <record id="demo_niveau_renf_l5" model="lagunes.traiteur.niveau.ligne">
+        <field name="niveau_id" ref="demo_niveau_renforcee"/>
+        <field name="sequence">50</field>
+        <field name="type_ligne">boisson</field>
+        <field name="description">Eau minérale 1.5L</field>
+        <field name="quantite_par_personne">0.5</field>
+        <field name="unite">bouteille</field>
+    </record>
+    <record id="demo_niveau_renf_l6" model="lagunes.traiteur.niveau.ligne">
+        <field name="niveau_id" ref="demo_niveau_renforcee"/>
+        <field name="sequence">60</field>
+        <field name="type_ligne">equipement</field>
+        <field name="description">Nappe blanche (tissu)</field>
+        <field name="quantite_par_personne">0.125</field>
+        <field name="unite">par table</field>
+        <field name="logistique_id" ref="lagunes_traiteur.logistique_nappe"/>
+    </record>
+
+    <!-- ╔═════════════════════════════════════════════════════════════════╗
+         ║  NIVEAU 3 : AMÉLIORÉE                                         ║
+         ╚═════════════════════════════════════════════════════════════════╝ -->
+    <record id="demo_niveau_amelioree" model="lagunes.traiteur.niveau">
+        <field name="name">Améliorée</field>
+        <field name="sequence">30</field>
+        <field name="is_recommended">True</field>
+        <field name="description">Notre formule la plus populaire ! Entrée, 3 choix de plats (africain + européen), desserts variés, jus frais, eau, café/thé. Mobilier et sono inclus.</field>
+        <field name="type_prestation_ids" eval="[(6, 0, [
+            ref('lagunes_traiteur.type_pause_dejeuner'),
+            ref('lagunes_traiteur.type_pause_cafe'),
+            ref('lagunes_traiteur.type_cocktail'),
+        ])]"/>
+    </record>
+
+    <!-- Lignes Améliorée -->
+    <record id="demo_niveau_amel_l1" model="lagunes.traiteur.niveau.ligne">
+        <field name="niveau_id" ref="demo_niveau_amelioree"/>
+        <field name="sequence">10</field>
+        <field name="type_ligne">plat</field>
+        <field name="description">Entrée au choix (2 options)</field>
+        <field name="quantite_par_personne">1</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_entree"/>
+        <field name="is_client_choice">True</field>
+        <field name="nb_choix">2</field>
+    </record>
+    <record id="demo_niveau_amel_l2" model="lagunes.traiteur.niveau.ligne">
+        <field name="niveau_id" ref="demo_niveau_amelioree"/>
+        <field name="sequence">20</field>
+        <field name="type_ligne">plat</field>
+        <field name="description">Plat principal au choix (3 options)</field>
+        <field name="quantite_par_personne">1</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_plat_resistance"/>
+        <field name="is_client_choice">True</field>
+        <field name="nb_choix">3</field>
+    </record>
+    <record id="demo_niveau_amel_l3" model="lagunes.traiteur.niveau.ligne">
+        <field name="niveau_id" ref="demo_niveau_amelioree"/>
+        <field name="sequence">30</field>
+        <field name="type_ligne">plat</field>
+        <field name="description">Dessert au choix (2 options)</field>
+        <field name="quantite_par_personne">1</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_dessert"/>
+        <field name="is_client_choice">True</field>
+        <field name="nb_choix">2</field>
+    </record>
+    <record id="demo_niveau_amel_l4" model="lagunes.traiteur.niveau.ligne">
+        <field name="niveau_id" ref="demo_niveau_amelioree"/>
+        <field name="sequence">40</field>
+        <field name="type_ligne">boisson</field>
+        <field name="description">Jus frais (bissap, gingembre ou ananas)</field>
+        <field name="quantite_par_personne">1</field>
+        <field name="unite">verre</field>
+    </record>
+    <record id="demo_niveau_amel_l5" model="lagunes.traiteur.niveau.ligne">
+        <field name="niveau_id" ref="demo_niveau_amelioree"/>
+        <field name="sequence">50</field>
+        <field name="type_ligne">boisson</field>
+        <field name="description">Eau minérale 1.5L</field>
+        <field name="quantite_par_personne">0.5</field>
+        <field name="unite">bouteille</field>
+    </record>
+    <record id="demo_niveau_amel_l6" model="lagunes.traiteur.niveau.ligne">
+        <field name="niveau_id" ref="demo_niveau_amelioree"/>
+        <field name="sequence">55</field>
+        <field name="type_ligne">boisson</field>
+        <field name="description">Café ou Thé (fin de repas)</field>
+        <field name="quantite_par_personne">1</field>
+        <field name="unite">tasse</field>
+    </record>
+    <record id="demo_niveau_amel_l7" model="lagunes.traiteur.niveau.ligne">
+        <field name="niveau_id" ref="demo_niveau_amelioree"/>
+        <field name="sequence">60</field>
+        <field name="type_ligne">equipement</field>
+        <field name="description">Nappe blanche</field>
+        <field name="quantite_par_personne">0.125</field>
+        <field name="unite">par table</field>
+        <field name="logistique_id" ref="lagunes_traiteur.logistique_nappe"/>
+    </record>
+    <record id="demo_niveau_amel_l8" model="lagunes.traiteur.niveau.ligne">
+        <field name="niveau_id" ref="demo_niveau_amelioree"/>
+        <field name="sequence">70</field>
+        <field name="type_ligne">equipement</field>
+        <field name="description">Table ronde (8 pers.)</field>
+        <field name="quantite_par_personne">0.125</field>
+        <field name="unite">par table</field>
+        <field name="logistique_id" ref="lagunes_traiteur.logistique_table"/>
+    </record>
+    <record id="demo_niveau_amel_l9" model="lagunes.traiteur.niveau.ligne">
+        <field name="niveau_id" ref="demo_niveau_amelioree"/>
+        <field name="sequence">80</field>
+        <field name="type_ligne">equipement</field>
+        <field name="description">Chaise de réception</field>
+        <field name="quantite_par_personne">1</field>
+        <field name="unite">par chaise</field>
+        <field name="logistique_id" ref="lagunes_traiteur.logistique_chaise"/>
+    </record>
+
+    <!-- ╔═════════════════════════════════════════════════════════════════╗
+         ║  NIVEAU 4 : COMPLÈTE (Premium)                                 ║
+         ╚═════════════════════════════════════════════════════════════════╝ -->
+    <record id="demo_niveau_complete" model="lagunes.traiteur.niveau">
+        <field name="name">Complète</field>
+        <field name="sequence">40</field>
+        <field name="description">La formule VIP tout compris : buffet d'entrées, choix large de plats, desserts, bar à jus, café/thé, mobilier, sono et service personnalisé.</field>
+        <field name="type_prestation_ids" eval="[(6, 0, [
+            ref('lagunes_traiteur.type_pause_dejeuner'),
+            ref('lagunes_traiteur.type_pause_cafe'),
+            ref('lagunes_traiteur.type_cocktail'),
+        ])]"/>
+    </record>
+
+    <!-- Lignes Complète -->
+    <record id="demo_niveau_comp_l1" model="lagunes.traiteur.niveau.ligne">
+        <field name="niveau_id" ref="demo_niveau_complete"/>
+        <field name="sequence">10</field>
+        <field name="type_ligne">plat</field>
+        <field name="description">Buffet d'entrées variées (3 options)</field>
+        <field name="quantite_par_personne">1</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_entree"/>
+        <field name="is_client_choice">True</field>
+        <field name="nb_choix">3</field>
+    </record>
+    <record id="demo_niveau_comp_l2" model="lagunes.traiteur.niveau.ligne">
+        <field name="niveau_id" ref="demo_niveau_complete"/>
+        <field name="sequence">20</field>
+        <field name="type_ligne">plat</field>
+        <field name="description">Plats principaux (4 options africain + européen)</field>
+        <field name="quantite_par_personne">1</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_plat_resistance"/>
+        <field name="is_client_choice">True</field>
+        <field name="nb_choix">4</field>
+    </record>
+    <record id="demo_niveau_comp_l3" model="lagunes.traiteur.niveau.ligne">
+        <field name="niveau_id" ref="demo_niveau_complete"/>
+        <field name="sequence">30</field>
+        <field name="type_ligne">plat</field>
+        <field name="description">Buffet desserts (3 options)</field>
+        <field name="quantite_par_personne">1</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_dessert"/>
+        <field name="is_client_choice">True</field>
+        <field name="nb_choix">3</field>
+    </record>
+    <record id="demo_niveau_comp_l4" model="lagunes.traiteur.niveau.ligne">
+        <field name="niveau_id" ref="demo_niveau_complete"/>
+        <field name="sequence">40</field>
+        <field name="type_ligne">boisson</field>
+        <field name="description">Bar à jus frais (bissap, gingembre, ananas)</field>
+        <field name="quantite_par_personne">2</field>
+        <field name="unite">verre</field>
+    </record>
+    <record id="demo_niveau_comp_l5" model="lagunes.traiteur.niveau.ligne">
+        <field name="niveau_id" ref="demo_niveau_complete"/>
+        <field name="sequence">50</field>
+        <field name="type_ligne">boisson</field>
+        <field name="description">Eau minérale 1.5L</field>
+        <field name="quantite_par_personne">1</field>
+        <field name="unite">bouteille</field>
+    </record>
+    <record id="demo_niveau_comp_l6" model="lagunes.traiteur.niveau.ligne">
+        <field name="niveau_id" ref="demo_niveau_complete"/>
+        <field name="sequence">55</field>
+        <field name="type_ligne">boisson</field>
+        <field name="description">Café et Thé en libre-service</field>
+        <field name="quantite_par_personne">1</field>
+        <field name="unite">tasse</field>
+    </record>
+    <record id="demo_niveau_comp_l7" model="lagunes.traiteur.niveau.ligne">
+        <field name="niveau_id" ref="demo_niveau_complete"/>
+        <field name="sequence">60</field>
+        <field name="type_ligne">equipement</field>
+        <field name="description">Nappe blanche</field>
+        <field name="quantite_par_personne">0.125</field>
+        <field name="logistique_id" ref="lagunes_traiteur.logistique_nappe"/>
+    </record>
+    <record id="demo_niveau_comp_l8" model="lagunes.traiteur.niveau.ligne">
+        <field name="niveau_id" ref="demo_niveau_complete"/>
+        <field name="sequence">70</field>
+        <field name="type_ligne">equipement</field>
+        <field name="description">Table ronde (8 pers.)</field>
+        <field name="quantite_par_personne">0.125</field>
+        <field name="logistique_id" ref="lagunes_traiteur.logistique_table"/>
+    </record>
+    <record id="demo_niveau_comp_l9" model="lagunes.traiteur.niveau.ligne">
+        <field name="niveau_id" ref="demo_niveau_complete"/>
+        <field name="sequence">80</field>
+        <field name="type_ligne">equipement</field>
+        <field name="description">Chaise de réception</field>
+        <field name="quantite_par_personne">1</field>
+        <field name="logistique_id" ref="lagunes_traiteur.logistique_chaise"/>
+    </record>
+    <record id="demo_niveau_comp_l10" model="lagunes.traiteur.niveau.ligne">
+        <field name="niveau_id" ref="demo_niveau_complete"/>
+        <field name="sequence">90</field>
+        <field name="type_ligne">equipement</field>
+        <field name="description">Sono + Micro sans fil</field>
+        <field name="quantite_par_personne">0</field>
+        <field name="logistique_id" ref="lagunes_traiteur.logistique_sono"/>
+    </record>
+    <record id="demo_niveau_comp_l11" model="lagunes.traiteur.niveau.ligne">
+        <field name="niveau_id" ref="demo_niveau_complete"/>
+        <field name="sequence">100</field>
+        <field name="type_ligne">service</field>
+        <field name="description">Maître d'hôtel dédié</field>
+        <field name="quantite_par_personne">0</field>
+        <field name="unite">forfait</field>
+    </record>
+
+    <!-- Grille Tarifaire Démo -->
+    <record id="demo_prix_standard_dej" model="lagunes.traiteur.niveau.prix">
+        <field name="niveau_id" ref="demo_niveau_standard"/>
+        <field name="type_id" ref="lagunes_traiteur.type_pause_dejeuner"/>
+        <field name="prix_par_personne">5000.0</field>
+    </record>
+
+    <record id="demo_prix_renf_dej" model="lagunes.traiteur.niveau.prix">
+        <field name="niveau_id" ref="demo_niveau_renforcee"/>
+        <field name="type_id" ref="lagunes_traiteur.type_pause_dejeuner"/>
+        <field name="prix_par_personne">8500.0</field>
+    </record>
+    <record id="demo_prix_renf_cafe" model="lagunes.traiteur.niveau.prix">
+        <field name="niveau_id" ref="demo_niveau_renforcee"/>
+        <field name="type_id" ref="lagunes_traiteur.type_pause_cafe"/>
+        <field name="prix_par_personne">3500.0</field>
+    </record>
+
+    <record id="demo_prix_amel_dej" model="lagunes.traiteur.niveau.prix">
+        <field name="niveau_id" ref="demo_niveau_amelioree"/>
+        <field name="type_id" ref="lagunes_traiteur.type_pause_dejeuner"/>
+        <field name="prix_par_personne">12000.0</field>
+    </record>
+    <record id="demo_prix_amel_cafe" model="lagunes.traiteur.niveau.prix">
+        <field name="niveau_id" ref="demo_niveau_amelioree"/>
+        <field name="type_id" ref="lagunes_traiteur.type_pause_cafe"/>
+        <field name="prix_par_personne">4500.0</field>
+    </record>
+
+    <record id="demo_prix_comp_dej" model="lagunes.traiteur.niveau.prix">
+        <field name="niveau_id" ref="demo_niveau_complete"/>
+        <field name="type_id" ref="lagunes_traiteur.type_pause_dejeuner"/>
+        <field name="prix_par_personne">18000.0</field>
+    </record>
+    <record id="demo_prix_comp_cocktail" model="lagunes.traiteur.niveau.prix">
+        <field name="niveau_id" ref="demo_niveau_complete"/>
+        <field name="type_id" ref="lagunes_traiteur.type_cocktail"/>
+        <field name="prix_par_personne">15000.0</field>
+    </record>
+
+</odoo>

@@ -1,0 +1,295 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Catégories -->
+        <record id="uom_categ_weight" model="lagunes.market.uom.category">
+            <field name="name">Poids (Masse)</field>
+        </record>
+
+        <record id="uom_categ_vol" model="lagunes.market.uom.category">
+            <field name="name">Volume (Liquides)</field>
+        </record>
+
+        <record id="uom_categ_unit" model="lagunes.market.uom.category">
+            <field name="name">Unité (Compte)</field>
+        </record>
+
+        <!-- Unités : POIDS -->
+        <record id="uom_kg" model="lagunes.market.uom">
+            <field name="name">kg</field>
+            <field name="category_id" ref="uom_categ_weight"/>
+            <field name="uom_type">reference</field>
+            <field name="factor">1.0</field>
+        </record>
+
+        <record id="uom_g" model="lagunes.market.uom">
+            <field name="name">g</field>
+            <field name="category_id" ref="uom_categ_weight"/>
+            <field name="uom_type">smaller</field>
+            <field name="factor">1000.0</field> <!-- Dans Odoo standard, factor_inv = 1000. Je vais utiliser factor pour MULTIPLIER la quantité d'unité de référence pour obtenir la sous-unité, ou Division? -->
+            <!-- 
+                Attention : Pour Odoo, 1 kg = 1000g. 
+                Si Qty_Ref = 1, Qty_g = Qty_Ref * factor.
+                Je vais suivre la logique Odoo : 
+                - Reference : factor = 1.0
+                - Bigger than reference : factor = ratio de combien d'unités de référence dans CETTE unité (ex: Tonne = 1000 kg).
+                - Smaller than reference : factor = ratio de combien de CETTE unité dans l'unité de référence (ex: g = 1000 dans 1 kg).
+            -->
+        </record>
+
+        <record id="uom_mg" model="lagunes.market.uom">
+            <field name="name">mg</field>
+            <field name="category_id" ref="uom_categ_weight"/>
+            <field name="uom_type">smaller</field>
+            <field name="factor">1000000.0</field>
+        </record>
+
+        <!-- Unités : VOLUME -->
+        <record id="uom_litre" model="lagunes.market.uom">
+            <field name="name">Litre(s)</field>
+            <field name="category_id" ref="uom_categ_vol"/>
+            <field name="uom_type">reference</field>
+            <field name="factor">1.0</field>
+        </record>
+
+        <record id="uom_cl" model="lagunes.market.uom">
+            <field name="name">cl</field>
+            <field name="category_id" ref="uom_categ_vol"/>
+            <field name="uom_type">smaller</field>
+            <field name="factor">100.0</field>
+        </record>
+
+        <record id="uom_ml" model="lagunes.market.uom">
+            <field name="name">ml</field>
+            <field name="category_id" ref="uom_categ_vol"/>
+            <field name="uom_type">smaller</field>
+            <field name="factor">1000.0</field>
+        </record>
+
+        <!-- Unités : UNITÉ -->
+        <record id="uom_unit" model="lagunes.market.uom">
+            <field name="name">Pièce</field>
+            <field name="category_id" ref="uom_categ_unit"/>
+            <field name="uom_type">reference</field>
+            <field name="factor">1.0</field>
+        </record>
+
+        <record id="uom_dozen" model="lagunes.market.uom">
+            <field name="name">Douzaine</field>
+            <field name="category_id" ref="uom_categ_unit"/>
+            <field name="uom_type">bigger</field>
+            <field name="factor">12.0</field>
+        </record>
+
+        <record id="uom_demi_dozen" model="lagunes.market.uom">
+            <field name="name">Demi-douzaine</field>
+            <field name="category_id" ref="uom_categ_unit"/>
+            <field name="uom_type">bigger</field>
+            <field name="factor">6.0</field>
+        </record>
+
+        <!-- ═══════════════════════════════════════════════════════════════════════
+             UNITÉS SPÉCIFIQUES CÔTE D'IVOIRE (Traditionnelles et Courantes)
+        ═══════════════════════════════════════════════════════════════════════ -->
+
+        <!-- Catégorie Emballages/Contenants -->
+        <record id="uom_categ_packaging" model="lagunes.market.uom.category">
+            <field name="name">Emballages &amp; Contenants</field>
+        </record>
+
+        <!-- Emballages standards -->
+        <record id="uom_carton" model="lagunes.market.uom">
+            <field name="name">Carton</field>
+            <field name="category_id" ref="uom_categ_packaging"/>
+            <field name="uom_type">reference</field>
+            <field name="factor">1.0</field>
+        </record>
+
+        <record id="uom_sac" model="lagunes.market.uom">
+            <field name="name">Sac</field>
+            <field name="category_id" ref="uom_categ_packaging"/>
+            <field name="uom_type">reference</field>
+            <field name="factor">1.0</field>
+        </record>
+
+        <record id="uom_filet" model="lagunes.market.uom">
+            <field name="name">Filet</field>
+            <field name="category_id" ref="uom_categ_packaging"/>
+            <field name="uom_type">reference</field>
+            <field name="factor">1.0</field>
+        </record>
+
+        <record id="uom_boite" model="lagunes.market.uom">
+            <field name="name">Boîte</field>
+            <field name="category_id" ref="uom_categ_packaging"/>
+            <field name="uom_type">reference</field>
+            <field name="factor">1.0</field>
+        </record>
+
+        <record id="uom_bidon" model="lagunes.market.uom">
+            <field name="name">Bidon</field>
+            <field name="category_id" ref="uom_categ_packaging"/>
+            <field name="uom_type">reference</field>
+            <field name="factor">1.0</field>
+        </record>
+
+        <record id="uom_sachet" model="lagunes.market.uom">
+            <field name="name">Sachet</field>
+            <field name="category_id" ref="uom_categ_packaging"/>
+            <field name="uom_type">reference</field>
+            <field name="factor">1.0</field>
+        </record>
+
+        <!-- Catégorie Marché Traditionnel CI -->
+        <record id="uom_categ_ci_market" model="lagunes.market.uom.category">
+            <field name="name">Marché Traditionnel (CI)</field>
+        </record>
+
+        <!-- Unités traditionnelles ivoiriennes -->
+        <record id="uom_plateau" model="lagunes.market.uom">
+            <field name="name">Plateau</field>
+            <field name="category_id" ref="uom_categ_ci_market"/>
+            <field name="uom_type">reference</field>
+            <field name="factor">1.0</field>
+        </record>
+
+        <record id="uom_tine" model="lagunes.market.uom">
+            <field name="name">Tine</field>
+            <field name="category_id" ref="uom_categ_ci_market"/>
+            <field name="uom_type">bigger</field>
+            <field name="factor">2.0</field>
+        </record>
+
+        <record id="uom_tasse" model="lagunes.market.uom">
+            <field name="name">Tasse (~250ml)</field>
+            <field name="category_id" ref="uom_categ_ci_market"/>
+            <field name="uom_type">smaller</field>
+            <field name="factor">4.0</field>
+        </record>
+
+        <record id="uom_cuilere_soupe" model="lagunes.market.uom">
+            <field name="name">C. à soupe (~15ml)</field>
+            <field name="category_id" ref="uom_categ_ci_market"/>
+            <field name="uom_type">smaller</field>
+            <field name="factor">66.67</field>
+        </record>
+
+        <record id="uom_cuilere_cafe" model="lagunes.market.uom">
+            <field name="name">C. à café (~5ml)</field>
+            <field name="category_id" ref="uom_categ_ci_market"/>
+            <field name="uom_type">smaller</field>
+            <field name="factor">200.0</field>
+        </record>
+
+        <record id="uom_verre" model="lagunes.market.uom">
+            <field name="name">Verre (~200ml)</field>
+            <field name="category_id" ref="uom_categ_ci_market"/>
+            <field name="uom_type">smaller</field>
+            <field name="factor">5.0</field>
+        </record>
+
+        <record id="uom_bol" model="lagunes.market.uom">
+            <field name="name">Bol (~400ml)</field>
+            <field name="category_id" ref="uom_categ_ci_market"/>
+            <field name="uom_type">smaller</field>
+            <field name="factor">2.5</field>
+        </record>
+
+        <record id="uom_morceau" model="lagunes.market.uom">
+            <field name="name">Morceau</field>
+            <field name="category_id" ref="uom_categ_ci_market"/>
+            <field name="uom_type">reference</field>
+            <field name="factor">1.0</field>
+        </record>
+
+        <record id="uom_boule" model="lagunes.market.uom">
+            <field name="name">Boule</field>
+            <field name="category_id" ref="uom_categ_ci_market"/>
+            <field name="uom_type">reference</field>
+            <field name="factor">1.0</field>
+        </record>
+
+        <record id="uom_tranche" model="lagunes.market.uom">
+            <field name="name">Tranche</field>
+            <field name="category_id" ref="uom_categ_ci_market"/>
+            <field name="uom_type">reference</field>
+            <field name="factor">1.0</field>
+        </record>
+
+        <record id="uom_bouquet" model="lagunes.market.uom">
+            <field name="name">Bouquet</field>
+            <field name="category_id" ref="uom_categ_ci_market"/>
+            <field name="uom_type">reference</field>
+            <field name="factor">1.0</field>
+        </record>
+
+        <record id="uom_botte" model="lagunes.market.uom">
+            <field name="name">Botte</field>
+            <field name="category_id" ref="uom_categ_ci_market"/>
+            <field name="uom_type">reference</field>
+            <field name="factor">1.0</field>
+        </record>
+
+        <record id="uom_regime" model="lagunes.market.uom">
+            <field name="name">Régime (12 doigts)</field>
+            <field name="category_id" ref="uom_categ_ci_market"/>
+            <field name="uom_type">bigger</field>
+            <field name="factor">12.0</field>
+        </record>
+
+        <record id="uom_main" model="lagunes.market.uom">
+            <field name="name">Main (poignée)</field>
+            <field name="category_id" ref="uom_categ_ci_market"/>
+            <field name="uom_type">reference</field>
+            <field name="factor">1.0</field>
+        </record>
+
+        <record id="uom_pincee" model="lagunes.market.uom">
+            <field name="name">Pincée</field>
+            <field name="category_id" ref="uom_categ_ci_market"/>
+            <field name="uom_type">reference</field>
+            <field name="factor">1.0</field>
+        </record>
+
+        <!-- ═══════════════════════════════════════════════════════════════════════
+             UNITÉS COMMERCIALES SUPPLÉMENTAIRES
+        ═══════════════════════════════════════════════════════════════════════ -->
+
+        <!-- Plus de poids -->
+        <record id="uom_quintal" model="lagunes.market.uom">
+            <field name="name">Quintal (100kg)</field>
+            <field name="category_id" ref="uom_categ_weight"/>
+            <field name="uom_type">bigger</field>
+            <field name="factor">100.0</field>
+        </record>
+
+        <record id="uom_tonne" model="lagunes.market.uom">
+            <field name="name">Tonne</field>
+            <field name="category_id" ref="uom_categ_weight"/>
+            <field name="uom_type">bigger</field>
+            <field name="factor">1000.0</field>
+        </record>
+
+        <!-- Plus de volumes -->
+        <record id="uom_galon" model="lagunes.market.uom">
+            <field name="name">Galon (4.5L)</field>
+            <field name="category_id" ref="uom_categ_vol"/>
+            <field name="uom_type">bigger</field>
+            <field name="factor">4.54609</field>
+        </record>
+
+        <record id="uom_bouteille_1_5l" model="lagunes.market.uom">
+            <field name="name">Bouteille 1.5L</field>
+            <field name="category_id" ref="uom_categ_vol"/>
+            <field name="uom_type">bigger</field>
+            <field name="factor">1.5</field>
+        </record>
+
+        <record id="uom_bouteille_75cl" model="lagunes.market.uom">
+            <field name="name">Bouteille 75cl</field>
+            <field name="category_id" ref="uom_categ_vol"/>
+            <field name="uom_type">smaller</field>
+            <field name="factor">1.333</field>
+        </record>
+    </data>
+</odoo>

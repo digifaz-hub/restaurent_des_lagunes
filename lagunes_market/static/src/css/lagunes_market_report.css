@@ -1,0 +1,150 @@
+/* ═══════════════════════════════════════════════════════════════════
+   LAGUNES MARKET — Styles rapport PDF QWeb
+═══════════════════════════════════════════════════════════════════ */
+
+.lagunes-market-report {
+    font-family: 'DejaVu Sans', Arial, sans-serif;
+    font-size: 10pt;
+    color: #29314E;
+}
+
+/* ─── En-tête rapport ───────────────────────────────────────────── */
+.lagunes-report-header {
+    margin-bottom: 20px;
+}
+
+.lagunes-report-title h2 {
+    color: #29314E;
+    font-size: 16pt;
+    font-weight: 700;
+    border-bottom: 3px solid #CBBB29;
+    padding-bottom: 8px;
+    margin-bottom: 12px;
+}
+
+/* ─── Table méta-données (référence, date…) ─────────────────────── */
+.lagunes-meta-table {
+    width: 100%;
+    border: none;
+}
+
+.lagunes-meta-table td {
+    padding: 4px 8px;
+    vertical-align: top;
+}
+
+.lagunes-label {
+    font-weight: 600;
+    color: #969AAF;
+    width: 120px;
+}
+
+/* ─── Badge statut ──────────────────────────────────────────────── */
+.lagunes-badge {
+    display: inline-block;
+    padding: 2px 10px;
+    border-radius: 12px;
+    font-size: 9pt;
+    font-weight: 600;
+    color: #fff;
+}
+
+.lagunes-badge-draft     { background-color: #CBBB29; }
+.lagunes-badge-validated { background-color: #6C8C16; }
+.lagunes-badge-cancelled { background-color: #dc3545; }
+
+/* ─── Titre de section ──────────────────────────────────────────── */
+.lagunes-section-title {
+    background-color: #29314E;
+    color: #fff;
+    font-size: 10pt;
+    font-weight: 600;
+    padding: 6px 12px;
+    margin: 16px 0 0 0;
+    border-radius: 4px 4px 0 0;
+}
+
+/* Titre stock initial : couleur distincte (marron bois) */
+.lagunes-section-leftover {
+    background-color: #8B6B48;
+}
+
+/* ─── Tableau lignes articles ───────────────────────────────────── */
+.lagunes-lines-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 0;
+}
+
+.lagunes-table-header th {
+    background-color: #F5F5E5;
+    color: #29314E;
+    font-weight: 600;
+    padding: 6px 8px;
+    border-bottom: 2px solid #CBBB29;
+}
+
+.lagunes-lines-table tbody td {
+    padding: 5px 8px;
+    border-bottom: 1px solid #e8e8e0;
+    vertical-align: middle;
+}
+
+.lagunes-row-even td {
+    background-color: rgba(245, 245, 229, 0.5);
+}
+
+/* Quantité restante stock initial : mise en valeur */
+.lagunes-leftover-qty {
+    font-weight: 700;
+    color: #8B6B48;
+}
+
+/* ─── Bloc montant total ─────────────────────────────────────────── */
+.lagunes-total-block {
+    margin-top: 12px;
+}
+
+.lagunes-total-table {
+    width: 100%;
+    margin-bottom: 0;
+}
+
+.lagunes-total-label {
+    font-weight: 600;
+    font-size: 11pt;
+    color: #29314E;
+    text-align: right;
+    padding-right: 16px;
+}
+
+.lagunes-total-amount {
+    font-weight: 700;
+    font-size: 13pt;
+    color: #6C8C16;
+    text-align: right;
+    width: 160px;
+    padding-right: 8px;
+}
+
+/* ─── Notes ─────────────────────────────────────────────────────── */
+.lagunes-notes {
+    background-color: #F5F5E5;
+    border-left: 4px solid #8B6B48;
+    padding: 10px 14px;
+    margin-top: 4px;
+    font-size: 9.5pt;
+    color: #444;
+    white-space: pre-line;
+}
+
+/* ─── Pied de page ──────────────────────────────────────────────── */
+.lagunes-report-footer {
+    margin-top: 30px;
+    padding-top: 8px;
+    border-top: 1px solid #969AAF;
+    display: flex;
+    justify-content: space-between;
+    font-size: 8pt;
+    color: #969AAF;
+}

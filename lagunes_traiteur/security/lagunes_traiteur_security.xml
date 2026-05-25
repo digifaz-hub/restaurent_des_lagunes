@@ -1,0 +1,52 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="module_category_lagunes_traiteur" model="ir.module.category">
+        <field name="name">Traiteur Lagunes</field>
+        <field name="description">Gestion du service traiteur</field>
+        <field name="parent_id" ref="base.module_category_sales"/>
+        <field name="sequence">20</field>
+    </record>
+
+    <!-- Groupe : Utilisateur (Consultation) -->
+    <record id="group_traiteur_user" model="res.groups">
+        <field name="name">Utilisateur (Lecture seule)</field>
+        <field name="category_id" ref="module_category_lagunes_traiteur"/>
+        <field name="implied_ids" eval="[(4, ref('base.group_user'))]"/>
+    </record>
+
+    <!-- Groupe : Commercial (Gestion des demandes) -->
+    <record id="group_traiteur_commercial" model="res.groups">
+        <field name="name">Commercial (Gestion complète)</field>
+        <field name="category_id" ref="module_category_lagunes_traiteur"/>
+        <field name="implied_ids" eval="[(4, ref('group_traiteur_user')), (4, ref('lagunes_market.group_market_user'))]"/>
+    </record>
+
+    <!-- Groupe : Manager (Configuration) -->
+    <record id="group_traiteur_manager" model="res.groups">
+        <field name="name">Administrateur / Manager</field>
+        <field name="category_id" ref="module_category_lagunes_traiteur"/>
+        <field name="implied_ids" eval="[(4, ref('group_traiteur_commercial'))]"/>
+        <field name="users" eval="[(4, ref('base.user_root')), (4, ref('base.user_admin'))]"/>
+    </record>
+
+    <!-- RÈGLES DE SÉCURITÉ (Multi-Company) -->
+    <data noupdate="1">
+        <record id="traiteur_demande_company_rule" model="ir.rule">
+            <field name="name">Traiteur : Demande par société</field>
+            <field name="model_id" ref="lagunes_traiteur.model_lagunes_traiteur_demande"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="traiteur_type_prestation_company_rule" model="ir.rule">
+            <field name="name">Traiteur : Type Prestation par société</field>
+            <field name="model_id" ref="lagunes_traiteur.model_lagunes_traiteur_type_prestation"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+
+        <record id="traiteur_devis_company_rule" model="ir.rule">
+            <field name="name">Traiteur : Devis par société</field>
+            <field name="model_id" ref="lagunes_traiteur.model_lagunes_traiteur_devis"/>
+            <field name="domain_force">[('company_id', 'in', company_ids)]</field>
+        </record>
+    </data>
+</odoo>

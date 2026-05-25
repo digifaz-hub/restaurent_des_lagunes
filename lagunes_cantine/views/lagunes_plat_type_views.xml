@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Vue liste des types de plats - DESIGN MODERNE -->
+    <record id="view_plat_type_list" model="ir.ui.view">
+        <field name="name">lagunes.plat.type.list</field>
+        <field name="model">lagunes.plat.type</field>
+        <field name="arch" type="xml">
+            <list string="Types de plats" 
+                  decoration-muted="not active"
+                  multi_edit="1"
+                  class="o_lagunes_view">
+                <field name="sequence" widget="handle" width="30"/>
+                <field name="name" width="200" string="Type de plat"/>
+                <field name="color" widget="color" width="80" string="Couleur"/>
+                <field name="description" optional="show" width="300" string="Description"/>
+                <field name="active" widget="boolean_toggle" width="80" string="Actif"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Vue formulaire des types de plats - DESIGN MODERNE -->
+    <record id="view_plat_type_form" model="ir.ui.view">
+        <field name="name">lagunes.plat.type.form</field>
+        <field name="model">lagunes.plat.type</field>
+        <field name="arch" type="xml">
+            <form string="Type de plat" class="o_lagunes_view">
+                <sheet>
+                    <!-- En-tête moderne avec couleur -->
+                    <div class="oe_title mb-4">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="lui-card-icon lui-icon-primary" style="width:60px;height:60px;">
+                                <i class="fa fa-utensils fa-lg" title="Cuisine"/>
+                            </div>
+                            <div class="flex-grow-1">
+                                <label class="o_form_label" for="name">
+                                    Type de plat
+                                </label>
+                                <h1 class="mb-0">
+                                    <field name="name" placeholder="ex: Entrée, Plat de résistance, Dessert" class="fw-bold text-primary"/>
+                                </h1>
+                            </div>
+                            <div class="text-end">
+                                <field name="color" widget="color" string="Couleur"/>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="card border-0 bg-light h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title mb-3">
+                                        <i class="fa fa-cog text-primary me-2" title="Configuration"/>
+                                        Configuration
+                                    </h5>
+                                    <group>
+                                        <field name="sequence" string="Ordre d'affichage"/>
+                                        <field name="active" widget="boolean_toggle" string="Type actif"/>
+                                    </group>
+                                    <div class="alert alert-light border mt-3" role="status">
+                                        <i class="fa fa-info-circle text-primary me-2" title="Info"/>
+                                        <small>La couleur définit l'apparence visuelle de ce type dans les menus et plats</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card border-0 bg-light h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title mb-3">
+                                        <i class="fa fa-align-left text-success me-2" title="Description"/>
+                                        Description
+                                    </h5>
+                                    <field name="description" nolabel="1" placeholder="Description du type de plat (ex: Les entrées sont servies en premier, les plats de résistance constituent le plat principal...)"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vue recherche des types de plats - DESIGN MODERNE -->
+    <record id="view_plat_type_search" model="ir.ui.view">
+        <field name="name">lagunes.plat.type.search</field>
+        <field name="model">lagunes.plat.type</field>
+        <field name="arch" type="xml">
+            <search string="Rechercher dans les types de plats">
+                <field name="name" string="Type de plat"/>
+                <separator/>
+                <filter string="Types actifs" name="actifs" domain="[('active', '=', True)]"
+                        help="Types de plats actuellement utilisables"/>
+                <filter string="Types inactifs" name="inactifs" domain="[('active', '=', False)]"
+                        help="Types de plats désactivés"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action pour les types de plats - DESIGN MODERNE -->
+    <record id="action_plat_type" model="ir.actions.act_window">
+        <field name="name">Types de plats</field>
+        <field name="res_model">lagunes.plat.type</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_actifs': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Aucun type de plat défini</p>
+            <div class="p-3 bg-light rounded">
+                <h5 class="mb-3"><i class="fa fa-utensils text-primary me-2"/>Structurez votre carte</h5>
+                <p>Les types de plats organisent votre carte en catégories logiques.</p>
+                
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-start gap-2">
+                            <i class="fa fa-leaf text-success mt-1"/>
+                            <div>
+                                <strong>Entrée</strong>
+                                <p class="small text-muted mb-0">Salades, soups...</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-start gap-2">
+                            <i class="fa fa-fire text-warning mt-1"/>
+                            <div>
+                                <strong>Plat principal</strong>
+                                <p class="small text-muted mb-0">Africain, Européen...</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-start gap-2">
+                            <i class="fa fa-birthday-cake text-info mt-1"/>
+                            <div>
+                                <strong>Dessert</strong>
+                                <p class="small text-muted mb-0">Fruits, pâtisseries...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="alert alert-info mb-0 py-2">
+                    <i class="fa fa-lightbulb text-warning me-2"/>
+                    <strong>Astuce :</strong> Définissez une couleur distinctive pour chaque type pour faciliter la visualisation
+                </div>
+            </div>
+        </field>
+    </record>
+
+</odoo>

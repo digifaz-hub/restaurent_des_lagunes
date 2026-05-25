@@ -1,0 +1,445 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+    <!-- ═══════════════════════════════════════════════════════════════════
+         STOCKS INITIAUX pour chaque article (société courante)
+         Couvre 3 états :
+           - OK         : qty > reorder_point  (vert)
+           - FAIBLE     : 0 < qty <= reorder_point (orange)
+           - CRITIQUE   : qty == 0  (rouge)
+         ═══════════════════════════════════════════════════════════════════ -->
+
+    <!-- ── CÉRÉALES : stocks confortables ───────────────────────────── -->
+    <record id="demo_stock_riz_parfume" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_riz_parfume"/>
+        <field name="qty">125.5</field>
+        <field name="reorder_point">30.0</field>
+        <field name="reorder_quantity">100.0</field>
+    </record>
+    <record id="demo_stock_riz_brise" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_riz_brise"/>
+        <field name="qty">80.0</field>
+        <field name="reorder_point">25.0</field>
+        <field name="reorder_quantity">80.0</field>
+    </record>
+    <record id="demo_stock_attieke" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_attieke"/>
+        <field name="qty">45.0</field>
+        <field name="reorder_point">20.0</field>
+        <field name="reorder_quantity">50.0</field>
+    </record>
+    <record id="demo_stock_foutou_banane" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_foutou_banane"/>
+        <field name="qty">12.0</field>
+        <field name="reorder_point">15.0</field>
+        <field name="reorder_quantity">30.0</field>
+    </record>
+    <record id="demo_stock_foutou_igname" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_foutou_igname"/>
+        <field name="qty">18.0</field>
+        <field name="reorder_point">15.0</field>
+        <field name="reorder_quantity">30.0</field>
+    </record>
+    <record id="demo_stock_manioc" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_manioc"/>
+        <field name="qty">22.0</field>
+        <field name="reorder_point">15.0</field>
+        <field name="reorder_quantity">30.0</field>
+    </record>
+    <record id="demo_stock_pates" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_pates"/>
+        <field name="qty">35.0</field>
+        <field name="reorder_point">20.0</field>
+        <field name="reorder_quantity">40.0</field>
+    </record>
+    <record id="demo_stock_farine_ble" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_farine_ble"/>
+        <field name="qty">60.0</field>
+        <field name="reorder_point">20.0</field>
+        <field name="reorder_quantity">50.0</field>
+    </record>
+    <record id="demo_stock_farine_mais" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_farine_mais"/>
+        <field name="qty">8.0</field>
+        <field name="reorder_point">15.0</field>
+        <field name="reorder_quantity">30.0</field>
+    </record>
+    <record id="demo_stock_igname" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_igname"/>
+        <field name="qty">55.0</field>
+        <field name="reorder_point">20.0</field>
+        <field name="reorder_quantity">40.0</field>
+    </record>
+    <record id="demo_stock_banane_plantain" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_banane_plantain"/>
+        <field name="qty">30.0</field>
+        <field name="reorder_point">15.0</field>
+        <field name="reorder_quantity">30.0</field>
+    </record>
+    <record id="demo_stock_pain" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_pain"/>
+        <field name="qty">45.0</field>
+        <field name="reorder_point">30.0</field>
+        <field name="reorder_quantity">60.0</field>
+    </record>
+
+    <!-- ── VIANDES ─────────────────────────────────────────────────── -->
+    <record id="demo_stock_poulet_frais" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_poulet_frais"/>
+        <field name="qty">42.0</field>
+        <field name="reorder_point">15.0</field>
+        <field name="reorder_quantity">30.0</field>
+    </record>
+    <record id="demo_stock_poulet_fume" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_poulet_fume"/>
+        <field name="qty">15.0</field>
+        <field name="reorder_point">10.0</field>
+        <field name="reorder_quantity">25.0</field>
+    </record>
+    <record id="demo_stock_boeuf" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_boeuf"/>
+        <field name="qty">28.0</field>
+        <field name="reorder_point">15.0</field>
+        <field name="reorder_quantity">30.0</field>
+    </record>
+    <record id="demo_stock_agneau" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_agneau"/>
+        <field name="qty">6.0</field>
+        <field name="reorder_point">10.0</field>
+        <field name="reorder_quantity">20.0</field>
+    </record>
+    <record id="demo_stock_mouton" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_mouton"/>
+        <field name="qty">0.0</field>
+        <field name="reorder_point">10.0</field>
+        <field name="reorder_quantity">20.0</field>
+    </record>
+    <record id="demo_stock_porc" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_porc"/>
+        <field name="qty">14.0</field>
+        <field name="reorder_point">8.0</field>
+        <field name="reorder_quantity">15.0</field>
+    </record>
+    <record id="demo_stock_pintade" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_pintade"/>
+        <field name="qty">18.0</field>
+        <field name="reorder_point">10.0</field>
+        <field name="reorder_quantity">20.0</field>
+    </record>
+    <record id="demo_stock_oeufs" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_oeufs"/>
+        <field name="qty">240.0</field>
+        <field name="reorder_point">60.0</field>
+        <field name="reorder_quantity">180.0</field>
+    </record>
+    <record id="demo_stock_saucisses" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_saucisses"/>
+        <field name="qty">9.0</field>
+        <field name="reorder_point">10.0</field>
+        <field name="reorder_quantity">20.0</field>
+    </record>
+
+    <!-- ── POISSONS ────────────────────────────────────────────────── -->
+    <record id="demo_stock_thon" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_thon"/>
+        <field name="qty">12.0</field>
+        <field name="reorder_point">8.0</field>
+        <field name="reorder_quantity">20.0</field>
+    </record>
+    <record id="demo_stock_bar" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_bar"/>
+        <field name="qty">4.5</field>
+        <field name="reorder_point">6.0</field>
+        <field name="reorder_quantity">15.0</field>
+    </record>
+    <record id="demo_stock_capitaine" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_capitaine"/>
+        <field name="qty">8.0</field>
+        <field name="reorder_point">5.0</field>
+        <field name="reorder_quantity">12.0</field>
+    </record>
+    <record id="demo_stock_machoiron" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_machoiron"/>
+        <field name="qty">10.0</field>
+        <field name="reorder_point">5.0</field>
+        <field name="reorder_quantity">12.0</field>
+    </record>
+    <record id="demo_stock_tilapia" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_tilapia"/>
+        <field name="qty">20.0</field>
+        <field name="reorder_point">8.0</field>
+        <field name="reorder_quantity">20.0</field>
+    </record>
+    <record id="demo_stock_crevettes" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_crevettes"/>
+        <field name="qty">0.0</field>
+        <field name="reorder_point">5.0</field>
+        <field name="reorder_quantity">10.0</field>
+    </record>
+
+    <!-- ── LÉGUMES ─────────────────────────────────────────────────── -->
+    <record id="demo_stock_tomate" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_tomate"/>
+        <field name="qty">35.0</field>
+        <field name="reorder_point">15.0</field>
+        <field name="reorder_quantity">30.0</field>
+    </record>
+    <record id="demo_stock_concentre_tomate" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_concentre_tomate"/>
+        <field name="qty">72.0</field>
+        <field name="reorder_point">24.0</field>
+        <field name="reorder_quantity">48.0</field>
+    </record>
+    <record id="demo_stock_oignon" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_oignon"/>
+        <field name="qty">55.0</field>
+        <field name="reorder_point">20.0</field>
+        <field name="reorder_quantity">40.0</field>
+    </record>
+    <record id="demo_stock_ail" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_ail"/>
+        <field name="qty">6.5</field>
+        <field name="reorder_point">3.0</field>
+        <field name="reorder_quantity">8.0</field>
+    </record>
+    <record id="demo_stock_gombo" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_gombo"/>
+        <field name="qty">14.0</field>
+        <field name="reorder_point">10.0</field>
+        <field name="reorder_quantity">20.0</field>
+    </record>
+    <record id="demo_stock_aubergine" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_aubergine"/>
+        <field name="qty">18.0</field>
+        <field name="reorder_point">10.0</field>
+        <field name="reorder_quantity">20.0</field>
+    </record>
+    <record id="demo_stock_carotte" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_carotte"/>
+        <field name="qty">25.0</field>
+        <field name="reorder_point">12.0</field>
+        <field name="reorder_quantity">25.0</field>
+    </record>
+    <record id="demo_stock_courgette" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_courgette"/>
+        <field name="qty">12.0</field>
+        <field name="reorder_point">10.0</field>
+        <field name="reorder_quantity">20.0</field>
+    </record>
+    <record id="demo_stock_chou" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_chou"/>
+        <field name="qty">16.0</field>
+        <field name="reorder_point">10.0</field>
+        <field name="reorder_quantity">20.0</field>
+    </record>
+    <record id="demo_stock_salade" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_salade"/>
+        <field name="qty">24.0</field>
+        <field name="reorder_point">15.0</field>
+        <field name="reorder_quantity">30.0</field>
+    </record>
+    <record id="demo_stock_epinards" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_epinards"/>
+        <field name="qty">10.0</field>
+        <field name="reorder_point">8.0</field>
+        <field name="reorder_quantity">15.0</field>
+    </record>
+    <record id="demo_stock_haricots_verts" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_haricots_verts"/>
+        <field name="qty">12.0</field>
+        <field name="reorder_point">8.0</field>
+        <field name="reorder_quantity">15.0</field>
+    </record>
+    <record id="demo_stock_poivron" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_poivron"/>
+        <field name="qty">9.0</field>
+        <field name="reorder_point">8.0</field>
+        <field name="reorder_quantity">15.0</field>
+    </record>
+    <record id="demo_stock_pomme_terre" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_pomme_terre"/>
+        <field name="qty">48.0</field>
+        <field name="reorder_point">20.0</field>
+        <field name="reorder_quantity">40.0</field>
+    </record>
+
+    <!-- ── ÉPICES ──────────────────────────────────────────────────── -->
+    <record id="demo_stock_sel" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_sel"/>
+        <field name="qty">35.0</field>
+        <field name="reorder_point">10.0</field>
+        <field name="reorder_quantity">20.0</field>
+    </record>
+    <record id="demo_stock_poivre" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_poivre"/>
+        <field name="qty">2500.0</field>
+        <field name="reorder_point">500.0</field>
+        <field name="reorder_quantity">1500.0</field>
+    </record>
+    <record id="demo_stock_piment" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_piment"/>
+        <field name="qty">4.5</field>
+        <field name="reorder_point">3.0</field>
+        <field name="reorder_quantity">8.0</field>
+    </record>
+    <record id="demo_stock_cube_maggi" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_cube_maggi"/>
+        <field name="qty">480.0</field>
+        <field name="reorder_point">120.0</field>
+        <field name="reorder_quantity">240.0</field>
+    </record>
+    <record id="demo_stock_gingembre" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_gingembre"/>
+        <field name="qty">5.0</field>
+        <field name="reorder_point">3.0</field>
+        <field name="reorder_quantity">6.0</field>
+    </record>
+    <record id="demo_stock_curry" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_curry"/>
+        <field name="qty">800.0</field>
+        <field name="reorder_point">300.0</field>
+        <field name="reorder_quantity">600.0</field>
+    </record>
+    <record id="demo_stock_graines_djoumble" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_graines_djoumble"/>
+        <field name="qty">3.5</field>
+        <field name="reorder_point">2.0</field>
+        <field name="reorder_quantity">5.0</field>
+    </record>
+    <record id="demo_stock_nete" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_nete"/>
+        <field name="qty">1500.0</field>
+        <field name="reorder_point">500.0</field>
+        <field name="reorder_quantity">1000.0</field>
+    </record>
+
+    <!-- ── HUILES ──────────────────────────────────────────────────── -->
+    <record id="demo_stock_huile_palme" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_huile_palme"/>
+        <field name="qty">65.0</field>
+        <field name="reorder_point">20.0</field>
+        <field name="reorder_quantity">40.0</field>
+    </record>
+    <record id="demo_stock_huile_arachide" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_huile_arachide"/>
+        <field name="qty">45.0</field>
+        <field name="reorder_point">20.0</field>
+        <field name="reorder_quantity">40.0</field>
+    </record>
+    <record id="demo_stock_huile_olive" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_huile_olive"/>
+        <field name="qty">18.0</field>
+        <field name="reorder_point">10.0</field>
+        <field name="reorder_quantity">20.0</field>
+    </record>
+    <record id="demo_stock_beurre" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_beurre"/>
+        <field name="qty">8.5</field>
+        <field name="reorder_point">5.0</field>
+        <field name="reorder_quantity">10.0</field>
+    </record>
+
+    <!-- ── LAITAGES ────────────────────────────────────────────────── -->
+    <record id="demo_stock_lait" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_lait"/>
+        <field name="qty">24.0</field>
+        <field name="reorder_point">15.0</field>
+        <field name="reorder_quantity">30.0</field>
+    </record>
+    <record id="demo_stock_yaourt" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_yaourt"/>
+        <field name="qty">80.0</field>
+        <field name="reorder_point">40.0</field>
+        <field name="reorder_quantity">80.0</field>
+    </record>
+    <record id="demo_stock_fromage" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_fromage"/>
+        <field name="qty">4.0</field>
+        <field name="reorder_point">3.0</field>
+        <field name="reorder_quantity">6.0</field>
+    </record>
+    <record id="demo_stock_creme_fraiche" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_creme_fraiche"/>
+        <field name="qty">7.0</field>
+        <field name="reorder_point">4.0</field>
+        <field name="reorder_quantity">8.0</field>
+    </record>
+
+    <!-- ── FRUITS ──────────────────────────────────────────────────── -->
+    <record id="demo_stock_ananas" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_ananas"/>
+        <field name="qty">36.0</field>
+        <field name="reorder_point">15.0</field>
+        <field name="reorder_quantity">30.0</field>
+    </record>
+    <record id="demo_stock_mangue" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_mangue"/>
+        <field name="qty">28.0</field>
+        <field name="reorder_point">12.0</field>
+        <field name="reorder_quantity">25.0</field>
+    </record>
+    <record id="demo_stock_papaye" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_papaye"/>
+        <field name="qty">22.0</field>
+        <field name="reorder_point">10.0</field>
+        <field name="reorder_quantity">20.0</field>
+    </record>
+    <record id="demo_stock_banane" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_banane"/>
+        <field name="qty">18.0</field>
+        <field name="reorder_point">12.0</field>
+        <field name="reorder_quantity">25.0</field>
+    </record>
+    <record id="demo_stock_orange" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_orange"/>
+        <field name="qty">32.0</field>
+        <field name="reorder_point">15.0</field>
+        <field name="reorder_quantity">30.0</field>
+    </record>
+    <record id="demo_stock_pomme" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_pomme"/>
+        <field name="qty">0.0</field>
+        <field name="reorder_point">10.0</field>
+        <field name="reorder_quantity">20.0</field>
+    </record>
+
+    <!-- ── BOISSONS ────────────────────────────────────────────────── -->
+    <record id="demo_stock_eau_minerale" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_eau_minerale"/>
+        <field name="qty">120.0</field>
+        <field name="reorder_point">60.0</field>
+        <field name="reorder_quantity">120.0</field>
+    </record>
+    <record id="demo_stock_jus_bissap" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_jus_bissap"/>
+        <field name="qty">22.0</field>
+        <field name="reorder_point">15.0</field>
+        <field name="reorder_quantity">30.0</field>
+    </record>
+    <record id="demo_stock_jus_gingembre" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_jus_gingembre"/>
+        <field name="qty">14.0</field>
+        <field name="reorder_point">10.0</field>
+        <field name="reorder_quantity">20.0</field>
+    </record>
+    <record id="demo_stock_jus_ananas" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_jus_ananas"/>
+        <field name="qty">18.0</field>
+        <field name="reorder_point">12.0</field>
+        <field name="reorder_quantity">25.0</field>
+    </record>
+
+    <!-- ── SURGELÉS ────────────────────────────────────────────────── -->
+    <record id="demo_stock_legumes_surgeles" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_legumes_surgeles"/>
+        <field name="qty">28.0</field>
+        <field name="reorder_point">15.0</field>
+        <field name="reorder_quantity">30.0</field>
+    </record>
+    <record id="demo_stock_frites_surgelees" model="lagunes.market.stock">
+        <field name="article_id" ref="demo_art_frites_surgelees"/>
+        <field name="qty">40.0</field>
+        <field name="reorder_point">20.0</field>
+        <field name="reorder_quantity">40.0</field>
+    </record>
+
+</odoo>

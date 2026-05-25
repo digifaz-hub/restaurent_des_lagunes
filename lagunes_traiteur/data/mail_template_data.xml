@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- 1. Email de confirmation de réception (Public) -->
+        <record id="email_template_confirmation_demande" model="mail.template">
+            <field name="name">Traiteur : Confirmation de réception</field>
+            <field name="model_id" ref="lagunes_traiteur.model_lagunes_traiteur_demande"/>
+            <field name="subject">Votre demande de prestation Traiteur - ${object.reference}</field>
+            <field name="email_from">${(object.company_id.email or 'noreply@lagunes.ci')|safe}</field>
+            <field name="email_to">${object.email_contact|safe}</field>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px; font-family: 'Helvetica', 'Arial', sans-serif;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Bonjour ${object.prenom_contact},<br/><br/>
+                        Nous avons bien reçu votre demande de prestation traiteur pour votre événement : 
+                        <strong>${object.type_prestation_id.name}</strong> du <strong>${object.date_debut}</strong> au <strong>${object.date_fin}</strong>.<br/><br/>
+                        Notre équipe  étudie actuellement votre dossier (Réf : ${object.reference}).<br/>
+                        Vous recevrez une proposition détaillée sous peu.<br/><br/>
+                        Cordialement,<br/>
+                        <strong>Restaurant des Lagunes</strong>
+                    </p>
+                </div>
+            </field>
+        </record>
+
+        <!-- 3. Email d'envoi de la proposition de menu (Commercial) -->
+        <record id="email_template_proposition_menu" model="mail.template">
+            <field name="name">Traiteur : Envoi de Proposition de Menu</field>
+            <field name="model_id" ref="lagunes_traiteur.model_lagunes_traiteur_proposition"/>
+            <field name="subject">Notre proposition de menu - {{ object.name }}</field>
+            <field name="email_from">{{ (object.company_id.email or 'noreply@lagunes.ci') }}</field>
+            <field name="email_to">{{ object.partner_email }}</field>
+            <field name="report_template_ids" eval="[(6, 0, [ref('action_report_traiteur_proposition_menu')])]"/>
+            <field name="auto_delete" eval="True"/>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px; font-family: 'Helvetica', 'Arial', sans-serif;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Bonjour
+                        <t t-out="object.prenom_contact or object.nom_contact or ''"/>,<br/><br/>
+                        Suite à votre demande de prestation traiteur, nous avons le plaisir de vous adresser
+                        notre proposition de menu personnalisée pour
+                        <strong t-out="object.nb_personnes or ''"/> personne(s).<br/><br/>
+                        Vous trouverez le détail de la proposition en pièce jointe (PDF).<br/>
+                        Nous restons à votre disposition pour ajuster cette proposition selon vos préférences.<br/><br/>
+                        Cordialement,<br/>
+                        <strong>Service Commercial Traiteur — Restaurant des Lagunes</strong>
+                    </p>
+                </div>
+            </field>
+            <field name="lang">fr_FR</field>
+        </record>
+
+        <!-- 2. Email d'envoi du devis (Commercial) -->
+        <record id="email_template_envoi_devis" model="mail.template">
+            <field name="name">Traiteur : Envoi de Devis</field>
+            <field name="model_id" ref="lagunes_traiteur.model_lagunes_traiteur_devis"/>
+            <field name="subject">Notre proposition Traiteur - ${object.name}</field>
+            <field name="email_from">${(object.company_id.email or 'noreply@lagunes.ci')|safe}</field>
+            <field name="email_to">${object.demande_id.email_contact|safe}</field>
+            <field name="report_template_ids" eval="[(6, 0, [ref('lagunes_traiteur.report_traiteur_devis_lagunes')])]"/>
+            <field name="body_html" type="html">
+                <div style="margin: 0px; padding: 0px; font-family: 'Helvetica', 'Arial', sans-serif;">
+                    <p style="margin: 0px; padding: 0px; font-size: 13px;">
+                        Bonjour ${object.demande_id.prenom_contact},<br/><br/>
+                        Suite à votre demande du ${object.demande_id.date_demande.strftime('%d/%m/%Y')}, nous avons le plaisir de vous transmettre 
+                        notre proposition tarifaire pour votre prestation traiteur.<br/><br/>
+                        Vous trouverez le devis détaillé en pièce jointe.<br/>
+                        Ce devis est valable jusqu'au <strong>${object.date_validite}</strong>.<br/><br/>
+                        Nous restons à votre entière disposition pour tout complément d'information.<br/><br/>
+                        Cordialement,<br/>
+                        <strong>Service Commercial Traiteur</strong>
+                    </p>
+                </div>
+            </field>
+        </record>
+    </data>
+</odoo>

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ============================================================
+         OVERRIDE : Vue formulaire sale.order
+         - Supprime le bouton "Aperçu" (preview)
+         - Ajoute le bouton "Imprimer Devis" directement dans le header
+         - Masque les rapports standard Odoo (optionnel)
+         ============================================================ -->
+
+    <record id="view_lagunes_sale_order_form_inherit" model="ir.ui.view">
+        <field name="name">sale.order.form.lagunes.inherit</field>
+        <field name="model">sale.order</field>
+        <field name="inherit_id" ref="sale.view_order_form"/>
+        <field name="arch" type="xml">
+
+            <!-- 1. Supprimer le bouton "Aperçu" (Preview) -->
+            <xpath expr="//button[@name='action_preview_sale_order']" position="replace"/>
+
+            <!-- 2. Ajouter le bouton "Imprimer Devis" dans le header,
+                    juste après le bouton "Envoyer par mail" -->
+            <xpath expr="//button[@name='action_quotation_send']" position="after">
+                <button name="%(lagunes_cantine.report_lagunes_sale_order_devis)d"
+                        string="Imprimer Devis"
+                        type="action"
+                        class="btn-secondary"
+                        invisible="state not in ['draft', 'sent', 'sale', 'done']"/>
+            </xpath>
+
+        </field>
+    </record>
+
+</odoo>

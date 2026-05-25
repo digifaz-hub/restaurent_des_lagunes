@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- Séquence pour les périodes de facturation -->
+        <record id="seq_lagunes_facturation_periode" model="ir.sequence">
+            <field name="name">Période de facturation</field>
+            <field name="code">lagunes.facturation.periode</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="prefix">FACT</field>
+            <field name="padding">5</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+        </record>
+        
+    </data>
+</odoo>

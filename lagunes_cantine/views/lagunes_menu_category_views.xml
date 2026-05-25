@@ -1,0 +1,76 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Vue liste pour lagunes.menu.category -->
+    <record id="view_menu_category_list" model="ir.ui.view">
+        <field name="name">lagunes.menu.category.list</field>
+        <field name="model">lagunes.menu.category</field>
+        <field name="arch" type="xml">
+            <list string="Catégories de menus" class="o_lagunes_view">
+                <field name="sequence" widget="handle"/>
+                <field name="name"/>
+                <field name="icon" optional="show"/>
+                <field name="color" widget="color" optional="show"/>
+                <field name="restricted_to_partners" widget="boolean" optional="show"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Vue formulaire pour lagunes.menu.category -->
+    <record id="view_menu_category_form" model="ir.ui.view">
+        <field name="name">lagunes.menu.category.form</field>
+        <field name="model">lagunes.menu.category</field>
+        <field name="arch" type="xml">
+            <form string="Catégorie de menu" class="o_lagunes_view">
+                <sheet>
+                    <div class="oe_title">
+                        <h1>
+                            <field name="name" placeholder="ex: Menu Africain"/>
+                        </h1>
+                    </div>
+                    <group>
+                        <group string="Présentation">
+                            <field name="sequence"/>
+                            <field name="icon" placeholder="ex: fa-globe"/>
+                            <field name="color" widget="color"/>
+                            <field name="active" widget="boolean"/>
+                        </group>
+                        <group string="Restriction d'accès">
+                            <field name="restricted_to_partners" widget="boolean"/>
+                            <field name="partner_ids" widget="many2many_tags"
+                                   invisible="not restricted_to_partners"
+                                   options="{'no_create': True}"/>
+                        </group>
+                    </group>
+                    <group string="Description">
+                        <field name="description" nolabel="1" 
+                               placeholder="Description de cette catégorie de menu..."/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vue recherche -->
+    <record id="view_menu_category_search" model="ir.ui.view">
+        <field name="name">lagunes.menu.category.search</field>
+        <field name="model">lagunes.menu.category</field>
+        <field name="arch" type="xml">
+            <search string="Rechercher catégories">
+                <field name="name"/>
+                <separator/>
+                <filter string="Actifs" name="actifs" domain="[('active', '=', True)]"/>
+                <filter string="Restreint" name="restricted" domain="[('restricted_to_partners', '=', True)]"/>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_menu_category" model="ir.actions.act_window">
+        <field name="name">Catégories de menus</field>
+        <field name="res_model">lagunes.menu.category</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+</odoo>

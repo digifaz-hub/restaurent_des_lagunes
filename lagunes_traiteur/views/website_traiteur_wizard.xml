@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="website_traiteur_wizard" name="Faire une demande Traiteur">
+        <t t-call="website.layout">
+            <div id="wrap" class="bg-light min-vh-100">
+                <div class="container py-5">
+                    
+                    <!-- Progress Bar -->
+                    <div class="row justify-content-center mb-5">
+                        <div class="col-lg-10">
+                            <ul class="nav nav-pills nav-justified bg-white p-2 rounded-pill shadow-sm" id="traiteur-steps">
+                                <li class="nav-item">
+                                    <span class="nav-link active rounded-pill fw-bold" data-step="1">1. Type</span>
+                                </li>
+                                <li class="nav-item">
+                                    <span class="nav-link rounded-pill fw-bold" data-step="2">2. Période</span>
+                                </li>
+                                <li class="nav-item">
+                                    <span class="nav-link rounded-pill fw-bold" data-step="3">3. Menus</span>
+                                </li>
+                                <li class="nav-item">
+                                    <span class="nav-link rounded-pill fw-bold" data-step="4">4. Options</span>
+                                </li>
+                                <li class="nav-item">
+                                    <span class="nav-link rounded-pill fw-bold" data-step="5">5. Validation</span>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <!-- Wizard Form -->
+                    <form id="traiteur_form" action="/traiteur/demande/submit" method="post">
+                        <input type="hidden" name="csrf_token" t-att-value="request.csrf_token()"/>
+                        
+                        <div class="row justify-content-center">
+                            <div class="col-lg-10">
+                                <div class="card border-0 shadow-lg rounded-4 overflow-hidden">
+                                    <div class="card-body p-5">
+                                        
+                                        <!-- STEP 1 : Type de Prestation -->
+                                        <div class="traiteur-step-content" id="step-1">
+                                            <h3 class="fw-bold mb-4">Quel type d'événement organisez-vous ?</h3>
+                                            <p class="text-muted mb-4">Cochez un ou plusieurs types pour décrire votre prestation.</p>
+                                            <div class="row g-4 justify-content-center">
+                                                <t t-foreach="types" t-as="type">
+                                                    <div class="col-md-4">
+                                                        <input type="checkbox" name="type_ids" t-att-id="'type_' + str(type.id)" t-att-value="type.id" class="btn-check"/>
+                                                        <label class="btn btn-outline-primary w-100 h-100 p-4 rounded-4 d-flex flex-column align-items-center gap-3 traiteur-type-card" t-att-for="'type_' + str(type.id)">
+                                                            <t t-if="type.image">
+                                                                <img t-att-src="'/web/image/lagunes.traiteur.type.prestation/%s/image' % type.id"
+                                                                     t-att-alt="type.name"
+                                                                     class="mb-2 rounded-3 shadow-sm"
+                                                                     style="width: 100%; height: 160px; object-fit: cover;"
+                                                                     loading="lazy"/>
+                                                            </t>
+                                                            <t t-else="">
+                                                                <div class="d-flex align-items-center justify-content-center bg-light rounded-3 mb-2" style="width: 100%; height: 160px;">
+                                                                    <i t-attf-class="fa #{type.icon or 'fa-cutlery'} fa-4x opacity-25" title="Icone prestation"/>
+                                                                </div>
+                                                            </t>
+                                                            <span class="h5 fw-bold mb-0"><t t-esc="type.name"/></span>
+                                                            <span class="small opacity-75"><t t-esc="type.heure_service"/></span>
+                                                        </label>
+                                                    </div>
+                                                </t>
+                                            </div>
+                                        </div>
+
+                                        <!-- STEP 2 : Paramètres -->
+                                        <div class="traiteur-step-content d-none" id="step-2">
+                                            <h3 class="fw-bold mb-4">Détails de la prestation</h3>
+                                            <div class="row g-4">
+                                                <div class="col-12">
+                                                    <label class="form-label fw-bold">Durée de la prestation</label>
+                                                    <div class="btn-group w-100" role="group">
+                                                        <input type="radio" class="btn-check" name="date_mode" id="date_mode_single" value="single" checked="checked"/>
+                                                        <label class="btn btn-outline-primary" for="date_mode_single">
+                                                            <i class="fa fa-calendar me-2" aria-hidden="true"/>1 jour
+                                                        </label>
+                                                        <input type="radio" class="btn-check" name="date_mode" id="date_mode_range" value="range"/>
+                                                        <label class="btn btn-outline-primary" for="date_mode_range">
+                                                            <i class="fa fa-calendar me-2" aria-hidden="true"/>Plusieurs jours
+                                                        </label>
+                                                    </div>
+                                                </div>
+                                                
+                                                <!-- Mode 1 jour -->
+                                                <div class="col-md-6" id="date_single_container">
+                                                    <label class="form-label fw-bold">Date de la prestation</label>
+                                                    <input type="date" name="date_debut" class="form-control" id="date_single"/>
+                                                </div>
+                                                
+                                                <!-- Mode Periode -->
+                                                <div class="col-md-6 d-none" id="date_range_container">
+                                                    <label class="form-label fw-bold">Periode souhaitee</label>
+                                                    <div class="input-group mb-3">
+                                                        <input type="date" name="date_debut" class="form-control" id="date_debut_range"/>
+                                                        <span class="input-group-text">au</span>
+                                                        <input type="date" name="date_fin" class="form-control" id="date_fin_range"/>
+                                                    </div>
+                                                </div>
+                                                
+                                                <div class="col-md-6">
+                                                    <label class="form-label fw-bold">Nombre de convives</label>
+                                                    <input type="number" name="nb_personnes" class="form-control" min="1" value="10" required="required"/>
+                                                </div>
+
+                                                <div class="col-12 mt-4">
+                                                    <label class="form-label fw-bold">Choisissez votre formule</label>
+                                                    <div class="row g-4 justify-content-center" id="niveaux-container">
+                                                        <t t-foreach="niveaux" t-as="niveau">
+                                                            <div class="col-md-6 col-lg-5">
+                                                                <div class="card h-100 border-2 niveau-card">
+                                                                    <input type="radio" name="niveau_id" t-att-id="'niveau_' + str(niveau.id)" t-att-value="niveau.id" class="btn-check"/>
+                                                                    <label class="btn btn-outline-primary w-100 h-100 p-3 rounded-3 d-flex flex-column text-start" t-att-for="'niveau_' + str(niveau.id)">
+                                                                        <span class="h5 fw-bold mb-2"><t t-esc="niveau.name"/></span>
+                                                                        <span class="small text-muted niveau-description" style="white-space:pre-line; line-height:1.5;"><t t-esc="niveau.description"/></span>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                        </t>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-12 mt-4" id="constituants-container" style="display:none;">
+                                                    <label class="form-label fw-bold">Ce qui est inclus dans votre formule</label>
+                                                    <div id="constituants-list" class="row g-3"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- STEP 3 : Menus -->
+                                        <div class="traiteur-step-content d-none" id="step-3">
+                                            <h3 class="fw-bold mb-4">Personnalisez votre prestation par jour</h3>
+                                            <p class="text-muted mb-4">Indiquez vos preferences ou besoins particuliers pour chaque jour de prestation.</p>
+                                            <div id="menus-container">
+                                                <div class="alert alert-info" role="status">
+                                                    Les details de votre menu seront finalises apres validation de votre demande par notre equipe.
+                                                </div>
+                                                <div class="mb-4">
+                                                    <label class="form-label fw-bold">Notes generales sur le menu</label>
+                                                    <textarea name="menu_notes" class="form-control" rows="3" placeholder="Precisez vos preferences alimentaires, allergies, restrictions..."></textarea>
+                                                </div>
+                                                <div class="mb-4">
+                                                    <label class="form-label fw-bold">Type de service souhaite</label>
+                                                    <select name="type_service" class="form-select">
+                                                        <option value="buffet">Buffet</option>
+                                                        <option value="assiette">Service a l'assiette</option>
+                                                        <option value="autre">Autre (preciser dans les notes)</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <!-- STEP 4 : Logistique -->
+                                        <div class="traiteur-step-content d-none" id="step-4">
+                                            <h3 class="fw-bold mb-4">Options et Materiel</h3>
+                                            <div class="row g-4 justify-content-center">
+                                                <t t-foreach="logistiques" t-as="log">
+                                                    <div class="col-md-6">
+                                                        <div class="card border border-2 rounded-4 p-3 d-flex flex-row align-items-center gap-3">
+                                                            <div class="bg-primary-subtle rounded-circle p-3 text-primary">
+                                                                <i t-attf-class="fa #{log.icon or 'fa-cube'} fs-4" title="Icone option"/>
+                                                            </div>
+                                                            <div class="flex-grow-1">
+                                                                <h6 class="fw-bold mb-0"><t t-esc="log.name"/></h6>
+                                                                <small class="text-muted"><t t-esc="log.unite"/></small>
+                                                            </div>
+                                                            <div style="width: 80px;">
+                                                                <input type="number" t-attf-name="log_#{log.id}" class="form-control form-control-sm" value="0" min="0"/>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </t>
+                                            </div>
+                                        </div>
+
+                                        <!-- STEP 5 : Validation -->
+                                        <div class="traiteur-step-content d-none" id="step-5">
+                                            <div class="row g-5">
+                                                <div class="col-lg-7">
+                                                    <h3 class="fw-bold mb-4">Vos coordonnees</h3>
+                                                    <div class="row g-3">
+                                                        <div class="col-md-6">
+                                                            <input type="text" name="prenom" class="form-control" placeholder="Prenom" required="required"/>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <input type="text" name="nom" class="form-control" placeholder="Nom" required="required"/>
+                                                        </div>
+                                                        <div class="col-12">
+                                                            <input type="email" name="email" class="form-control" placeholder="Email professionnel" required="required"/>
+                                                        </div>
+                                                        <div class="col-12">
+                                                            <input type="tel" name="phone" class="form-control" placeholder="Telephone" required="required"/>
+                                                        </div>
+                                                        <div class="col-12">
+                                                            <input type="text" name="entreprise" class="form-control" placeholder="Nom de l'entreprise / Organisation"/>
+                                                        </div>
+                                                        <div class="col-12">
+                                                            <textarea name="adresse" class="form-control" rows="2" placeholder="Adresse de la prestation" required="required"></textarea>
+                                                        </div>
+                                                        <div class="col-12">
+                                                            <textarea name="notes" class="form-control" rows="3" placeholder="Avez-vous des besoins particuliers ?"></textarea>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-5">
+                                                    <div class="bg-light rounded-4 p-4 sticky-top" style="top: 20px;">
+                                                        <h4 class="fw-bold mb-4">Recapitulatif</h4>
+                                                        <div id="recap-content"></div>
+                                                        <hr/>
+                                                        <div class="form-check mb-4">
+                                                            <input class="form-check-input" type="checkbox" value="" id="cgv" required="required"/>
+                                                            <label class="form-check-label small" for="cgv">
+                                                                J'accepte les CGV et la politique de confidentialite.
+                                                            </label>
+                                                        </div>
+                                                        <button type="submit" class="btn btn-primary btn-lg w-100 rounded-pill fw-bold">
+                                                            Envoyer ma demande <i class="fa fa-paper-plane ms-2" aria-hidden="true"/>
+                                                        </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                    <div class="card-footer bg-white p-4 border-0 d-flex justify-content-between align-items-center">
+                                        <button type="button" class="btn btn-outline-primary btn-lg rounded-pill px-4 shadow-sm d-none" id="prev-step">
+                                            <i class="fa fa-chevron-left me-2" aria-hidden="true"/> Précédent
+                                        </button>
+                                        <button type="button" class="btn btn-primary btn-lg rounded-pill px-5 ms-auto" id="next-step">
+                                            Suivant <i class="fa fa-chevron-right ms-2" aria-hidden="true"/>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+            <!--
+                DONNEES SERVEUR : constituants injectes via data-attribute JSON.
+                Le JS externe (traiteur_wizard.js) lit ce div au demarrage.
+                Cette approche evite tout melange CDATA + QWeb qui cause
+                "Unexpected end of input".
+            -->
+            <div id="traiteur-server-data"
+                 style="display:none;"
+                 t-att-data-constituants="json.dumps({str(n.id): n.ligne_ids.mapped('description') for n in niveaux})">
+            </div>
+
+            <!-- Toast Container (Fallback) -->
+            <div id="toast-container" class="toast-container position-fixed top-0 end-0 p-3" style="z-index: 9999;"></div>
+
+            <!-- Error Modal Premium -->
+            <div class="modal fade" id="errorModal" tabindex="-1" aria-hidden="true" style="z-index: 10000;">
+                <div class="modal-dialog modal-dialog-centered">
+                    <div class="modal-content border-0 shadow-lg rounded-4">
+                        <div class="modal-header border-0 bg-danger text-white p-4">
+                            <h5 class="modal-title fw-bold">
+                                <i class="fa fa-exclamation-triangle me-2" title="Alerte"></i> Attention
+                            </h5>
+                            <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+                        </div>
+                        <div class="modal-body p-5 text-center">
+                            <div class="mb-4">
+                                <i class="fa fa-info-circle text-danger display-4" title="Info"></i>
+                            </div>
+                            <p id="errorModalMessage" class="fs-5 text-muted fw-medium"></p>
+                        </div>
+                        <div class="modal-footer border-0 p-4 justify-content-center">
+                            <button type="button" class="btn btn-danger btn-lg px-5 rounded-pill fw-bold" data-bs-dismiss="modal">Compris</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </t>
+    </template>
+</odoo>

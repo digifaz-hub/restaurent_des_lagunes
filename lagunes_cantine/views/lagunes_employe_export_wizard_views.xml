@@ -1,0 +1,132 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         VUE FORMULAIRE du wizard d'export des employés
+    ══════════════════════════════════════════════════════════════ -->
+    <record id="view_lagunes_employe_export_wizard_form" model="ir.ui.view">
+        <field name="name">lagunes.employe.export.wizard.form</field>
+        <field name="model">lagunes.employe.export.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Exporter les employés">
+                <sheet>
+                    <group string="Filtres">
+                        <field name="entreprise_id"
+                               options="{'no_create': True}"
+                               required="1"/>
+                        <field name="actifs_seulement" widget="boolean_toggle"/>
+                    </group>
+                    <group string="Résumé">
+                        <field name="nb_employes" readonly="1"/>
+                    </group>
+                </sheet>
+                <footer>
+                    <button name="action_export_excel"
+                            type="object"
+                            string="Exporter Excel"
+                            class="oe_highlight"
+                            icon="fa-file-excel-o"/>
+                    <button name="action_export_pdf"
+                            type="object"
+                            string="Exporter PDF"
+                            class="btn-primary"
+                            icon="fa-file-pdf-o"/>
+                    <button string="Fermer" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         ACTION pour ouvrir le wizard (utilisée par les boutons Action)
+    ══════════════════════════════════════════════════════════════ -->
+    <record id="action_lagunes_employe_export_wizard" model="ir.actions.act_window">
+        <field name="name">Exporter les employés</field>
+        <field name="res_model">lagunes.employe.export.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         ACTION SERVEUR liée au modèle lagunes.employe
+         → Apparaît dans le menu "Action" de la vue liste des employés
+    ══════════════════════════════════════════════════════════════ -->
+    <record id="action_server_export_employes_excel" model="ir.actions.server">
+        <field name="name">Exporter en Excel</field>
+        <field name="model_id" ref="lagunes_cantine.model_lagunes_employe"/>
+        <field name="binding_model_id" ref="lagunes_cantine.model_lagunes_employe"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+# Ouvrir le wizard pré-rempli avec l'entreprise des employés sélectionnés
+entreprise_id = False
+if records:
+    entreprise_id = records[0].entreprise_id.id
+
+action = {
+    'type': 'ir.actions.act_window',
+    'name': 'Exporter les employés',
+    'res_model': 'lagunes.employe.export.wizard',
+    'view_mode': 'form',
+    'target': 'new',
+    'context': {
+        'default_entreprise_id': entreprise_id,
+    },
+}
+        </field>
+    </record>
+
+    <record id="action_server_export_employes_pdf" model="ir.actions.server">
+        <field name="name">Exporter en PDF</field>
+        <field name="model_id" ref="lagunes_cantine.model_lagunes_employe"/>
+        <field name="binding_model_id" ref="lagunes_cantine.model_lagunes_employe"/>
+        <field name="binding_view_types">list</field>
+        <field name="state">code</field>
+        <field name="code">
+# Ouvrir le wizard pré-rempli avec l'entreprise des employés sélectionnés
+entreprise_id = False
+if records:
+    entreprise_id = records[0].entreprise_id.id
+
+action = {
+    'type': 'ir.actions.act_window',
+    'name': 'Exporter les employés (PDF)',
+    'res_model': 'lagunes.employe.export.wizard',
+    'view_mode': 'form',
+    'target': 'new',
+    'context': {
+        'default_entreprise_id': entreprise_id,
+    },
+}
+        </field>
+    </record>
+
+    <!-- ══════════════════════════════════════════════════════════════
+         ACTION SERVEUR liée à res.partner (vue entreprises clientes)
+         → Apparaît dans le menu "Action" de la vue liste des entreprises
+    ══════════════════════════════════════════════════════════════ -->
+    <record id="action_server_export_employes_from_partner" model="ir.actions.server">
+        <field name="name">Exporter les employés (Excel/PDF)</field>
+        <field name="model_id" ref="base.model_res_partner"/>
+        <field name="binding_model_id" ref="base.model_res_partner"/>
+        <field name="binding_view_types">list,form</field>
+        <field name="state">code</field>
+        <field name="code">
+entreprise_id = False
+if records:
+    entreprise_id = records[0].id
+
+action = {
+    'type': 'ir.actions.act_window',
+    'name': 'Exporter les employés',
+    'res_model': 'lagunes.employe.export.wizard',
+    'view_mode': 'form',
+    'target': 'new',
+    'context': {
+        'default_entreprise_id': entreprise_id,
+    },
+}
+        </field>
+    </record>
+
+</odoo>

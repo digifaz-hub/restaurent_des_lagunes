@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ═══════════════════════════════════════════════════════════
+         STOCK DES ARTICLES
+    ═══════════════════════════════════════════════════════════ -->
+    <record id="view_market_stock_list" model="ir.ui.view">
+        <field name="name">lagunes.market.stock.list</field>
+        <field name="model">lagunes.market.stock</field>
+        <field name="arch" type="xml">
+            <list string="Stock des articles"
+                  decoration-success="stock_status == 'ok'"
+                  decoration-warning="stock_status == 'low'"
+                  decoration-danger="stock_status == 'critical'"
+                  create="false" delete="false" edit="true">
+                <field name="article_id"/>
+                <field name="category_id"/>
+                <field name="qty" string="Quantité disponible"/>
+                <field name="uom" string="Unité"/>
+                <field name="autonomy_days" widget="badge" decoration-danger="autonomy_days &lt; 3" decoration-warning="autonomy_days &lt; 7" decoration-success="autonomy_days &gt;= 7" invisible="qty == 0"/>
+                <field name="reorder_point" string="Stock min"/>
+                <field name="stock_status" widget="badge"
+                       decoration-success="stock_status == 'ok'"
+                       decoration-warning="stock_status == 'low'"
+                       decoration-danger="stock_status == 'critical'"/>
+                <field name="is_low_stock" invisible="1"/>
+                <field name="is_critical" invisible="1"/>
+                <button name="action_open_adjustment_wizard" type="object" string="Ajuster" class="btn btn-outline-primary rounded-pill btn-sm fw-bold px-3" icon="fa-pencil-square-o"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_market_stock_search" model="ir.ui.view">
+        <field name="name">lagunes.market.stock.search</field>
+        <field name="model">lagunes.market.stock</field>
+        <field name="arch" type="xml">
+            <search string="Recherche stock">
+                <field name="article_id" string="Article"/>
+                <field name="category_id"/>
+
+                <!-- Filtres par état de stock -->
+                <separator/>
+                <filter string="Stock OK" name="stock_ok"
+                        domain="[('stock_status', '=', 'ok')]"/>
+                <filter string="Stock faible" name="stock_low"
+                        domain="[('stock_status', '=', 'low')]"/>
+                <filter string="Rupture de stock" name="stock_critical"
+                        domain="[('stock_status', '=', 'critical')]"/>
+
+                <group expand="0" string="Regrouper par">
+                    <filter name="group_category" string="Catégorie"
+                            context="{'group_by': 'category_id'}"/>
+                    <filter name="group_status" string="État stock"
+                            context="{'group_by': 'stock_status'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_market_stock" model="ir.actions.act_window">
+        <field name="name">Stock des articles</field>
+        <field name="res_model">lagunes.market.stock</field>
+        <field name="view_mode">list</field>
+        <field name="search_view_id" ref="view_market_stock_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Aucun stock enregistré
+            </p>
+            <p>
+                Le stock est alimenté automatiquement lors de la validation des marchés
+                (stock initial + nouveaux achats).
+            </p>
+        </field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         HISTORIQUE DES MOUVEMENTS DE STOCK
+    ═══════════════════════════════════════════════════════════ -->
+    <record id="view_market_stock_move_list" model="ir.ui.view">
+        <field name="name">lagunes.market.stock.move.list</field>
+        <field name="model">lagunes.market.stock.move</field>
+        <field name="arch" type="xml">
+            <list string="Mouvements de stock" create="false" delete="false" edit="false"
+                  decoration-success="move_type == 'in'"
+                  decoration-danger="move_type == 'out'">
+                <field name="date"/>
+                <field name="article_id"/>
+                <field name="plat_name" optional="show" string="Plat"/>
+                <field name="source" optional="show" string="Source"/>
+                <field name="category_id" optional="show"/>
+                <field name="move_type" widget="badge"
+                       decoration-success="move_type == 'in'"
+                       decoration-danger="move_type == 'out'"/>
+                <field name="move_category" widget="badge" optional="show"/>
+                <field name="qty"/>
+                <field name="uom" string="Unité"/>
+                <field name="reference" optional="show"/>
+                <field name="created_by" optional="hide"/>
+                <field name="market_id" optional="show"/>
+                <field name="note" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_market_stock_move_search" model="ir.ui.view">
+        <field name="name">lagunes.market.stock.move.search</field>
+        <field name="model">lagunes.market.stock.move</field>
+        <field name="arch" type="xml">
+            <search string="Recherche mouvements">
+                <field name="article_id" string="Article"/>
+                <field name="plat_name" string="Plat"/>
+                <field name="market_id" string="Marché"/>
+                <filter name="in" string="Entrées" domain="[('move_type','=','in')]"/>
+                <filter name="out" string="Sorties" domain="[('move_type','=','out')]"/>
+                <separator/>
+                <filter name="source_cantine" string="Cantine" domain="[('source','=','cantine')]"/>
+                <filter name="source_traiteur" string="Traiteur" domain="[('source','=','traiteur')]"/>
+                <separator/>
+                <filter name="this_month" string="Ce mois-ci"
+                        domain="[('date', '&gt;=', (context_today()).strftime('%Y-%m-01'))]"/>
+                <group expand="0" string="Regrouper par">
+                    <filter name="group_source" string="Source"
+                            context="{'group_by': 'source'}"/>
+                    <filter name="group_plat" string="Plat"
+                            context="{'group_by': 'plat_name'}"/>
+                    <filter name="group_article" string="Article"
+                            context="{'group_by': 'article_id'}"/>
+                    <filter name="group_type" string="Type"
+                            context="{'group_by': 'move_type'}"/>
+                    <filter name="group_month" string="Mois"
+                            context="{'group_by': 'date:month'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_market_stock_move" model="ir.actions.act_window">
+        <field name="name">Historique des mouvements</field>
+        <field name="res_model">lagunes.market.stock.move</field>
+        <field name="view_mode">list</field>
+        <field name="search_view_id" ref="view_market_stock_move_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Aucun mouvement de stock enregistré
+            </p>
+            <p>
+                Les mouvements sont créés automatiquement lors de la validation
+                et de l'annulation des marchés (entrées achats, entrées stock initial, sorties).
+            </p>
+        </field>
+    </record>
+</odoo>

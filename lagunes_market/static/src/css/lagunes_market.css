@@ -1,0 +1,235 @@
+/* ═══════════════════════════════════════════════════════════════════
+   LAGUNES MARKET — Styles backend Odoo 18
+   Palette de couleurs :
+     Principale   : #29314E (bleu marine foncé)
+     Accent       : #CBBB29 (or moutarde)
+     Validé       : #6C8C16 (vert olive)
+     Secondaire   : #969AAF (bleu-gris doux)
+     Tertiaire    : #8B6B48 (marron bois)
+     Fond neutre  : #F5F5E5 (crème clair)
+═══════════════════════════════════════════════════════════════════ */
+
+/* ─── Variables CSS ─────────────────────────────────────────────── */
+:root {
+    --lm-primary:    #29314E;
+    --lm-accent:     #CBBB29;
+    --lm-success:    #6C8C16;
+    --lm-secondary:  #969AAF;
+    --lm-tertiary:   #8B6B48;
+    --lm-bg:         #F5F5E5;
+    --lm-danger:     #dc3545;
+    
+    --radius-lg: 20px;
+    --shadow-md: 0 10px 25px rgba(0,0,0,0.08);
+    --shadow-lg: 0 20px 50px rgba(0,0,0,0.12);
+}
+
+/* ─── Barre de statut colorée ───────────────────────────────────── */
+.o_lagunes_market .o_statusbar_status .o_arrow_button.btn-primary {
+    background-color: var(--lm-primary) !important;
+    border-color: var(--lm-primary) !important;
+}
+
+/* ─── Badge statuts dans les vues liste ─────────────────────────── */
+/* Brouillon : or moutarde */
+.badge.text-bg-warning,
+.o_field_badge .badge.text-bg-warning {
+    background-color: var(--lm-accent) !important;
+    color: #fff !important;
+}
+
+/* Validé : vert olive */
+.badge.text-bg-success,
+.o_field_badge .badge.text-bg-success {
+    background-color: var(--lm-success) !important;
+    color: #fff !important;
+}
+
+/* Annulé : danger standard */
+.badge.text-bg-danger,
+.o_field_badge .badge.text-bg-danger {
+    background-color: var(--lm-danger) !important;
+    color: #fff !important;
+}
+
+/* ─── En-tête formulaire marché ─────────────────────────────────── */
+.o_form_view[class*="lagunes"] .o_form_sheet_bg {
+    background-color: var(--lm-bg);
+}
+
+/* ─── Boutons primaires du module ───────────────────────────────── */
+.o_form_view .o_statusbar_buttons .btn-primary {
+    background-color: var(--lm-primary);
+    border-color: var(--lm-primary);
+}
+
+.o_form_view .o_statusbar_buttons .btn-primary:hover {
+    background-color: #1e2438;
+    border-color: #1e2438;
+}
+
+/* ─── Kanban : cartes ────────────────────────────────────────────── */
+.o_kanban_record .o_kanban_record_title {
+    color: var(--lm-primary);
+    font-weight: 600;
+}
+
+/* ─── Tableau lignes articles : alternance légère ───────────────── */
+.o_field_one2many .o_list_view tbody tr:nth-child(even) {
+    background-color: rgba(245, 245, 229, 0.4);
+}
+
+/* ─── Dashboard Marché Premium ─── */
+.o_market_dashboard {
+    background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
+}
+
+.o_market_dashboard .kpi-card {
+    background: white !important;
+    border-radius: var(--radius-lg) !important;
+    border: none !important;
+    box-shadow: var(--shadow-md) !important;
+    transition: all 0.4s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+    padding: 28px !important;
+}
+
+.o_market_dashboard .kpi-card:hover {
+    transform: translateY(-10px) !important;
+    box-shadow: var(--shadow-lg) !important;
+}
+
+.o_market_dashboard .icon-box {
+    width: 52px;
+    height: 52px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 14px !important;
+}
+
+.o_market_dashboard h2 {
+    font-size: 34px !important;
+    font-weight: 800 !important;
+    letter-spacing: -1px;
+}
+
+.o_market_dashboard .transition-hover {
+    transition: all 0.2s ease;
+}
+
+.o_market_dashboard .transition-hover:hover {
+    background-color: #f8f9fa !important;
+    border-color: #dee2e6 !important;
+    transform: translateX(5px);
+}
+
+.o_market_dashboard .ls-1 {
+    letter-spacing: 1px;
+}
+
+/* Timeline */
+.o_market_dashboard .timeline-dot {
+    z-index: 10;
+}
+
+.o_market_dashboard .timeline-item:last-child {
+    margin-bottom: 0 !important;
+}
+
+.o_market_dashboard .bg-success-subtle {
+    background-color: rgba(46, 204, 113, 0.1);
+}
+
+.o_market_dashboard .bg-danger-subtle {
+    background-color: rgba(231, 76, 60, 0.1);
+}
+
+.o_market_dashboard .bg-primary-subtle {
+    background-color: rgba(41, 49, 78, 0.1);
+}
+
+.o_market_dashboard .bg-info-subtle {
+    background-color: rgba(23, 162, 184, 0.1);
+}
+
+/* ─── Premium Dashboard Refinements ─── */
+.bg-gradient-primary {
+    background: linear-gradient(135deg, var(--lm-primary) 0%, #4c5a8a 100%) !important;
+}
+
+.bg-gradient-success {
+    background: linear-gradient(135deg, var(--lm-success) 0%, #a2c636 100%) !important;
+}
+
+.bg-gradient-info {
+    background: linear-gradient(135deg, #17a2b8 0%, #5bc0de 100%) !important;
+}
+
+.bg-gradient-purple {
+    background: linear-gradient(135deg, #6f42c1 0%, #a29bfe 100%) !important;
+}
+
+.bg-purple-subtle {
+    background-color: rgba(111, 66, 193, 0.1);
+}
+
+.text-purple {
+    color: #6f42c1 !important;
+}
+
+.gradient-text-primary {
+    background: linear-gradient(90deg, var(--lm-primary) 0%, #4c5a8a 100%);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+.ls-2 {
+    letter-spacing: 2px;
+}
+
+.transition-3d {
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275) !important;
+}
+
+.transition-3d:hover {
+    transform: translateY(-12px) scale(1.02) !important;
+    box-shadow: 0 25px 50px rgba(0,0,0,0.15) !important;
+}
+
+/* ─── Styles partagés "Lagunes Dashboard" ─── */
+.o_lagunes_dashboard .ld-header {
+    background: linear-gradient(135deg, var(--lm-primary) 0%, #1e2438 100%);
+    padding: 1.5rem 2rem;
+    border-radius: 0 0 1.5rem 1.5rem;
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.o_lagunes_dashboard .ld-header-icon-circle {
+    width: 50px;
+    height: 50px;
+    background: rgba(255, 255, 255, 0.15);
+    backdrop-filter: blur(5px);
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 1.5rem;
+}
+
+.o_lagunes_dashboard .ld-btn-glass {
+    background: rgba(255, 255, 255, 0.1);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: white;
+    padding: 0.6rem 1.2rem;
+    border-radius: 50px;
+    transition: all 0.3s ease;
+    font-weight: 500;
+}
+
+.o_lagunes_dashboard .ld-btn-glass:hover {
+    background: rgba(255, 255, 255, 0.2);
+    transform: translateY(-2px);
+}
+

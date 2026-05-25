@@ -1,0 +1,135 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         VUE : ALERTES STOCK - Articles à réapprovisionner
+    ═══════════════════════════════════════════════════════════════════════ -->
+    <record id="view_market_stock_alerts_list" model="ir.ui.view">
+        <field name="name">lagunes.market.stock.alerts.list</field>
+        <field name="model">lagunes.market.stock</field>
+        <field name="arch" type="xml">
+            <list string="Alertes de stock" 
+                  decoration-danger="stock_status == 'critical'"
+                  decoration-warning="stock_status == 'low'"
+                  create="false" delete="false" edit="true">
+
+                <field name="article_id"/>
+                <field name="category_id"/>
+                <field name="qty" string="Stock actuel"/>
+                <field name="reorder_point" string="Seuil minimum"/>
+                <field name="stock_status" widget="badge"
+                       decoration-success="stock_status == 'ok'"
+                       decoration-warning="stock_status == 'low'"
+                       decoration-danger="stock_status == 'critical'"/>
+                <field name="uom" string="Unité"/>
+                <field name="last_movement_date" optional="show"/>
+                <button name="action_open_adjustment_wizard" type="object" string="Ajuster" class="btn btn-sm btn-primary" icon="fa-pencil-square-o"/>
+
+            </list>
+        </field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         ACTION : Alertes de stock
+    ═══════════════════════════════════════════════════════════════════════ -->
+    <record id="action_market_stock_alerts" model="ir.actions.act_window">
+        <field name="name">Alertes de stock</field>
+        <field name="res_model">lagunes.market.stock</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_market_stock_alerts_list"/>
+        <field name="domain">[('stock_status', 'in', ['low', 'critical'])]</field>
+        <field name="context">{'search_default_group_status': 1}</field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         VUE : Mouvements de déduction (Cantine)
+    ═══════════════════════════════════════════════════════════════════════ -->
+    <record id="view_market_stock_deductions_list" model="ir.ui.view">
+        <field name="name">lagunes.market.stock.deductions.list</field>
+        <field name="model">lagunes.market.stock.move</field>
+        <field name="arch" type="xml">
+            <list string="Déductions Cantine" create="false" delete="false" edit="false"
+                  decoration-danger="move_type == 'out'">
+                <field name="date"/>
+                <field name="reference" string="Commande"/>
+                <field name="article_id"/>
+                <field name="qty" string="Qté déduite"/>
+                <field name="uom" string="Unité"/>
+                <field name="created_by" string="Par"/>
+                <field name="note" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         ACTION : Déductions Cantine
+    ═══════════════════════════════════════════════════════════════════════ -->
+    <record id="action_market_stock_deductions" model="ir.actions.act_window">
+        <field name="name">Consommation Cantine</field>
+        <field name="res_model">lagunes.market.stock.move</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_market_stock_deductions_list"/>
+        <field name="domain">[('move_category', '=', 'order_deduction'), ('source', '=', 'cantine')]</field>
+        <field name="context">{'search_default_group_date': 1}</field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         VUE : Mouvements de déduction (Traiteur)
+    ═══════════════════════════════════════════════════════════════════════ -->
+    <record id="view_market_stock_traiteur_deductions_list" model="ir.ui.view">
+        <field name="name">lagunes.market.stock.traiteur.deductions.list</field>
+        <field name="model">lagunes.market.stock.move</field>
+        <field name="arch" type="xml">
+            <list string="Déductions Traiteur" create="false" delete="false" edit="false"
+                  decoration-danger="move_type == 'out'">
+                <field name="date"/>
+                <field name="reference" string="Référence"/>
+                <field name="article_id"/>
+                <field name="qty" string="Qté déduite"/>
+                <field name="uom" string="Unité"/>
+                <field name="created_by" string="Par"/>
+                <field name="note" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_market_stock_traiteur_deductions" model="ir.actions.act_window">
+        <field name="name">Consommation Service Traiteur</field>
+        <field name="res_model">lagunes.market.stock.move</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_market_stock_traiteur_deductions_list"/>
+        <field name="domain">[('move_category', '=', 'order_deduction'), ('source', '=', 'traiteur')]</field>
+        <field name="context">{'search_default_group_date': 1}</field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         VUE : Articles sans mouvement (inactifs)
+    ═══════════════════════════════════════════════════════════════════════ -->
+    <record id="view_market_stock_inactive_list" model="ir.ui.view">
+        <field name="name">lagunes.market.stock.inactive.list</field>
+        <field name="model">lagunes.market.stock</field>
+        <field name="arch" type="xml">
+            <list string="Articles sans mouvement" 
+                  decoration-muted="qty == 0"
+                  create="false" delete="false" edit="false">
+                <field name="article_id"/>
+                <field name="category_id"/>
+                <field name="qty" string="Stock actuel"/>
+                <field name="last_movement_date"/>
+                <field name="uom"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════════════════════
+         ACTION : Articles sans mouvement
+    ═══════════════════════════════════════════════════════════════════════ -->
+    <record id="action_market_stock_inactive" model="ir.actions.act_window">
+        <field name="name">Articles inactifs</field>
+        <field name="res_model">lagunes.market.stock</field>
+        <field name="view_mode">list</field>
+        <field name="view_id" ref="view_market_stock_inactive_list"/>
+        <field name="domain">['|', ('qty', '=', 0), ('last_movement_date', '&lt;', (context_today() - relativedelta(days=30)).strftime('%Y-%m-%d'))]</field>
+    </record>
+
+</odoo>

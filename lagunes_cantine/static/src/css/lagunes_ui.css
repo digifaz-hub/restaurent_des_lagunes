@@ -1,0 +1,289 @@
+/**
+ * Restaurant des Lagunes - Cantine
+ * lagunes_ui.css
+ *
+ * Système de design global pour la modernisation des vues backend (Odoo 18).
+ * Ce fichier définit des variables et classes utilitaires pour un look "React-like".
+ */
+
+:root {
+    /* Palette de couleurs modernisée */
+    --lui-primary: #16166d;
+    --lui-secondary: #E65A2B;
+    --lui-bg-soft: #f8fafc;
+    --lui-bg-card: #ffffff;
+    --lui-border: #e2e8f0;
+    --lui-text-main: #1e293b;
+    --lui-text-muted: #64748b;
+    --lui-shadow-sm: 0 1px 3px rgba(0,0,0,0.1);
+    --lui-shadow-md: 0 4px 6px -1px rgba(0,0,0,0.1), 0 2px 4px -1px rgba(0,0,0,0.06);
+    --lui-radius: 12px;
+}
+
+/* ──────────────────────────────────────────────────────────────────
+   Vues Globales (Héritage Odoo)
+   ────────────────────────────────────────────────────────────────── */
+
+.o_lagunes_view {
+    background-color: var(--lui-bg-soft) !important;
+}
+
+/* Styles pour les formulaires (Sheet) */
+.o_lagunes_view .o_form_sheet {
+    border: none !important;
+    box-shadow: var(--lui-shadow-md) !important;
+    border-radius: var(--lui-radius) !important;
+    padding: 2rem !important;
+    margin-top: 1rem !important;
+    background: var(--lui-bg-card) !important;
+}
+
+/* En-tête de formulaire */
+.o_lagunes_view .o_form_statusbar {
+    background-color: transparent !important;
+    border-bottom: 1px solid var(--lui-border) !important;
+    padding: 0.5rem 1rem !important;
+    margin-bottom: 0.5rem !important;
+}
+
+/* ──────────────────────────────────────────────────────────────────
+   Utilitaires pour les Cartes (React-like)
+   ────────────────────────────────────────────────────────────────── */
+
+.lui-card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1.5rem;
+    padding: 1rem 0;
+}
+
+.lui-card {
+    background: var(--lui-bg-card);
+    border: 1px solid var(--lui-border);
+    border-radius: var(--lui-radius);
+    padding: 1.25rem;
+    box-shadow: var(--lui-shadow-sm);
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    cursor: pointer;
+}
+
+.lui-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--lui-shadow-md);
+    border-color: var(--lui-primary);
+}
+
+.lui-card-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    font-size: 1.25rem;
+}
+
+/* Variantes d'icônes */
+.lui-icon-primary { background: rgba(22, 22, 109, 0.1); color: var(--lui-primary); }
+.lui-icon-secondary { background: rgba(230, 90, 43, 0.1); color: var(--lui-secondary); }
+.lui-icon-success { background: #ecfdf5; color: #10b981; }
+
+/* ──────────────────────────────────────────────────────────────────
+   Badges et Statuts
+   ────────────────────────────────────────────────────────────────── */
+
+.o_lagunes_view .badge {
+    font-weight: 500 !important;
+    padding: 0.4em 0.8em !important;
+    border-radius: 20px !important;
+    text-transform: capitalize !important;
+}
+
+.lui-badge-pill {
+    display: inline-flex;
+    align-items: center;
+    padding: 0.25rem 0.75rem;
+    border-radius: 9999px;
+    font-size: 0.875rem;
+    font-weight: 500;
+}
+
+/* ──────────────────────────────────────────────────────────────────
+   Groupements et Sections
+   ────────────────────────────────────────────────────────────────── */
+
+.o_lagunes_view h2, .o_lagunes_view h3 {
+    color: var(--lui-text-main);
+    font-weight: 600;
+}
+
+.o_lagunes_view .o_horizontal_separator {
+    color: var(--lui-primary) !important;
+    font-weight: 700 !important;
+    text-transform: uppercase !important;
+    letter-spacing: 0.05em !important;
+    font-size: 0.9rem !important;
+    margin-top: 2rem !important;
+    border-bottom: 2px solid var(--lui-border) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────────
+   Modernisation du Kanban
+   ────────────────────────────────────────────────────────────────── */
+
+.o_lagunes_view.o_kanban_view .o_kanban_record {
+    border-radius: var(--lui-radius) !important;
+    border: 1px solid var(--lui-border) !important;
+    padding: 1rem !important;
+    box-shadow: var(--lui-shadow-sm) !important;
+}
+
+.o_lagunes_view.o_kanban_view .o_kanban_record:hover {
+    border-color: var(--lui-primary) !important;
+}
+
+/* ──────────────────────────────────────────────────────────────────
+   Améliorations UX Modernes - Animation et Feedback
+   ────────────────────────────────────────────────────────────────── */
+
+/* Transitions fluides sur les boutons */
+.o_lagunes_view .btn {
+    transition: all 0.2s ease-in-out !important;
+    border-radius: 8px !important;
+    font-weight: 500 !important;
+}
+
+.o_lagunes_view .btn:hover {
+    transform: translateY(-1px) !important;
+    box-shadow: 0 4px 12px rgba(22, 22, 109, 0.15) !important;
+}
+
+/* Boutons primaires plus visuels */
+.o_lagunes_view .btn-primary {
+    background: linear-gradient(135deg, var(--lui-primary) 0%, #2d2d9a 100%) !important;
+    border: none !important;
+}
+
+/* Statuts colorés et modernes */
+.o_lagunes_view .o_statusbar_status .o_arrow_button {
+    border-radius: 6px !important;
+    margin: 0 2px !important;
+    font-weight: 500 !important;
+}
+
+/* Champs de formulaire modernisés */
+.o_lagunes_view .o_field_widget input,
+.o_lagunes_view .o_field_widget select,
+.o_lagunes_view .o_field_widget textarea {
+    border-radius: 8px !important;
+    border: 1px solid var(--lui-border) !important;
+    transition: all 0.2s ease !important;
+}
+
+.o_lagunes_view .o_field_widget input:focus,
+.o_lagunes_view .o_field_widget select:focus,
+.o_lagunes_view .o_field_widget textarea:focus {
+    border-color: var(--lui-primary) !important;
+    box-shadow: 0 0 0 3px rgba(22, 22, 109, 0.1) !important;
+}
+
+/* Titres de sections plus visuels */
+.o_lagunes_view .o_group .o_horizontal_separator {
+    display: flex !important;
+    align-items: center !important;
+    gap: 0.5rem !important;
+}
+
+.o_lagunes_view .o_group .o_horizontal_separator::before {
+    content: '';
+    width: 4px;
+    height: 20px;
+    background: var(--lui-primary);
+    border-radius: 2px;
+}
+
+/* Alertes et messages plus doux */
+.o_lagunes_view .alert {
+    border-radius: 10px !important;
+    border: none !important;
+    box-shadow: var(--lui-shadow-sm) !important;
+}
+
+.o_lagunes_view .alert-info {
+    background: linear-gradient(135deg, #dbeafe 0%, #bfdbfe 100%) !important;
+    color: #1e40af !important;
+}
+
+.o_lagunes_view .alert-warning {
+    background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%) !important;
+    color: #92400e !important;
+}
+
+.o_lagunes_view .alert-success {
+    background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%) !important;
+    color: #065f46 !important;
+}
+
+/* Statistiques et chiffres clés */
+.o_lagunes_view .oe_stat_button {
+    border-radius: 10px !important;
+    border: 1px solid var(--lui-border) !important;
+    background: var(--lui-bg-card) !important;
+    transition: all 0.2s ease !important;
+}
+
+.o_lagunes_view .oe_stat_button:hover {
+    background: var(--lui-bg-soft) !important;
+    border-color: var(--lui-primary) !important;
+}
+
+/* Onglets modernisés */
+.o_lagunes_view .o_notebook .nav-tabs .nav-link {
+    border-radius: 8px 8px 0 0 !important;
+    font-weight: 500 !important;
+    color: var(--lui-text-muted) !important;
+    border: none !important;
+    border-bottom: 2px solid transparent !important;
+}
+
+.o_lagunes_view .o_notebook .nav-tabs .nav-link.active {
+    color: var(--lui-primary) !important;
+    background: transparent !important;
+    border-bottom-color: var(--lui-primary) !important;
+}
+
+/* Listes plus lisibles */
+.o_lagunes_view .o_list_table thead th {
+    background: var(--lui-bg-soft) !important;
+    font-weight: 600 !important;
+    text-transform: uppercase !important;
+    font-size: 0.75rem !important;
+    letter-spacing: 0.05em !important;
+    color: var(--lui-text-muted) !important;
+    border-bottom: 2px solid var(--lui-border) !important;
+}
+
+.o_lagunes_view .o_list_table tbody tr:hover {
+    background: rgba(22, 22, 109, 0.02) !important;
+}
+
+/* Tags et badges améliorés */
+.o_lagunes_view .o_tag {
+    border-radius: 6px !important;
+    font-weight: 500 !important;
+    padding: 0.25rem 0.5rem !important;
+}
+
+/* Responsive mobile */
+@media (max-width: 768px) {
+    .o_lagunes_view .o_form_sheet {
+        padding: 1rem !important;
+        margin: 0.5rem !important;
+    }
+    
+    .lui-card-grid {
+        grid-template-columns: 1fr !important;
+        gap: 1rem !important;
+    }
+}

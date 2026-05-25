@@ -1,0 +1,4 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- L'action rapport PDF est définie dans report/lagunes_market_report.xml.
+     Le bouton "Imprimer" apparaît automatiquement dans le formulaire via binding_model_id. -->
+<odoo/>

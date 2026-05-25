@@ -1,0 +1,59 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        
+        <!-- Catégorie de produits pour la cantine -->
+        <record id="product_category_cantine" model="product.category">
+            <field name="name">Cantine</field>
+            <field name="parent_id" ref="product.product_category_all"/>
+        </record>
+        
+        <record id="product_category_plats_principaux" model="product.category">
+            <field name="name">Plats principaux</field>
+            <field name="parent_id" ref="product_category_cantine"/>
+        </record>
+        
+        <record id="product_category_accompagnements" model="product.category">
+            <field name="name">Accompagnements</field>
+            <field name="parent_id" ref="product_category_cantine"/>
+        </record>
+        
+        <record id="product_category_desserts" model="product.category">
+            <field name="name">Desserts</field>
+            <field name="parent_id" ref="product_category_cantine"/>
+        </record>
+        
+        <record id="product_category_boissons" model="product.category">
+            <field name="name">Boissons</field>
+            <field name="parent_id" ref="product_category_cantine"/>
+        </record>
+
+        <!-- Tags produits pour la gestion des boissons -->
+        <record id="product_tag_boisson" model="product.tag">
+            <field name="name">Boisson</field>
+            <field name="color">4</field>
+        </record>
+
+        <record id="product_tag_boisson_chaude" model="product.tag">
+            <field name="name">Boisson chaude</field>
+            <field name="color">1</field>
+        </record>
+
+        <record id="product_tag_boisson_fraiche" model="product.tag">
+            <field name="name">Boisson fraîche</field>
+            <field name="color">7</field>
+        </record>
+
+        <!-- Séquence pour les références de commandes -->
+        <record id="seq_lagunes_commande" model="ir.sequence">
+            <field name="name">Commande Cantine</field>
+            <field name="code">lagunes.commande</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="prefix">CMD</field>
+            <field name="padding">5</field>
+            <field name="number_next">1</field>
+            <field name="number_increment">1</field>
+        </record>
+        
+    </data>
+</odoo>

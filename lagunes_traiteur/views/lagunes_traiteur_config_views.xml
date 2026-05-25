@@ -1,0 +1,51 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_traiteur_config_form" model="ir.ui.view">
+        <field name="name">lagunes.traiteur.config.form</field>
+        <field name="model">lagunes.traiteur.config</field>
+        <field name="arch" type="xml">
+            <form string="Paramètres Traiteur">
+                <sheet>
+                    <group string="Portail Public">
+                        <field name="portail_url" widget="CopyClipboardChar" readonly="1"/>
+                    </group>
+                    <group string="Identité Visuelle (Portail)">
+                        <group>
+                            <field name="titre_portail"/>
+                            <field name="sous_titre_portail"/>
+                            <field name="couleur_primaire" widget="color"/>
+                        </group>
+                        <group>
+                            <field name="logo_portail" widget="image" class="oe_avatar"/>
+                        </group>
+                    </group>
+                    <group string="Délais &amp; Notifications">
+                        <group>
+                            <field name="jours_avance_menu"/>
+                            <field name="delai_reponse_devis_jours"/>
+                        </group>
+                        <group>
+                            <field name="email_reception_demandes"/>
+                            <field name="company_id" readonly="1" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <group string="Intégration Ventes">
+                        <field name="produit_prestation_id"/>
+                    </group>
+                    <notebook>
+                        <page string="CGV / Mentions Légales" name="mentions">
+                            <field name="mentions_legales" widget="html"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_traiteur_config_server" model="ir.actions.server">
+        <field name="name">Configuration Traiteur</field>
+        <field name="model_id" ref="lagunes_traiteur.model_lagunes_traiteur_config"/>
+        <field name="state">code</field>
+        <field name="code">action = model.action_open_config()</field>
+    </record>
+</odoo>

@@ -1,0 +1,93 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- 
+        ARCHITECTUE CENTRALISÉE DU MODULE TRAITEUR 
+        Ce fichier regroupe TOUS les points d'entrée du module pour une meilleure lisibilité.
+    -->
+
+    <!-- Menu Racine -->
+    <menuitem id="menu_traiteur_root"
+              name="Service Traiteur"
+              web_icon="lagunes_traiteur,static/description/icon.png"
+              sequence="25"/>
+
+    <!-- 1. PILOTAGE -->
+    <menuitem id="menu_traiteur_dashboard"
+              name="Tableau de Bord"
+              parent="menu_traiteur_root"
+              action="action_traiteur_dashboard"
+              sequence="1"/>
+
+    <!-- 2. COMMERCE (Opérations) -->
+    <menuitem id="menu_traiteur_ops_parent"
+              name="Opérations"
+              parent="menu_traiteur_root"
+              sequence="10"/>
+
+    <menuitem id="menu_traiteur_demande"
+              name="Demandes Clients"
+              parent="menu_traiteur_ops_parent"
+              action="action_traiteur_demande_all"
+              sequence="10"/>
+
+    <menuitem id="menu_traiteur_devis"
+              name="Devis Envoyés"
+              parent="menu_traiteur_ops_parent"
+              action="action_traiteur_devis_all"
+              sequence="20"/>
+
+    <menuitem id="menu_traiteur_proposition"
+              name="Propositions de Menu"
+              parent="menu_traiteur_ops_parent"
+              action="action_lagunes_traiteur_proposition"
+              sequence="15"/>
+
+    <!-- 3. PRODUCTION (Planning & Cuisine) -->
+    <menuitem id="menu_traiteur_planning_parent"
+              name="Planning &amp; Cuisine"
+              parent="menu_traiteur_root"
+              sequence="20"/>
+
+    <menuitem id="menu_traiteur_calendar_direct"
+              name="Calendrier des Prestations"
+              parent="menu_traiteur_planning_parent"
+              action="action_traiteur_demande_calendar_only"
+              sequence="10"/>
+
+    <menuitem id="menu_traiteur_production_consolidated"
+              name="Fiche de Production du Jour"
+              parent="menu_traiteur_planning_parent"
+              action="action_traiteur_production_wizard"
+              sequence="20"/>
+
+    <!-- 4. CONFIGURATION -->
+    <menuitem id="menu_traiteur_config_parent"
+              name="Configuration"
+              parent="menu_traiteur_root"
+              sequence="100"
+              groups="group_traiteur_manager"/>
+
+    <menuitem id="menu_traiteur_config_settings"
+              name="Paramètres Traiteur"
+              parent="menu_traiteur_config_parent"
+              action="action_traiteur_config_server"
+              sequence="10"/>
+
+    <menuitem id="menu_traiteur_type_prestation"
+              name="Types de prestations"
+              parent="menu_traiteur_config_parent"
+              action="action_traiteur_type_prestation"
+              sequence="20"/>
+
+    <menuitem id="menu_traiteur_niveau"
+              name="Niveaux de prix (Formules)"
+              parent="menu_traiteur_config_parent"
+              action="action_traiteur_niveau"
+              sequence="30"/>
+
+    <menuitem id="menu_traiteur_logistique"
+              name="Logistique / Matériel"
+              parent="menu_traiteur_config_parent"
+              action="action_traiteur_logistique"
+              sequence="40"/>
+</odoo>

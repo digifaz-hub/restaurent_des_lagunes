@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Types de plats standard -->
+    <record id="plat_type_entree" model="lagunes.plat.type">
+        <field name="name">Entrée</field>
+        <field name="sequence">1</field>
+        <field name="description">Entrée - Première course</field>
+        <field name="color">15395562</field>
+    </record>
+
+    <record id="plat_type_plat_resistance" model="lagunes.plat.type">
+        <field name="name">Plat de résistance</field>
+        <field name="sequence">2</field>
+        <field name="description">Plat principal</field>
+        <field name="color">10824234</field>
+    </record>
+
+    <record id="plat_type_dessert" model="lagunes.plat.type">
+        <field name="name">Dessert</field>
+        <field name="sequence">4</field>
+        <field name="description">Dessert - Fin de repas</field>
+        <field name="color">16098303</field>
+    </record>
+
+    <!-- Catégories de menus standard -->
+    <record id="menu_cat_africain" model="lagunes.menu.category">
+        <field name="name">Menu Africain</field>
+        <field name="sequence">1</field>
+        <field name="description">Cuisine africaine traditionnelle</field>
+        <field name="icon">fa-globe</field>
+        <field name="color">#d4881b</field>
+    </record>
+
+    <record id="menu_cat_europeen" model="lagunes.menu.category">
+        <field name="name">Menu Européen</field>
+        <field name="sequence">2</field>
+        <field name="description">Cuisine européenne</field>
+        <field name="icon">fa-cutlery</field>
+        <field name="color">#16166d</field>
+    </record>
+
+
+
+
+
+</odoo>

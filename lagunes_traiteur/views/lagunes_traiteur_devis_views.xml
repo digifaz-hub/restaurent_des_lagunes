@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vue Liste : Devis -->
+    <record id="view_traiteur_devis_list" model="ir.ui.view">
+        <field name="name">lagunes.traiteur.devis.list</field>
+        <field name="model">lagunes.traiteur.devis</field>
+        <field name="arch" type="xml">
+            <list string="Devis Traiteur">
+                <field name="name"/>
+                <field name="demande_id"/>
+                <field name="sale_order_id"/>
+                <field name="date_validite"/>
+                <field name="montant_total" widget="monetary"/>
+                <field name="state" widget="badge" decoration-info="state == 'draft'" decoration-success="state == 'accepted'" decoration-warning="state == 'sent'" decoration-danger="state == 'refused'" decoration-muted="state == 'revised'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Vue Formulaire : Devis -->
+    <record id="view_traiteur_devis_form" model="ir.ui.view">
+        <field name="name">lagunes.traiteur.devis.form</field>
+        <field name="model">lagunes.traiteur.devis</field>
+        <field name="arch" type="xml">
+            <form string="Devis Traiteur">
+                <header>
+                    <button name="action_send_devis" type="object" string="Envoyer par email" class="oe_highlight" invisible="state != 'draft'"/>
+                    <button name="action_accept_devis" type="object" string="Accepter" class="btn-success" invisible="state not in ['sent', 'draft']"/>
+                    <button name="action_refuse_devis" type="object" string="Refuser" class="btn-danger" invisible="state not in ['sent', 'draft']"/>
+                    <button name="action_revise_devis" type="object" string="Créer Révision" class="btn-warning" invisible="state not in ['sent', 'refused', 'accepted']"/>
+                    <button name="%(report_traiteur_devis_lagunes)d" type="action" string="Imprimer PDF" class="btn-secondary"/>
+                    <field name="state" widget="statusbar" statusbar_visible="draft,sent,accepted,refused,revised"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="demande_id"/>
+                            <field name="sale_order_id"/>
+                            <field name="parent_devis_id" invisible="not parent_devis_id"/>
+                            <field name="revision_count" readonly="1"/>
+                        </group>
+                        <group>
+                            <field name="date_validite"/>
+                            <field name="date_envoi" readonly="1"/>
+                            <field name="company_id" groups="base.group_multi_company"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Notes Client" name="client_notes">
+                            <field name="client_notes" placeholder="Notes ou modifications demandées par le client..."/>
+                        </page>
+                        <page string="Conditions Particulières" name="notes">
+                            <field name="notes_devis" placeholder="Précisez ici les conditions spécifiques à ce devis..."/>
+                        </page>
+                        <page string="Motif Refus" name="refusal" invisible="state != 'refused'">
+                            <field name="refusal_reason" placeholder="Indiquez le motif du refus..."/>
+                        </page>
+                        <page string="Historique Révisions" name="revisions" invisible="not child_devis_ids">
+                            <field name="child_devis_ids">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="state"/>
+                                    <field name="create_date"/>
+                                    <field name="montant_total" widget="monetary"/>
+                                </list>
+                            </field>
+                        </page>
+                    </notebook>
+                    <group class="oe_subtotal_footer oe_right">
+                        <field name="montant_total" class="oe_subtotal_footer_separator"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action -->
+    <record id="action_traiteur_devis_all" model="ir.actions.act_window">
+        <field name="name">Devis Traiteur</field>
+        <field name="res_model">lagunes.traiteur.devis</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

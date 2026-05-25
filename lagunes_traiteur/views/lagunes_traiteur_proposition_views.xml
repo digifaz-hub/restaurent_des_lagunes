@@ -1,0 +1,167 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- LIST VIEW -->
+    <record id="view_lagunes_traiteur_proposition_list" model="ir.ui.view">
+        <field name="name">lagunes.traiteur.proposition.list</field>
+        <field name="model">lagunes.traiteur.proposition</field>
+        <field name="arch" type="xml">
+            <list string="Propositions de menu">
+                <field name="name"/>
+                <field name="demande_id"/>
+                <field name="nom_contact"/>
+                <field name="partner_email"/>
+                <field name="date"/>
+                <field name="nb_personnes"/>
+                <field name="montant_total" sum="Total" widget="monetary"/>
+                <field name="currency_id" column_invisible="1"/>
+                <field name="state" widget="badge"
+                       decoration-info="state == 'draft'"
+                       decoration-success="state in ('sent', 'accepted')"
+                       decoration-danger="state == 'refused'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- FORM VIEW -->
+    <record id="view_lagunes_traiteur_proposition_form" model="ir.ui.view">
+        <field name="name">lagunes.traiteur.proposition.form</field>
+        <field name="model">lagunes.traiteur.proposition</field>
+        <field name="arch" type="xml">
+            <form string="Proposition de menu">
+                <header>
+                    <button name="action_send_email" type="object"
+                            string="Envoyer par email" class="oe_highlight"
+                            invisible="state == 'refused'"/>
+                    <button name="action_print" type="object"
+                            string="Aperçu PDF" class="btn-secondary"/>
+                    <button name="action_mark_accepted" type="object"
+                            string="Marquer acceptée" class="btn-success"
+                            invisible="state != 'sent'"/>
+                    <button name="action_mark_refused" type="object"
+                            string="Marquer refusée" class="btn-danger"
+                            invisible="state != 'sent'"/>
+                    <button name="action_reset_to_draft" type="object"
+                            string="Repasser en brouillon"
+                            invisible="state == 'draft'"/>
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,sent,accepted"/>
+                </header>
+                <sheet>
+                    <div class="oe_title">
+                        <h1><field name="name" readonly="1"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="demande_id" options="{'no_create': True}"/>
+                            <field name="nom_contact"/>
+                            <field name="prenom_contact"/>
+                            <field name="partner_email"/>
+                        </group>
+                        <group>
+                            <field name="date"/>
+                            <field name="nb_personnes"/>
+                            <field name="montant_total" widget="monetary"/>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="company_id" invisible="1"/>
+                            <field name="date_envoi" readonly="1"
+                                   invisible="not date_envoi"/>
+                        </group>
+                    </group>
+
+                    <notebook>
+                        <page string="Composition du menu" name="menu">
+                            <field name="line_ids">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="jour_id"
+                                           options="{'no_create': True}"
+                                           optional="show"/>
+                                    <field name="plat_type_id"
+                                           options="{'no_create': True}"/>
+                                    <field name="plat_type_sequence" column_invisible="1"/>
+                                    <field name="plat_id"
+                                           options="{'no_create': True}"
+                                           optional="show"/>
+                                    <field name="accompagnement_id"
+                                           options="{'no_create': True}"
+                                           optional="show"
+                                           placeholder="Accompagnement"/>
+                                    <field name="product_id"
+                                       options="{'no_create': True}"
+                                       optional="show"
+                                       help="Pour les boissons (produits taggués 'Boisson')"/>
+                                    <field name="logistique_id"
+                                       options="{'no_create': True}"
+                                       optional="hide"/>
+                                    <field name="prestation_id"
+                                       options="{'no_create': True}"
+                                       optional="hide"
+                                       domain="[('demande_id', '=', parent.demande_id)]"
+                                       help="Permet de regrouper par type de prestation (repas vs collation) dans le PDF."/>
+                                    <field name="description"/>
+                                    <field name="quantite"/>
+                                    <field name="unite" optional="hide"/>
+                                    <field name="prix_unitaire" widget="monetary"/>
+                                    <field name="sous_total" widget="monetary" sum="Total"/>
+                                    <field name="currency_id" column_invisible="1"/>
+                                    <field name="notes" optional="hide"/>
+                                </list>
+                            </field>
+                            <group class="oe_subtotal_footer oe_right">
+                                <field name="montant_total" widget="monetary"
+                                       class="oe_subtotal_footer_separator"/>
+                            </group>
+                        </page>
+                        <page string="Notes / Présentation" name="notes">
+                            <field name="notes"
+                                   placeholder="Texte d'accompagnement libre, mention spéciale, allergies..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+                <chatter/>
+            </form>
+        </field>
+    </record>
+
+    <!-- SEARCH VIEW -->
+    <record id="view_lagunes_traiteur_proposition_search" model="ir.ui.view">
+        <field name="name">lagunes.traiteur.proposition.search</field>
+        <field name="model">lagunes.traiteur.proposition</field>
+        <field name="arch" type="xml">
+            <search>
+                <field name="name"/>
+                <field name="demande_id"/>
+                <field name="nom_contact"/>
+                <field name="partner_email"/>
+                <filter string="Brouillon" name="draft" domain="[('state','=','draft')]"/>
+                <filter string="Envoyée" name="sent" domain="[('state','=','sent')]"/>
+                <filter string="Acceptée" name="accepted" domain="[('state','=','accepted')]"/>
+                <filter string="Refusée" name="refused" domain="[('state','=','refused')]"/>
+                <group expand="0" string="Regrouper par">
+                    <filter string="Statut" name="group_state" context="{'group_by': 'state'}"/>
+                    <filter string="Demande" name="group_demande" context="{'group_by': 'demande_id'}"/>
+                    <filter string="Date" name="group_date" context="{'group_by': 'date'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ACTION -->
+    <record id="action_lagunes_traiteur_proposition" model="ir.actions.act_window">
+        <field name="name">Propositions de menu</field>
+        <field name="res_model">lagunes.traiteur.proposition</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_lagunes_traiteur_proposition_search"/>
+    </record>
+
+    <!-- SEQUENCE -->
+    <record id="seq_lagunes_traiteur_proposition" model="ir.sequence">
+        <field name="name">Proposition de menu Traiteur</field>
+        <field name="code">lagunes.traiteur.proposition</field>
+        <field name="prefix">PROP/%(year)s/</field>
+        <field name="padding">5</field>
+        <field name="company_id" eval="False"/>
+    </record>
+
+</odoo>

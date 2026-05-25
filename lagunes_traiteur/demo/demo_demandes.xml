@@ -1,0 +1,338 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+         6 DEMANDES TRAITEUR à différents états du workflow
+         ═══════════════════════════════════════════════════════════════════ -->
+
+    <!-- ── DEMANDE 1 : Séminaire DIGIFAZ — État "en_cours" ────────── -->
+    <record id="demo_demande_01" model="lagunes.traiteur.demande">
+        <field name="date_demande">2026-05-10</field>
+        <field name="nom_contact">Koné</field>
+        <field name="prenom_contact">Amadou</field>
+        <field name="email_contact">a.kone@digifaz.ci</field>
+        <field name="telephone_contact">+225 07 07 10 20 30</field>
+        <field name="nom_entreprise">DIGIFAZ Services</field>
+        <field name="adresse_prestation">Salle de conférence Sofitel Abidjan, Plateau</field>
+        <field name="date_debut">2026-06-02</field>
+        <field name="date_fin">2026-06-03</field>
+        <field name="nb_personnes">50</field>
+        <field name="niveau_id" ref="demo_niveau_amelioree"/>
+        <field name="notes_client">Prévoir options sans porc pour tout le groupe.</field>
+        <field name="state">en_cours</field>
+        <field name="user_id" ref="base.user_admin"/>
+    </record>
+
+    <!-- Jour 1 de la demande 1 -->
+    <record id="demo_dem01_jour1" model="lagunes.traiteur.demande.jour">
+        <field name="demande_id" ref="demo_demande_01"/>
+        <field name="date">2026-06-02</field>
+    </record>
+    <record id="demo_dem01_j1_prest1" model="lagunes.traiteur.demande.prestation">
+        <field name="jour_id" ref="demo_dem01_jour1"/>
+        <field name="type_prestation_id" ref="lagunes_traiteur.type_pause_cafe"/>
+        <field name="niveau_id" ref="demo_niveau_amelioree"/>
+        <field name="heure_prestation">10.0</field>
+        <field name="nb_personnes">50</field>
+    </record>
+    <record id="demo_dem01_j1_prest2" model="lagunes.traiteur.demande.prestation">
+        <field name="jour_id" ref="demo_dem01_jour1"/>
+        <field name="type_prestation_id" ref="lagunes_traiteur.type_pause_dejeuner"/>
+        <field name="niveau_id" ref="demo_niveau_amelioree"/>
+        <field name="heure_prestation">12.5</field>
+        <field name="nb_personnes">50</field>
+    </record>
+    <!-- Plats pour le déjeuner jour 1 -->
+    <record id="demo_dem01_j1p2_plat1" model="lagunes.traiteur.demande.plat">
+        <field name="prestation_id" ref="demo_dem01_j1_prest2"/>
+        <field name="description">Salade composée</field>
+        <field name="plat_id" ref="lagunes_cantine.demo_plat_salade_composee"/>
+        <field name="quantite">50</field>
+        <field name="prix_unitaire">1500</field>
+    </record>
+    <record id="demo_dem01_j1p2_plat2" model="lagunes.traiteur.demande.plat">
+        <field name="prestation_id" ref="demo_dem01_j1_prest2"/>
+        <field name="description">Kedjenou de poulet</field>
+        <field name="plat_id" ref="lagunes_cantine.demo_plat_kedjenou_poulet"/>
+        <field name="accompagnement_id" ref="lagunes_cantine.demo_product_accomp_attieke"/>
+        <field name="quantite">30</field>
+        <field name="prix_unitaire">3500</field>
+    </record>
+    <record id="demo_dem01_j1p2_plat3" model="lagunes.traiteur.demande.plat">
+        <field name="prestation_id" ref="demo_dem01_j1_prest2"/>
+        <field name="description">Poulet rôti aux légumes</field>
+        <field name="plat_id" ref="lagunes_cantine.demo_plat_poulet_roti_legumes"/>
+        <field name="accompagnement_id" ref="lagunes_cantine.demo_product_accomp_legumes"/>
+        <field name="quantite">20</field>
+        <field name="prix_unitaire">3500</field>
+    </record>
+    <record id="demo_dem01_j1p2_plat4" model="lagunes.traiteur.demande.plat">
+        <field name="prestation_id" ref="demo_dem01_j1_prest2"/>
+        <field name="description">Salade de fruits frais</field>
+        <field name="plat_id" ref="lagunes_cantine.demo_plat_salade_fruits"/>
+        <field name="quantite">50</field>
+        <field name="prix_unitaire">1500</field>
+    </record>
+
+    <!-- Jour 2 de la demande 1 -->
+    <record id="demo_dem01_jour2" model="lagunes.traiteur.demande.jour">
+        <field name="demande_id" ref="demo_demande_01"/>
+        <field name="date">2026-06-03</field>
+    </record>
+    <record id="demo_dem01_j2_prest1" model="lagunes.traiteur.demande.prestation">
+        <field name="jour_id" ref="demo_dem01_jour2"/>
+        <field name="type_prestation_id" ref="lagunes_traiteur.type_pause_dejeuner"/>
+        <field name="niveau_id" ref="demo_niveau_amelioree"/>
+        <field name="heure_prestation">12.5</field>
+        <field name="nb_personnes">50</field>
+    </record>
+    <record id="demo_dem01_j2p1_plat1" model="lagunes.traiteur.demande.plat">
+        <field name="prestation_id" ref="demo_dem01_j2_prest1"/>
+        <field name="description">Avocat aux crevettes</field>
+        <field name="plat_id" ref="lagunes_cantine.demo_plat_avocat_crevettes"/>
+        <field name="quantite">50</field>
+        <field name="prix_unitaire">2800</field>
+    </record>
+    <record id="demo_dem01_j2p1_plat2" model="lagunes.traiteur.demande.plat">
+        <field name="prestation_id" ref="demo_dem01_j2_prest1"/>
+        <field name="description">Sauce graine boeuf</field>
+        <field name="plat_id" ref="lagunes_cantine.demo_plat_sauce_graine"/>
+        <field name="accompagnement_id" ref="lagunes_cantine.demo_product_accomp_riz_nature"/>
+        <field name="quantite">30</field>
+        <field name="prix_unitaire">3800</field>
+    </record>
+    <record id="demo_dem01_j2p1_plat3" model="lagunes.traiteur.demande.plat">
+        <field name="prestation_id" ref="demo_dem01_j2_prest1"/>
+        <field name="description">Steak haché &amp; frites</field>
+        <field name="plat_id" ref="lagunes_cantine.demo_plat_steak_frites"/>
+        <field name="accompagnement_id" ref="lagunes_cantine.demo_product_accomp_frites"/>
+        <field name="quantite">20</field>
+        <field name="prix_unitaire">3500</field>
+    </record>
+
+    <!-- Logistique demande 1 -->
+    <record id="demo_dem01_log1" model="lagunes.traiteur.logistique.line">
+        <field name="demande_id" ref="demo_demande_01"/>
+        <field name="logistique_id" ref="lagunes_traiteur.logistique_sono"/>
+        <field name="quantite">2</field>
+    </record>
+
+    <!-- ── DEMANDE 2 : Cocktail ORANGE — État "new" ───────────────── -->
+    <record id="demo_demande_02" model="lagunes.traiteur.demande">
+        <field name="date_demande">2026-05-12</field>
+        <field name="nom_contact">Touré</field>
+        <field name="prenom_contact">Fatoumata</field>
+        <field name="email_contact">f.toure@orange.ci</field>
+        <field name="telephone_contact">+225 05 05 20 30 40</field>
+        <field name="nom_entreprise">Orange Côte d'Ivoire</field>
+        <field name="adresse_prestation">Siège Orange, Plateau — Terrasse panoramique</field>
+        <field name="date_debut">2026-07-15</field>
+        <field name="date_fin">2026-07-15</field>
+        <field name="nb_personnes">100</field>
+        <field name="niveau_id" ref="demo_niveau_complete"/>
+        <field name="notes_client">Événement de lancement 5G. Ambiance festive souhaitée. Possibilité d'ajouter un bar à cocktails soft ?</field>
+        <field name="state">new</field>
+    </record>
+    <record id="demo_dem02_jour1" model="lagunes.traiteur.demande.jour">
+        <field name="demande_id" ref="demo_demande_02"/>
+        <field name="date">2026-07-15</field>
+    </record>
+    <record id="demo_dem02_j1_prest1" model="lagunes.traiteur.demande.prestation">
+        <field name="jour_id" ref="demo_dem02_jour1"/>
+        <field name="type_prestation_id" ref="lagunes_traiteur.type_cocktail"/>
+        <field name="niveau_id" ref="demo_niveau_complete"/>
+        <field name="heure_prestation">19.0</field>
+        <field name="nb_personnes">100</field>
+    </record>
+
+    <!-- ── DEMANDE 3 : Déjeuner MTN — État "accepte" ─────────────── -->
+    <record id="demo_demande_03" model="lagunes.traiteur.demande">
+        <field name="date_demande">2026-04-20</field>
+        <field name="nom_contact">Bamba</field>
+        <field name="prenom_contact">Ibrahim</field>
+        <field name="email_contact">i.bamba@mtn.ci</field>
+        <field name="telephone_contact">+225 07 77 88 99 00</field>
+        <field name="nom_entreprise">MTN Côte d'Ivoire</field>
+        <field name="adresse_prestation">Zone 4, Marcory — Salle Ivoire</field>
+        <field name="date_debut">2026-05-05</field>
+        <field name="date_fin">2026-05-05</field>
+        <field name="nb_personnes">30</field>
+        <field name="niveau_id" ref="demo_niveau_renforcee"/>
+        <field name="notes_client">Formation interne, repas simple mais de qualité.</field>
+        <field name="state">accepte</field>
+        <field name="user_id" ref="base.user_admin"/>
+    </record>
+    <record id="demo_dem03_jour1" model="lagunes.traiteur.demande.jour">
+        <field name="demande_id" ref="demo_demande_03"/>
+        <field name="date">2026-05-05</field>
+    </record>
+    <record id="demo_dem03_j1_prest1" model="lagunes.traiteur.demande.prestation">
+        <field name="jour_id" ref="demo_dem03_jour1"/>
+        <field name="type_prestation_id" ref="lagunes_traiteur.type_pause_dejeuner"/>
+        <field name="niveau_id" ref="demo_niveau_renforcee"/>
+        <field name="heure_prestation">12.5</field>
+        <field name="nb_personnes">30</field>
+    </record>
+    <record id="demo_dem03_j1p1_plat1" model="lagunes.traiteur.demande.plat">
+        <field name="prestation_id" ref="demo_dem03_j1_prest1"/>
+        <field name="description">Salade César</field>
+        <field name="plat_id" ref="lagunes_cantine.demo_plat_salade_cesar"/>
+        <field name="quantite">30</field>
+        <field name="prix_unitaire">2000</field>
+    </record>
+    <record id="demo_dem03_j1p1_plat2" model="lagunes.traiteur.demande.plat">
+        <field name="prestation_id" ref="demo_dem03_j1_prest1"/>
+        <field name="description">Riz gras au poulet</field>
+        <field name="plat_id" ref="lagunes_cantine.demo_plat_riz_gras"/>
+        <field name="accompagnement_id" ref="lagunes_cantine.demo_product_accomp_riz_nature"/>
+        <field name="quantite">30</field>
+        <field name="prix_unitaire">3200</field>
+    </record>
+    <record id="demo_dem03_j1p1_plat3" model="lagunes.traiteur.demande.plat">
+        <field name="prestation_id" ref="demo_dem03_j1_prest1"/>
+        <field name="description">Crème caramel</field>
+        <field name="plat_id" ref="lagunes_cantine.demo_plat_creme_caramel"/>
+        <field name="quantite">30</field>
+        <field name="prix_unitaire">1200</field>
+    </record>
+
+    <!-- ── DEMANDE 4 : Cabinet Kouassi — État "annule" ────────────── -->
+    <record id="demo_demande_04" model="lagunes.traiteur.demande">
+        <field name="date_demande">2026-04-01</field>
+        <field name="nom_contact">Kouassi</field>
+        <field name="prenom_contact">Aya</field>
+        <field name="email_contact">a.kouassi@kouassi-associes.ci</field>
+        <field name="telephone_contact">+225 27 22 44 55 66</field>
+        <field name="nom_entreprise">Cabinet Kouassi &amp; Associés</field>
+        <field name="adresse_prestation">Cocody, II Plateaux — Bureau principal</field>
+        <field name="date_debut">2026-04-25</field>
+        <field name="date_fin">2026-04-25</field>
+        <field name="nb_personnes">15</field>
+        <field name="niveau_id" ref="demo_niveau_standard"/>
+        <field name="notes_client">Réunion annulée suite à un report interne.</field>
+        <field name="state">annule</field>
+    </record>
+
+    <!-- ── DEMANDE 5 : NSIA — État "new", petit événement ─────────── -->
+    <record id="demo_demande_05" model="lagunes.traiteur.demande">
+        <field name="date_demande">2026-05-14</field>
+        <field name="nom_contact">Diabaté</field>
+        <field name="prenom_contact">Mariam</field>
+        <field name="email_contact">m.diabate@nsia.ci</field>
+        <field name="telephone_contact">+225 05 06 07 08 09</field>
+        <field name="nom_entreprise">NSIA Assurances</field>
+        <field name="adresse_prestation">Plateau — Salle du conseil</field>
+        <field name="date_debut">2026-06-20</field>
+        <field name="date_fin">2026-06-20</field>
+        <field name="nb_personnes">20</field>
+        <field name="niveau_id" ref="demo_niveau_renforcee"/>
+        <field name="notes_client">Conseil d'administration trimestriel. Menu raffiné souhaité.</field>
+        <field name="state">new</field>
+    </record>
+    <record id="demo_dem05_jour1" model="lagunes.traiteur.demande.jour">
+        <field name="demande_id" ref="demo_demande_05"/>
+        <field name="date">2026-06-20</field>
+    </record>
+    <record id="demo_dem05_j1_prest1" model="lagunes.traiteur.demande.prestation">
+        <field name="jour_id" ref="demo_dem05_jour1"/>
+        <field name="type_prestation_id" ref="lagunes_traiteur.type_pause_cafe"/>
+        <field name="niveau_id" ref="demo_niveau_renforcee"/>
+        <field name="heure_prestation">10.0</field>
+        <field name="nb_personnes">20</field>
+    </record>
+    <record id="demo_dem05_j1_prest2" model="lagunes.traiteur.demande.prestation">
+        <field name="jour_id" ref="demo_dem05_jour1"/>
+        <field name="type_prestation_id" ref="lagunes_traiteur.type_pause_dejeuner"/>
+        <field name="niveau_id" ref="demo_niveau_renforcee"/>
+        <field name="heure_prestation">13.0</field>
+        <field name="nb_personnes">20</field>
+    </record>
+
+    <!-- ── DEMANDE 6 : TotalEnergies — 3 jours, État "en_cours" ──── -->
+    <record id="demo_demande_06" model="lagunes.traiteur.demande">
+        <field name="date_demande">2026-05-08</field>
+        <field name="nom_contact">Yao</field>
+        <field name="prenom_contact">Serge</field>
+        <field name="email_contact">s.yao@total.ci</field>
+        <field name="telephone_contact">+225 07 01 02 03 04</field>
+        <field name="nom_entreprise">TotalEnergies Côte d'Ivoire</field>
+        <field name="adresse_prestation">Centre de formation Total, Marcory</field>
+        <field name="date_debut">2026-06-10</field>
+        <field name="date_fin">2026-06-12</field>
+        <field name="nb_personnes">40</field>
+        <field name="niveau_id" ref="demo_niveau_amelioree"/>
+        <field name="notes_client">Formation HSE sur 3 jours. Pause-café matin + déjeuner chaque jour.</field>
+        <field name="state">en_cours</field>
+        <field name="user_id" ref="base.user_admin"/>
+    </record>
+    <record id="demo_dem06_jour1" model="lagunes.traiteur.demande.jour">
+        <field name="demande_id" ref="demo_demande_06"/>
+        <field name="date">2026-06-10</field>
+    </record>
+    <record id="demo_dem06_jour2" model="lagunes.traiteur.demande.jour">
+        <field name="demande_id" ref="demo_demande_06"/>
+        <field name="date">2026-06-11</field>
+    </record>
+    <record id="demo_dem06_jour3" model="lagunes.traiteur.demande.jour">
+        <field name="demande_id" ref="demo_demande_06"/>
+        <field name="date">2026-06-12</field>
+    </record>
+    <!-- Prestations jour 1 -->
+    <record id="demo_dem06_j1_prest1" model="lagunes.traiteur.demande.prestation">
+        <field name="jour_id" ref="demo_dem06_jour1"/>
+        <field name="type_prestation_id" ref="lagunes_traiteur.type_pause_cafe"/>
+        <field name="niveau_id" ref="demo_niveau_amelioree"/>
+        <field name="heure_prestation">10.0</field>
+        <field name="nb_personnes">40</field>
+    </record>
+    <record id="demo_dem06_j1_prest2" model="lagunes.traiteur.demande.prestation">
+        <field name="jour_id" ref="demo_dem06_jour1"/>
+        <field name="type_prestation_id" ref="lagunes_traiteur.type_pause_dejeuner"/>
+        <field name="niveau_id" ref="demo_niveau_amelioree"/>
+        <field name="heure_prestation">12.5</field>
+        <field name="nb_personnes">40</field>
+    </record>
+    <record id="demo_dem06_j1p2_plat1" model="lagunes.traiteur.demande.plat">
+        <field name="prestation_id" ref="demo_dem06_j1_prest2"/>
+        <field name="description">Soupe de légumes</field>
+        <field name="plat_id" ref="lagunes_cantine.demo_plat_soupe_legumes"/>
+        <field name="quantite">40</field>
+        <field name="prix_unitaire">1200</field>
+    </record>
+    <record id="demo_dem06_j1p2_plat2" model="lagunes.traiteur.demande.plat">
+        <field name="prestation_id" ref="demo_dem06_j1_prest2"/>
+        <field name="description">Mafé d'agneau</field>
+        <field name="plat_id" ref="lagunes_cantine.demo_plat_mafe_agneau"/>
+        <field name="accompagnement_id" ref="lagunes_cantine.demo_product_accomp_riz_nature"/>
+        <field name="quantite">25</field>
+        <field name="prix_unitaire">4200</field>
+    </record>
+    <record id="demo_dem06_j1p2_plat3" model="lagunes.traiteur.demande.plat">
+        <field name="prestation_id" ref="demo_dem06_j1_prest2"/>
+        <field name="description">Escalope milanaise &amp; pâtes</field>
+        <field name="plat_id" ref="lagunes_cantine.demo_plat_escalope_milanaise"/>
+        <field name="accompagnement_id" ref="lagunes_cantine.demo_product_accomp_pates"/>
+        <field name="quantite">15</field>
+        <field name="prix_unitaire">3800</field>
+    </record>
+    <record id="demo_dem06_j1p2_plat4" model="lagunes.traiteur.demande.plat">
+        <field name="prestation_id" ref="demo_dem06_j1_prest2"/>
+        <field name="description">Mousse au chocolat</field>
+        <field name="plat_id" ref="lagunes_cantine.demo_plat_mousse_chocolat"/>
+        <field name="quantite">40</field>
+        <field name="prix_unitaire">1800</field>
+    </record>
+
+    <!-- Logistique demande 6 -->
+    <record id="demo_dem06_log1" model="lagunes.traiteur.logistique.line">
+        <field name="demande_id" ref="demo_demande_06"/>
+        <field name="logistique_id" ref="lagunes_traiteur.logistique_table"/>
+        <field name="quantite">5</field>
+    </record>
+    <record id="demo_dem06_log2" model="lagunes.traiteur.logistique.line">
+        <field name="demande_id" ref="demo_demande_06"/>
+        <field name="logistique_id" ref="lagunes_traiteur.logistique_chaise"/>
+        <field name="quantite">40</field>
+    </record>
+
+</odoo>

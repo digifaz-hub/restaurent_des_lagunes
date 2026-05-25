@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Vue pour wizard de modification groupée -->
+    <record id="view_commande_bulk_state_change_form" model="ir.ui.view">
+        <field name="name">lagunes.commande.bulk.state.change.form</field>
+        <field name="model">lagunes.commande.bulk.state.change</field>
+        <field name="arch" type="xml">
+            <form string="Modifier les statuts" class="o_lagunes_view">
+                <sheet>
+                    <group>
+                        <group string="Cible">
+                            <field name="entreprise_id" options="{'no_create': True, 'no_open': True}"/>
+                        </group>
+                        <group string="Modification">
+                            <field name="new_state" required="1"/>
+                            <field name="apply_to_all_partner" widget="boolean"/>
+                        </group>
+                    </group>
+                    <group string="Notes additionnelles">
+                        <field name="notes" nolabel="1" placeholder="Notes à ajouter aux commandes..."/>
+                    </group>
+                    <footer>
+                        <button name="action_apply_state_change" type="object"
+                                string="Appliquer" class="btn btn-primary"/>
+                        <button special="cancel" string="Annuler" class="btn btn-secondary"/>
+                    </footer>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Action pour le wizard -->
+    <record id="action_commande_bulk_state_change" model="ir.actions.act_window">
+        <field name="name">Modification groupée</field>
+        <field name="res_model">lagunes.commande.bulk.state.change</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

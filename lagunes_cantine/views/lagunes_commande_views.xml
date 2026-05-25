@@ -1,0 +1,671 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Vue formulaire pour lagunes.commande - AMÉLIORÉE -->
+    <record id="view_lagunes_commande_form" model="ir.ui.view">
+        <field name="name">lagunes.commande.form</field>
+        <field name="model">lagunes.commande</field>
+        <field name="arch" type="xml">
+            <form string="Commande Cantine" class="o_lagunes_view">
+                <header>
+                    <button name="action_confirm" type="object" string="Confirmer" 
+                            invisible="state != 'draft'" class="oe_highlight"/>
+                    <button name="action_prepare" type="object" string="En préparation" 
+                            invisible="state != 'confirmed'" class="oe_highlight"/>
+                    <button name="action_ready" type="object" string="Prêt" 
+                            invisible="state != 'preparing'" class="oe_highlight"/>
+                    <button name="action_deliver" type="object" string="Livré" 
+                            invisible="state != 'ready'" class="oe_highlight"/>
+                    <button name="action_cancel" type="object" string="Annuler" 
+                            invisible="state in ['delivered', 'cancelled']" class="btn-warning"/>
+                    <field name="state" widget="statusbar" options="{'clickable': '1'}"
+                           statusbar_visible="draft,confirmed,preparing,ready,delivered"/>
+                </header>
+                <sheet>
+                    <!-- En-tête moderne avec informations clés -->
+                    <div class="oe_title mb-4">
+                        <div class="d-flex align-items-center gap-3 mb-3">
+                            <div class="lui-card-icon lui-icon-primary">
+                                <i class="fa fa-cutlery" title="Icone commande"/>
+                            </div>
+                            <div>
+                                <label for="reference" class="text-muted small text-uppercase fw-bold mb-1 d-block"/>
+                                <h1 class="mb-0">
+                                    <field name="reference" readonly="1" class="text-primary fw-bold"/>
+                                </h1>
+                            </div>
+                        </div>
+                        
+                        <div class="d-flex flex-wrap gap-2 mb-3">
+                            <field name="state" widget="badge" 
+                                   decoration-success="state == 'delivered'"
+                                   decoration-info="state in ['confirmed', 'preparing']"
+                                   decoration-warning="state == 'ready'"
+                                   decoration-danger="state == 'cancelled'"/>
+                            <field name="facturation_state" widget="badge"
+                                   decoration-warning="facturation_state == 'not_invoiced'"
+                                   decoration-info="facturation_state == 'to_invoice'"
+                                   decoration-success="facturation_state == 'invoiced'"/>
+                        </div>
+                        
+                        <div class="alert alert-info d-flex align-items-center gap-2 py-2" invisible="state != 'draft'" role="status">
+                            <i class="fa fa-info-circle" title="Information"/>
+                            <span>Cette commande est en attente de confirmation</span>
+                        </div>
+
+                        <!-- Alerte stock insuffisant -->
+                        <div class="alert alert-danger d-flex align-items-start gap-2 py-2" invisible="not stock_insufficient" role="alert">
+                            <i class="fa fa-exclamation-triangle" title="Attention stock"/>
+                            <div>
+                                <strong>Stock insuffisant détecté !</strong><br/>
+                                <span>Forçage par <field name="stock_forced_by_id"/> le <field name="stock_forced_date"/>.<br/>
+                                La livraison nécessite une validation administrative.</span>
+                            </div>
+                        </div>
+
+                        <!-- Info stock déduit -->
+                        <div class="alert alert-success d-flex align-items-center gap-2 py-2" invisible="not is_stock_deducted">
+                            <i class="fa fa-check-circle" title="Succès"/>
+                            <span>Stock déduit le <field name="stock_deduction_date"/></span>
+                        </div>
+
+                        <!-- Rafraîchissement dynamique stock (temps réel) -->
+                        <div class="d-flex align-items-center gap-2 mt-2" invisible="is_stock_deducted">
+                            <span class="small text-muted fw-bold">Stock :</span>
+                            <field name="stock_availability_info" widget="badge"
+                                   decoration-success="stock_availability_color == 'success'"
+                                   decoration-warning="stock_availability_color == 'warning'"
+                                   decoration-danger="stock_availability_color == 'danger'"/>
+                            <field name="stock_availability_color" invisible="1"/>
+                        </div>
+                    </div>
+                    
+                    <!-- Informations client -->
+                    <div class="mb-4">
+                        <h3 class="o_horizontal_separator mb-3">
+                            <i class="fa fa-user-circle-o me-2" title="Client"/>
+                            Informations client
+                        </h3>
+                        <div class="row g-3">
+                            <div class="col-md-6">
+                                <group>
+                                    <field name="entreprise_id" options="{'no_create': True}" 
+                                           string="Entreprise cliente"/>
+                                    <field name="employee_name" string="Employé commanditaire"/>
+                                    <field name="ordered_for_name" string="Commandé pour"/>
+                                </group>
+                            </div>
+                            <div class="col-md-6">
+                                <group>
+                                    <field name="date" widget="date" string="Date de commande"/>
+                                    <field name="create_date" readonly="1" string="Date de création"/>
+                                    <field name="quantity" readonly="1" string="Quantité"/>
+                                </group>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Menu commandé -->
+                    <div class="mb-4">
+                        <h3 class="o_horizontal_separator mb-3">
+                            <i class="fa fa-list me-2" title="Détail"/>
+                            Détail de la commande
+                        </h3>
+                        
+                        <notebook>
+                            <page string="Résumé (Vue classique)" name="classic_view">
+                                <div class="row g-3 mt-2">
+                                    <div class="col-md-4">
+                                        <div class="card h-100 border-0 bg-light">
+                                            <div class="card-body">
+                                                <h6 class="text-muted text-uppercase small mb-3">
+                                                    <i class="fa fa-leaf me-1 text-success" title="Entrée"/>
+                                                    Entrée
+                                                </h6>
+                                                <field name="entree_plat_id" options="{'no_create': True}" nolabel="1"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="card h-100 border-0 bg-light">
+                                            <div class="card-body">
+                                                <h6 class="text-muted text-uppercase small mb-3">
+                                                    <i class="fa fa-fire me-1 text-warning" title="Plat principal"/>
+                                                    Plat principal
+                                                </h6>
+                                                <field name="resistance_plat_id" options="{'no_create': True}" nolabel="1"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4">
+                                        <div class="card h-100 border-0 bg-light">
+                                            <div class="card-body">
+                                                <h6 class="text-muted text-uppercase small mb-3">
+                                                    <i class="fa fa-birthday-cake me-1 text-info" title="Dessert"/>
+                                                    Dessert
+                                                </h6>
+                                                <field name="dessert_plat_id" options="{'no_create': True}" nolabel="1"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="mt-3 p-2 bg-white border rounded text-center fw-bold text-primary">
+                                    <i class="fa fa-info-circle me-2" title="Résumé"/>
+                                    Synthèse : <field name="display_menu"/>
+                                </div>
+                            </page>
+                            
+                            <page string="Lignes de commande (Détail)" name="order_lines">
+                                <field name="line_ids">
+                                    <list editable="bottom">
+                                        <field name="plat_id"/>
+                                        <field name="plat_type_id"/>
+                                        <field name="quantity"/>
+                                        <field name="price_unit" widget="monetary"/>
+                                        <field name="price_subtotal" widget="monetary" sum="Total"/>
+                                    </list>
+                                </field>
+                            </page>
+                        </notebook>
+                    </div>
+                    
+                    <!-- Options et prix -->
+                    <div class="row g-4 mb-4">
+                        <div class="col-md-6">
+                            <h3 class="o_horizontal_separator mb-3">
+                                <i class="fa fa-sliders me-2" title="Options"/>
+                                Options personnalisées
+                            </h3>
+                            <div class="card border-0 bg-light p-3">
+                                <field name="option_ids" widget="many2many_tags" options="{'no_create': True}" 
+                                       nolabel="1" placeholder="Aucune option sélectionnée"/>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <h3 class="o_horizontal_separator mb-3">
+                                <i class="fa fa-calculator me-2" title="Calcul"/>
+                                Récapitulatif financier
+                            </h3>
+                            <div class="card border-0 bg-light p-3">
+                                <div class="d-flex justify-content-between align-items-center">
+                                    <span class="text-muted">Montant total</span>
+                                    <field name="prix_total" readonly="1" widget="monetary" 
+                                           class="h4 mb-0 text-primary fw-bold"/>
+                                </div>
+                                <div class="mt-3 pt-3 border-top" invisible="not sale_order_id">
+                                    <field name="facturation_state" widget="badge" nolabel="1"
+                                           decoration-warning="facturation_state == 'not_invoiced'"
+                                           decoration-info="facturation_state == 'to_invoice'"
+                                           decoration-success="facturation_state == 'invoiced'"/>
+                                    <field name="sale_order_id" readonly="1" 
+                                           invisible="not sale_order_id"
+                                           options="{'no_create': True}" class="mt-2 d-block"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Notes -->
+                    <div class="mb-3">
+                        <h3 class="o_horizontal_separator mb-3">
+                            <i class="fa fa-commenting-o me-2" title="Notes"/>
+                            Notes et instructions spéciales
+                        </h3>
+                        <div class="card border-0 bg-light">
+                            <div class="card-body">
+                                <field name="notes" nolabel="1" placeholder="Aucune note particulière..." 
+                                       class="bg-transparent border-0"/>
+                            </div>
+                        </div>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Vue liste pour lagunes.commande - DESIGN MODERNE -->
+    <record id="view_lagunes_commande_tree" model="ir.ui.view">
+        <field name="name">lagunes.commande.list</field>
+        <field name="model">lagunes.commande</field>
+        <field name="arch" type="xml">
+            <list string="Commandes Cantine"
+                  decoration-muted="state == 'cancelled'"
+                  decoration-success="state == 'delivered'"
+                  decoration-info="state == 'confirmed'"
+                  decoration-warning="state == 'ready'"
+                  decoration-danger="stock_insufficient == True"
+                  multi_edit="1"
+                  create="1" edit="1" delete="1" class="o_lagunes_view">
+                <!-- Colonne principale : Référence et statut -->
+                <field name="reference" width="150" string="N° Commande"/>
+                <field name="state" widget="badge" width="120" string="Statut"
+                       decoration-success="state == 'delivered'"
+                       decoration-info="state in ['confirmed', 'preparing']"
+                       decoration-warning="state == 'ready'"
+                       decoration-danger="state == 'cancelled'"/>
+                
+                <!-- Informations temporelles -->
+                <field name="date" widget="date" width="110" string="Date"/>
+                <field name="create_date" widget="date" optional="hide" string="Créé le"/>
+                
+                <!-- Informations client -->
+                <field name="entreprise_id" width="180" string="Entreprise"/>
+                <field name="employee_name" optional="show" width="150" string="Employé"/>
+                <field name="ordered_for_name" optional="hide" width="150" string="Pour"/>
+                
+                <!-- Menu complet en une colonne consolidée -->
+                <field name="display_menu" width="300" string="Menu consommé"/>
+                <field name="entree_plat_id" optional="hide" width="140" string="Entrée"/>
+                <field name="resistance_plat_id" optional="hide" width="160" string="Plat principal"/>
+                <field name="dessert_plat_id" optional="hide" width="140" string="Dessert"/>
+                
+                <!-- Quantité et montant -->
+                <field name="quantity" width="80" string="Qté" sum="Total Qté"/>
+                <field name="prix_total" sum="Total" widget="monetary" width="120" string="Montant"/>
+                
+                <!-- Facturation -->
+                <field name="facturation_state" widget="badge" optional="show" width="130" string="Facturation"
+                       decoration-warning="facturation_state == 'not_invoiced'"
+                       decoration-info="facturation_state == 'to_invoice'"
+                       decoration-success="facturation_state == 'invoiced'"/>
+            </list>
+        </field>
+    </record>
+    
+    <!-- Vue kanban pour lagunes.commande - DESIGN MODERNE ET DYNAMIQUE -->
+    <record id="view_lagunes_commande_kanban" model="ir.ui.view">
+        <field name="name">lagunes.commande.kanban</field>
+        <field name="model">lagunes.commande</field>
+        <field name="arch" type="xml">
+            <kanban class="o_kanban_small_column o_lagunes_view" 
+                    default_group_by="state" 
+                    quick_create="false"
+                    records_draggable="true"
+                    archivable="false">
+                <field name="reference"/>
+                <field name="employee_name"/>
+                <field name="ordered_for_name"/>
+                <field name="entree_plat_id"/>
+                <field name="resistance_plat_id"/>
+                <field name="dessert_plat_id"/>
+                <field name="quantity"/>
+                <field name="option_ids"/>
+                <field name="state"/>
+                <field name="notes"/>
+                <field name="date"/>
+                <field name="prix_total"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_global_click p-3 h-100" style="border-radius: 12px; background: linear-gradient(145deg, #ffffff 0%, #f8fafc 100%); border: 1px solid #e2e8f0; box-shadow: 0 2px 8px rgba(0,0,0,0.04);">
+                            <!-- En-tête avec référence et statut -->
+                            <div class="d-flex justify-content-between align-items-start mb-3">
+                                <div class="d-flex align-items-center gap-2">
+                                    <div class="rounded-circle d-flex align-items-center justify-content-center" 
+                                         style="width: 36px; height: 36px; background: linear-gradient(135deg, #16166d 0%, #2d2d9a 100%);">
+                                        <i class="fa fa-cutlery text-white small"/>
+                                    </div>
+                                    <div>
+                                        <div class="fw-bold text-primary" style="font-size: 1.05rem;">
+                                            <field name="reference"/>
+                                        </div>
+                                        <div class="text-muted small d-flex align-items-center gap-1">
+                                            <i class="fa fa-calendar-o"/> <field name="date"/>
+                                        </div>
+                                    </div>
+                                </div>
+                                <field name="state" widget="label_selection" 
+                                       options="{'classes': {'draft': 'default', 'confirmed': 'info', 'preparing': 'warning', 'ready': 'success', 'delivered': 'success', 'cancelled': 'danger'}}"/>
+                            </div>
+
+                            <!-- Informations client -->
+                            <div class="mb-3">
+                                <div class="d-flex align-items-center gap-2 p-2 rounded" style="background: rgba(22, 22, 109, 0.04);">
+                                    <div class="rounded-circle bg-white d-flex align-items-center justify-content-center shadow-sm" 
+                                         style="width: 28px; height: 28px;">
+                                        <i class="fa fa-user text-primary small"/>
+                                    </div>
+                                    <div class="fw-semibold text-dark"><field name="employee_name"/></div>
+                                </div>
+                                <div t-if="record.ordered_for_name.raw_value" class="small text-muted mt-2 ms-4">
+                                    <i class="fa fa-arrow-right text-muted me-1"/> Pour <t t-esc="record.ordered_for_name.value"/>
+                                </div>
+                            </div>
+
+                            <!-- Menu commandé -->
+                            <div class="mb-3 p-2 rounded" style="background: #f1f5f9;">
+                                <div class="small fw-semibold text-muted mb-2 text-uppercase" style="font-size: 0.7rem; letter-spacing: 0.05em;">
+                                    Menu commandé
+                                </div>
+                                <div class="d-flex flex-column gap-1">
+                                    <div t-if="record.entree_plat_id.raw_value" class="d-flex align-items-center gap-2 small">
+                                        <i class="fa fa-leaf text-success"/>
+                                        <span class="text-truncate"><field name="entree_plat_id"/></span>
+                                    </div>
+                                    <div t-if="record.resistance_plat_id.raw_value" class="d-flex align-items-center gap-2 small fw-semibold">
+                                        <i class="fa fa-fire text-warning"/>
+                                        <span class="text-truncate"><field name="resistance_plat_id"/></span>
+                                    </div>
+                                    <div t-if="record.dessert_plat_id.raw_value" class="d-flex align-items-center gap-2 small">
+                                        <i class="fa fa-birthday-cake text-info"/>
+                                        <span class="text-truncate"><field name="dessert_plat_id"/></span>
+                                    </div>
+                                </div>
+                                <div class="mt-2 pt-2 border-top d-flex justify-content-between align-items-center">
+                                    <span class="small text-muted">Quantité</span>
+                                    <span class="badge rounded-pill" style="background: #16166d; color: white;">
+                                        x<field name="quantity"/>
+                                    </span>
+                                </div>
+                            </div>
+
+                            <!-- Options -->
+                            <div t-if="record.option_ids.raw_value.length" class="mb-3">
+                                <field name="option_ids" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                            </div>
+
+                            <!-- Notes avec icône -->
+                            <div t-if="record.notes.raw_value" class="d-flex align-items-start gap-2 p-2 rounded mb-3" style="background: #fffbeb; border-left: 3px solid #f59e0b;">
+                                <i class="fa fa-commenting text-warning mt-1"/>
+                                <span class="small text-dark text-truncate" style="font-size: 0.85rem;"><t t-esc="record.notes.value"/></span>
+                            </div>
+
+                            <!-- Prix -->
+                            <div class="mt-auto pt-2 border-top d-flex justify-content-between align-items-center">
+                                <span class="small text-muted">Total</span>
+                                <span class="fw-bold text-primary" style="font-size: 1.1rem;">
+                                    <field name="prix_total" widget="monetary"/>
+                                </span>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+    
+    <!-- Vue pivot pour analyses - NOUVELLE -->
+    <record id="view_lagunes_commande_pivot" model="ir.ui.view">
+        <field name="name">lagunes.commande.pivot</field>
+        <field name="model">lagunes.commande</field>
+        <field name="arch" type="xml">
+            <pivot string="Analyse des commandes" class="o_lagunes_view">
+                <field name="entreprise_id" type="row"/>
+                <field name="week_menu_id" type="row"/>
+                <field name="date" interval="week" type="col"/>
+                <field name="quantity" type="measure"/>
+                <field name="prix_total" type="measure"/>
+            </pivot>
+        </field>
+    </record>
+    
+    <!-- Vue graphique - NOUVELLE -->
+    <record id="view_lagunes_commande_graph" model="ir.ui.view">
+        <field name="name">lagunes.commande.graph</field>
+        <field name="model">lagunes.commande</field>
+        <field name="arch" type="xml">
+            <graph string="Statistiques des commandes" type="bar" class="o_lagunes_view">
+                <field name="date" interval="day"/>
+                <field name="quantity" type="measure"/>
+            </graph>
+        </field>
+    </record>
+    
+    <!-- Vue recherche - DESIGN MODERNE AVEC FILTRES ORGANISÉS -->
+    <record id="view_lagunes_commande_search" model="ir.ui.view">
+        <field name="name">lagunes.commande.search</field>
+        <field name="model">lagunes.commande</field>
+        <field name="arch" type="xml">
+            <search string="Rechercher dans les commandes">
+                <!-- Champs de recherche principaux -->
+                <field name="reference" string="N° commande"/>
+                <field name="entreprise_id" string="Entreprise"/>
+                <field name="employee_name" string="Employé"/>
+                <field name="ordered_for_name" string="Commandé pour"/>
+                <field name="week_menu_id" string="Menu hebdo"/>
+                <field name="date" string="Date"/>
+                
+                <!-- ════════════════════════════════════════════════════════════════
+                     FILTRES TEMPORELS - Accès rapide aux périodes courantes
+                ════════════════════════════════════════════════════════════════ -->
+                <filter string="Aujourd'hui" name="today" 
+                        domain="[('date', '=', context_today().strftime('%Y-%m-%d'))]"
+                        help="Commandes du jour en cours"/>
+                <filter string="Hier" name="yesterday" 
+                        domain="[('date', '=', (context_today() - relativedelta(days=1)).strftime('%Y-%m-%d'))]"
+                        help="Commandes de la veille"/>
+                <separator/>
+                <filter string="Cette semaine" name="this_week" 
+                        domain="[('date', '&gt;=', (context_today() - relativedelta(days=context_today().weekday())).strftime('%Y-%m-%d')),
+                                ('date', '&lt;=', (context_today() + relativedelta(days=6-context_today().weekday())).strftime('%Y-%m-%d'))]"
+                        help="Commandes de la semaine en cours (Lundi → Dimanche)"/>
+                <filter string="Ce mois" name="this_month" 
+                        domain="[('date', '&gt;=', context_today().strftime('%Y-%m-01')),
+                                ('date', '&lt;', (context_today() + relativedelta(months=1)).strftime('%Y-%m-01'))]"
+                        help="Commandes du mois en cours"/>
+                
+                <!-- ════════════════════════════════════════════════════════════════
+                     FILTRES PAR STATUT - Suivi du workflow de préparation
+                ════════════════════════════════════════════════════════════════ -->
+                <separator/>
+                <filter string="Brouillon" name="draft" domain="[('state', '=', 'draft')]"
+                        help="Commandes en attente de confirmation"/>
+                <filter string="Confirmées" name="confirmed" domain="[('state', '=', 'confirmed')]"
+                        help="Commandes confirmées, prêtes à être préparées"/>
+                <filter string="En préparation" name="preparing" domain="[('state', '=', 'preparing')]"
+                        help="Commandes en cours de préparation en cuisine"/>
+                <filter string="Prêtes" name="ready" domain="[('state', '=', 'ready')]"
+                        help="Commandes prêtes pour la livraison"/>
+                <filter string="Livrées" name="delivered" domain="[('state', '=', 'delivered')]"
+                        help="Commandes livrées aux clients"/>
+                <filter string="Annulées" name="cancelled" domain="[('state', '=', 'cancelled')]"
+                        help="Commandes annulées"/>
+                
+                <!-- ════════════════════════════════════════════════════════════════
+                     FILTRES FACTURATION - Gestion de la facturation mensuelle
+                ════════════════════════════════════════════════════════════════ -->
+                <separator/>
+                <filter string="Non facturées" name="not_invoiced" 
+                        domain="[('facturation_state', '=', 'not_invoiced')]"
+                        help="Commandes à inclure dans la prochaine facturation"/>
+                <filter string="À facturer" name="to_invoice" 
+                        domain="[('facturation_state', '=', 'to_invoice')]"
+                        help="Commandes en cours de facturation (période validée)"/>
+                <filter string="Facturées" name="invoiced" 
+                        domain="[('facturation_state', '=', 'invoiced')]"
+                        help="Commandes déjà facturées et payées"/>
+                
+                <!-- Filtres spéciaux -->
+                <separator/>
+                <filter string="Avec notes" name="with_notes" 
+                        domain="[('notes', '!=', False), ('notes', '!=', '')]"
+                        help="Commandes contenant des instructions spéciales"/>
+                
+                <!-- ════════════════════════════════════════════════════════════════
+                     GROUPEMENTS - Organisation des données
+                ════════════════════════════════════════════════════════════════ -->
+                <group expand="0" string="Grouper par">
+                    <filter string="Entreprise" name="group_entreprise" 
+                            context="{'group_by': 'entreprise_id'}"/>
+                    <filter string="Employé" name="group_employee" 
+                            context="{'group_by': 'employee_name'}"/>
+                    <filter string="Par jour" name="group_date" 
+                            context="{'group_by': 'date:day'}"/>
+                    <filter string="Par semaine" name="group_week" 
+                            context="{'group_by': 'date:week'}"/>
+                    <filter string="Par mois" name="group_month" 
+                            context="{'group_by': 'date:month'}"/>
+                    <filter string="Par statut" name="group_state" 
+                            context="{'group_by': 'state'}"/>
+                    <filter string="Par menu hebdo" name="group_menu"
+                            context="{'group_by': 'week_menu_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    
+    <!-- Action principale avec guide utilisateur -->
+    <record id="action_lagunes_commande" model="ir.actions.act_window">
+        <field name="name">Toutes les commandes</field>
+        <field name="res_model">lagunes.commande</field>
+        <field name="view_mode">list,kanban,form,pivot,graph</field>
+        <field name="context">{'search_default_today': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Aucune commande pour le moment</p>
+            <div class="p-3 bg-light rounded">
+                <h5 class="mb-3"><i class="fa fa-info-circle text-primary me-2"/>Bienvenue dans la gestion des commandes</h5>
+                <p>Les commandes apparaissent ici lorsque les employés passent commande via le portail web.</p>
+                
+                <div class="row g-3 mt-2">
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-start gap-2">
+                            <i class="fa fa-search text-primary mt-1"/>
+                            <div>
+                                <strong>Recherche avancée</strong>
+                                <p class="small text-muted mb-0">Filtrez par date, statut, entreprise ou employé</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-start gap-2">
+                            <i class="fa fa-bar-chart text-success mt-1"/>
+                            <div>
+                                <strong>Statistiques</strong>
+                                <p class="small text-muted mb-0">Vue pivot et graphiques pour analyser les volumes</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-start gap-2">
+                            <i class="fa fa-exchange text-info mt-1"/>
+                            <div>
+                                <strong>Workflow</strong>
+                                <p class="small text-muted mb-0">Suivez les statuts : Brouillon → Confirmé → Préparation → Prêt → Livré</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="alert alert-info mt-3 mb-0 py-2">
+                    <i class="fa fa-lightbulb text-warning me-2"/>
+                    <strong>Astuce :</strong> Utilisez la vue Kanban pour glisser-déposer les commandes entre les statuts
+                </div>
+            </div>
+        </field>
+    </record>
+    
+    <!-- Action cuisine - Espace dédié préparation -->
+    <record id="action_lagunes_commande_cuisine" model="ir.actions.act_window">
+        <field name="name">Commandes du jour</field>
+        <field name="res_model">lagunes.commande</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="context">{'search_default_today': 1, 'search_default_confirmed': 1, 'search_default_preparing': 1, 'search_default_ready': 1}</field>
+        <field name="domain">[('state', 'in', ['confirmed', 'preparing', 'ready'])]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Aucune commande en préparation</p>
+            <div class="p-3 bg-light rounded">
+                <h5 class="mb-3"><i class="fa fa-cutlery text-primary me-2"/>Espace Cuisine</h5>
+                <p>Cette vue est optimisée pour l'équipe de préparation.</p>
+                
+                <div class="alert alert-success mb-3">
+                    <i class="fa fa-magic me-2"/>
+                    <strong>Glisser-déposer :</strong> Déplacez les cartes entre les colonnes pour mettre à jour le statut des commandes
+                </div>
+                
+                <div class="row g-2">
+                    <div class="col-md-4"><span class="badge bg-info">Confirmé</span> <small>À préparer</small></div>
+                    <div class="col-md-4"><span class="badge bg-warning">En préparation</span> <small>En cours</small></div>
+                    <div class="col-md-4"><span class="badge bg-success">Prêt</span> <small>À livrer</small></div>
+                </div>
+            </div>
+        </field>
+    </record>
+    
+    <!-- Action historique -->
+    <record id="action_lagunes_commande_history" model="ir.actions.act_window">
+        <field name="name">Historique</field>
+        <field name="res_model">lagunes.commande</field>
+        <field name="view_mode">list,kanban,form,pivot,graph</field>
+        <field name="context">{'search_default_this_month': 1, 'search_default_group_week': 1}</field>
+        <field name="domain">[('state', 'in', ['delivered', 'cancelled'])]</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Aucun historique pour cette période</p>
+            <div class="p-3 bg-light rounded">
+                <h5 class="mb-3"><i class="fa fa-history text-primary me-2"/>Historique des commandes</h5>
+                <p>Retrouvez ici toutes les commandes traitées :</p>
+                <ul class="mb-0">
+                    <li><span class="badge bg-success">Livrées</span> Commandes servies aux clients</li>
+                    <li><span class="badge bg-danger">Annulées</span> Commandes annulées avant livraison</li>
+                </ul>
+                <div class="alert alert-light mt-3 mb-0">
+                    <i class="fa fa-filter text-muted me-2"/>
+                    Utilisez les filtres de période pour retrouver des commandes spécifiques
+                </div>
+            </div>
+        </field>
+    </record>
+    
+    <!-- ════════════════════════════════════════════════════════════════
+         ACTIONS SERVEUR - CHANGEMENT DE STATUT EN MASSE
+    ════════════════════════════════════════════════════════════════ -->
+    
+    <!-- Action : Confirmer en masse -->
+    <record id="action_bulk_confirm" model="ir.actions.server">
+        <field name="name">Confirmer les commandes</field>
+        <field name="model_id" ref="lagunes_cantine.model_lagunes_commande"/>
+        <field name="binding_model_id" ref="lagunes_cantine.model_lagunes_commande"/>
+        <field name="state">code</field>
+        <field name="code">
+if records:
+    records.action_bulk_state_change('confirmed')
+        </field>
+    </record>
+    
+    <!-- Action : Mettre en préparation en masse -->
+    <record id="action_bulk_prepare" model="ir.actions.server">
+        <field name="name">Mettre en préparation</field>
+        <field name="model_id" ref="lagunes_cantine.model_lagunes_commande"/>
+        <field name="binding_model_id" ref="lagunes_cantine.model_lagunes_commande"/>
+        <field name="state">code</field>
+        <field name="code">
+if records:
+    records.action_bulk_state_change('preparing')
+        </field>
+    </record>
+    
+    <!-- Action : Marquer prêt en masse -->
+    <record id="action_bulk_ready" model="ir.actions.server">
+        <field name="name">Marquer comme prêt</field>
+        <field name="model_id" ref="lagunes_cantine.model_lagunes_commande"/>
+        <field name="binding_model_id" ref="lagunes_cantine.model_lagunes_commande"/>
+        <field name="state">code</field>
+        <field name="code">
+if records:
+    records.action_bulk_state_change('ready')
+        </field>
+    </record>
+    
+    <!-- Action : Marquer livré en masse -->
+    <record id="action_bulk_deliver" model="ir.actions.server">
+        <field name="name">Marquer comme livré</field>
+        <field name="model_id" ref="lagunes_cantine.model_lagunes_commande"/>
+        <field name="binding_model_id" ref="lagunes_cantine.model_lagunes_commande"/>
+        <field name="state">code</field>
+        <field name="code">
+if records:
+    records.action_bulk_state_change('delivered')
+        </field>
+    </record>
+    
+    <!-- Action : Annuler en masse -->
+    <record id="action_bulk_cancel" model="ir.actions.server">
+        <field name="name">Annuler les commandes</field>
+        <field name="model_id" ref="lagunes_cantine.model_lagunes_commande"/>
+        <field name="binding_model_id" ref="lagunes_cantine.model_lagunes_commande"/>
+        <field name="state">code</field>
+        <field name="code">
+if records:
+    records.action_bulk_state_change('cancelled')
+        </field>
+    </record>
+
+</odoo>

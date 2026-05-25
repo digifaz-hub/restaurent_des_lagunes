@@ -1,0 +1,110 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- ═══════════════════════════════════════════════════════════
+             Séquences automatiques
+        ═══════════════════════════════════════════════════════════ -->
+        <record id="sequence_lagunes_market" model="ir.sequence">
+            <field name="name">Séquence Marché d'approvisionnement</field>
+            <field name="code">lagunes.market.sequence</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="prefix">MKT/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="number_increment">1</field>
+            <field name="use_date_range">True</field>
+        </record>
+
+        <record id="sequence_lagunes_market_consumption" model="ir.sequence">
+            <field name="name">Séquence Consommation de stock</field>
+            <field name="code">lagunes.market.consumption.sequence</field>
+            <field name="company_id" ref="base.main_company"/>
+            <field name="prefix">CONSO/%(year)s/</field>
+            <field name="padding">4</field>
+            <field name="number_increment">1</field>
+            <field name="use_date_range">True</field>
+        </record>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             Catégories d'unités de mesure
+        ═══════════════════════════════════════════════════════════ -->
+        <record id="uom_category_poids" model="lagunes.market.uom.category">
+            <field name="name">Poids</field>
+        </record>
+        <record id="uom_category_volume" model="lagunes.market.uom.category">
+            <field name="name">Volume</field>
+        </record>
+        <record id="uom_category_unite" model="lagunes.market.uom.category">
+            <field name="name">Unité</field>
+        </record>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             Unités de mesure par défaut
+        ═══════════════════════════════════════════════════════════ -->
+        <record id="uom_kg" model="lagunes.market.uom">
+            <field name="name">kg</field>
+            <field name="category_id" ref="uom_category_poids"/>
+        </record>
+        <record id="uom_g" model="lagunes.market.uom">
+            <field name="name">g</field>
+            <field name="category_id" ref="uom_category_poids"/>
+            <field name="uom_type">smaller</field>
+            <field name="factor">1000.0</field>
+        </record>
+        <record id="uom_litre" model="lagunes.market.uom">
+            <field name="name">litre</field>
+            <field name="category_id" ref="uom_category_volume"/>
+        </record>
+        <record id="uom_cl" model="lagunes.market.uom">
+            <field name="name">cl</field>
+            <field name="category_id" ref="uom_category_volume"/>
+            <field name="uom_type">smaller</field>
+            <field name="factor">100.0</field>
+        </record>
+        <record id="uom_piece" model="lagunes.market.uom">
+            <field name="name">pièce</field>
+            <field name="category_id" ref="uom_category_unite"/>
+        </record>
+        <record id="uom_botte" model="lagunes.market.uom">
+            <field name="name">botte</field>
+            <field name="category_id" ref="uom_category_unite"/>
+        </record>
+        <record id="uom_sachet" model="lagunes.market.uom">
+            <field name="name">sachet</field>
+            <field name="category_id" ref="uom_category_unite"/>
+        </record>
+        <record id="uom_boite" model="lagunes.market.uom">
+            <field name="name">boîte</field>
+            <field name="category_id" ref="uom_category_unite"/>
+        </record>
+        <record id="uom_sac" model="lagunes.market.uom">
+            <field name="name">sac</field>
+            <field name="category_id" ref="uom_category_unite"/>
+        </record>
+        <record id="uom_tas" model="lagunes.market.uom">
+            <field name="name">tas</field>
+            <field name="category_id" ref="uom_category_unite"/>
+        </record>
+
+        <!-- ═══════════════════════════════════════════════════════════
+             Catégories d'articles par défaut
+        ═══════════════════════════════════════════════════════════ -->
+        <record id="category_cereales" model="lagunes.market.article.category">
+            <field name="name">Céréales et féculents</field>
+        </record>
+        <record id="category_viandes" model="lagunes.market.article.category">
+            <field name="name">Viandes et poissons</field>
+        </record>
+        <record id="category_legumes" model="lagunes.market.article.category">
+            <field name="name">Légumes et tubercules</field>
+        </record>
+        <record id="category_epices" model="lagunes.market.article.category">
+            <field name="name">Épices et condiments</field>
+        </record>
+        <record id="category_huiles" model="lagunes.market.article.category">
+            <field name="name">Huiles et matières grasses</field>
+        </record>
+        <record id="category_autres" model="lagunes.market.article.category">
+            <field name="name">Autres</field>
+        </record>
+    </data>
+</odoo>

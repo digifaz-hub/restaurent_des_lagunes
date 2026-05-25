@@ -1,0 +1,170 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vue liste des options de plat - DESIGN MODERNE -->
+    <record id="view_lagunes_plat_option_tree" model="ir.ui.view">
+        <field name="name">lagunes.plat.option.tree</field>
+        <field name="model">lagunes.plat.option</field>
+        <field name="type">list</field>
+        <field name="arch" type="xml">
+            <list string="Options de plats" 
+                  decoration-muted="not active"
+                  multi_edit="1"
+                  class="o_lagunes_view">
+                <field name="sequence" widget="handle" width="30"/>
+                <field name="name" width="250" string="Nom de l'option"/>
+                <field name="is_global" width="120" string="Globale"/>
+                <field name="plat_ids" optional="show" width="200" string="Plats" widget="many2many_tags"/>
+                <field name="active" widget="boolean" optional="show" width="80" string="Active"/>
+            </list>
+        </field>
+    </record>
+    
+    <!-- Vue formulaire des options de plat - DESIGN MODERNE -->
+    <record id="view_lagunes_plat_option_form" model="ir.ui.view">
+        <field name="name">lagunes.plat.option.form</field>
+        <field name="model">lagunes.plat.option</field>
+        <field name="arch" type="xml">
+            <form string="Option de plat" class="o_lagunes_view">
+                <header>
+                    <button name="toggle_active" type="object" string="Activer/Désactiver" class="oe_highlight"/>
+                </header>
+                <sheet>
+                    <!-- En-tête moderne -->
+                    <div class="oe_title mb-4">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="lui-card-icon lui-icon-primary" style="width:60px;height:60px;">
+                                <i class="fa fa-cog fa-lg" title="Configuration"/>
+                            </div>
+                            <div>
+                                <label class="o_form_label" for="name">
+                                    Option de personnalisation
+                                </label>
+                                <h1 class="mb-0">
+                                    <field name="name" class="fw-bold text-primary oe_inline"/>
+                                </h1>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row g-4">
+                        <div class="col-md-6">
+                            <div class="card border-0 bg-light h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title mb-3">
+                                        <i class="fa fa-sliders text-primary me-2" title="Réglages"/>
+                                        Configuration
+                                    </h5>
+                                    <group>
+                                        <field name="sequence" string="Ordre d'affichage"/>
+                                        <field name="is_global" widget="boolean_toggle" string="Option globale"/>
+                                        <field name="active" widget="boolean_toggle" string="Active"/>
+                                    </group>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="card border-0 bg-light h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title mb-3">
+                                        <i class="fa fa-info-circle text-success me-2" title="Information"/>
+                                        Description
+                                    </h5>
+                                    <field name="description" nolabel="1" placeholder="Description de l'option (ex: Sans sel, Piment à part, Sauce séparée...)"/>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <h3 class="o_horizontal_separator">
+                            <i class="fa fa-cutlery me-2" title="Plat"/>
+                            Plats concernés
+                        </h3>
+                        <div class="alert alert-light border mb-3" role="status">
+                            <i class="fa fa-lightbulb text-warning me-2" title="Astuce"/>
+                            Sélectionnez les plats pour lesquels cette option sera disponible
+                        </div>
+                        <field name="plat_ids" widget="many2many_tags"/>
+                    </div>
+                    
+                    <div class="mt-4">
+                        <h3 class="o_horizontal_separator">
+                            <i class="fa fa-sticky-note me-2" title="Note"/>
+                            Notes internes
+                        </h3>
+                        <field name="notes" placeholder="Notes supplémentaires pour l'équipe de cuisine..."/>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Vue recherche des options - DESIGN MODERNE -->
+    <record id="view_lagunes_plat_option_search" model="ir.ui.view">
+        <field name="name">lagunes.plat.option.search</field>
+        <field name="model">lagunes.plat.option</field>
+        <field name="arch" type="xml">
+            <search string="Rechercher dans les options">
+                <field name="name" string="Nom de l'option"/>
+                <separator/>
+                <filter name="filter_active" string="Options actives" domain="[('active', '=', True)]"
+                        help="Options actuellement disponibles"/>
+                <filter name="filter_inactive" string="Options inactives" domain="[('active', '=', False)]"
+                        help="Options désactivées"/>
+                <filter name="filter_global" string="Options globales" domain="[('is_global', '=', True)]"
+                        help="Options disponibles pour tous les plats par défaut"/>
+            </search>
+        </field>
+    </record>
+    
+    <!-- Action pour voir les options - DESIGN MODERNE -->
+    <record id="action_lagunes_plat_option" model="ir.actions.act_window">
+        <field name="name">Options de plats</field>
+        <field name="type">ir.actions.act_window</field>
+        <field name="res_model">lagunes.plat.option</field>
+        <field name="view_mode">list,form</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Aucune option créée</p>
+            <div class="p-3 bg-light rounded">
+                <h5 class="mb-3"><i class="fa fa-cog text-primary me-2" title="Paramètres"/>Personnalisez les commandes</h5>
+                <p>Les options permettent aux employés de personnaliser leurs plats selon leurs préférences.</p>
+                
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-start gap-2">
+                            <i class="fa fa-ban text-danger mt-1" title="Interdit"/>
+                            <div>
+                                <strong>Restrictions</strong>
+                                <p class="small text-muted mb-0">Sans sel, sans piment...</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-start gap-2">
+                            <i class="fa fa-cutlery text-info mt-1" title="Cuisine"/>
+                            <div>
+                                <strong>Préparation</strong>
+                                <p class="small text-muted mb-0">Sauce à côté, bien cuit...</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-start gap-2">
+                            <i class="fa fa-plus-circle text-success mt-1" title="Ajouter"/>
+                            <div>
+                                <strong>Extras</strong>
+                                <p class="small text-muted mb-0">Portion double, suppléments...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="alert alert-info mb-0 py-2" role="status">
+                    <i class="fa fa-lightbulb text-warning me-2" title="Astuce"/>
+                    <strong>Astuce :</strong> Les options globales sont automatiquement proposées sur tous les plats
+                </div>
+            </div>
+        </field>
+    </record>
+
+</odoo>

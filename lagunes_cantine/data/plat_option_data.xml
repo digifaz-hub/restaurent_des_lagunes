@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Données d'exemple - Options de plats -->
+    
+    <!-- Option 1: Sans sel -->
+    <record id="plat_option_sans_sel" model="lagunes.plat.option">
+        <field name="name">Sans sel</field>
+        <field name="sequence">10</field>
+        <field name="description">Le plat est préparé sans ajout de sel supplémentaire</field>
+        <field name="prix_supplementaire">0.0</field>
+        <field name="is_global">True</field>
+        <field name="active">True</field>
+    </record>
+    
+    <!-- Option 2: Piment à part -->
+    <record id="plat_option_piment_apart" model="lagunes.plat.option">
+        <field name="name">Piment à part</field>
+        <field name="sequence">20</field>
+        <field name="description">Le piment est servi séparément pour que vous puissiez l'ajouter selon votre goût</field>
+        <field name="prix_supplementaire">0.0</field>
+        <field name="is_global">True</field>
+        <field name="active">True</field>
+    </record>
+    
+    <!-- Option 3: Sauce à côté -->
+    <record id="plat_option_sauce_aside" model="lagunes.plat.option">
+        <field name="name">Sauce à côté</field>
+        <field name="sequence">30</field>
+        <field name="description">La sauce est servie dans un petit récipient à côté du plat</field>
+        <field name="prix_supplementaire">0.0</field>
+        <field name="is_global">False</field>
+        <field name="active">True</field>
+    </record>
+    
+    <!-- Option 4: Portion supplémentaire -->
+    <record id="plat_option_extra" model="lagunes.plat.option">
+        <field name="name">Portion supplémentaire</field>
+        <field name="sequence">40</field>
+        <field name="description">Ajoutez 50% de portion supplémentaire</field>
+        <field name="prix_supplementaire">0</field>
+        <field name="is_global">False</field>
+        <field name="active">True</field>
+    </record>
+    
+    <!-- Option 5: Légumes supplémentaires -->
+    <record id="plat_option_legumes" model="lagunes.plat.option">
+        <field name="name">Légumes supplémentaires</field>
+        <field name="sequence">50</field>
+        <field name="description">Ajoutez des légumes frais supplémentaires (tomates, oignons, salades)</field>
+        <field name="prix_supplementaire">0</field>
+        <field name="is_global">True</field>
+        <field name="active">True</field>
+    </record>
+    
+    <!-- Option 6: Sans huile/Allégé -->
+    <record id="plat_option_sans_huile" model="lagunes.plat.option">
+        <field name="name">Sans huile (allégé)</field>
+        <field name="sequence">60</field>
+        <field name="description">Préparation avec peu ou pas d'huile pour un repas plus léger</field>
+        <field name="prix_supplementaire">0.0</field>
+        <field name="is_global">True</field>
+        <field name="active">True</field>
+    </record>
+
+</odoo>

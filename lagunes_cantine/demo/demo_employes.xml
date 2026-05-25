@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+    <!-- DIGIFAZ (12) -->
+    <record id="demo_emp_d01" model="lagunes.employe"><field name="nom">Kouassi</field><field name="prenom">Jean-Marc</field><field name="email">jm.kouassi@digifaz.ci</field><field name="entreprise_id" ref="demo_partner_digifaz"/></record>
+    <record id="demo_emp_d02" model="lagunes.employe"><field name="nom">Bamba</field><field name="prenom">Aïcha</field><field name="email">aicha.bamba@digifaz.ci</field><field name="entreprise_id" ref="demo_partner_digifaz"/></record>
+    <record id="demo_emp_d03" model="lagunes.employe"><field name="nom">Diallo</field><field name="prenom">Ibrahim</field><field name="email">ibrahim.diallo@digifaz.ci</field><field name="entreprise_id" ref="demo_partner_digifaz"/></record>
+    <record id="demo_emp_d04" model="lagunes.employe"><field name="nom">Yao</field><field name="prenom">Marie-C</field><field name="email">mc.yao@digifaz.ci</field><field name="entreprise_id" ref="demo_partner_digifaz"/><field name="menu_category_ids" eval="[(6, 0, [ref('lagunes_cantine.menu_cat_africain')])]"/></record>
+    <record id="demo_emp_d05" model="lagunes.employe"><field name="nom">N'Guessan</field><field name="prenom">Koffi</field><field name="email">koffi.nguessan@digifaz.ci</field><field name="entreprise_id" ref="demo_partner_digifaz"/><field name="menu_category_ids" eval="[(6, 0, [ref('lagunes_cantine.menu_cat_europeen')])]"/></record>
+    <record id="demo_emp_d06" model="lagunes.employe"><field name="nom">Touré</field><field name="prenom">Fatou</field><field name="email">fatou.toure@digifaz.ci</field><field name="entreprise_id" ref="demo_partner_digifaz"/></record>
+    <record id="demo_emp_d07" model="lagunes.employe"><field name="nom">Koné</field><field name="prenom">Seydou</field><field name="email">seydou.kone@digifaz.ci</field><field name="entreprise_id" ref="demo_partner_digifaz"/></record>
+    <record id="demo_emp_d08" model="lagunes.employe"><field name="nom">Ouattara</field><field name="prenom">Éric</field><field name="email">eric.ouattara@digifaz.ci</field><field name="entreprise_id" ref="demo_partner_digifaz"/></record>
+    <record id="demo_emp_d09" model="lagunes.employe"><field name="nom">Bakayoko</field><field name="prenom">Sandrine</field><field name="email">sandrine.bakayoko@digifaz.ci</field><field name="entreprise_id" ref="demo_partner_digifaz"/></record>
+    <record id="demo_emp_d10" model="lagunes.employe"><field name="nom">Kouamé</field><field name="prenom">Laurent</field><field name="email">laurent.kouame@digifaz.ci</field><field name="entreprise_id" ref="demo_partner_digifaz"/></record>
+    <record id="demo_emp_d11" model="lagunes.employe"><field name="nom">Assi</field><field name="prenom">Bénédicte</field><field name="email">benedicte.assi@digifaz.ci</field><field name="entreprise_id" ref="demo_partner_digifaz"/><field name="peut_commander_pour_autres" eval="True"/><field name="nb_personnes_autorisees">3</field></record>
+    <record id="demo_emp_d12" model="lagunes.employe"><field name="nom">Bédié</field><field name="prenom">Henri</field><field name="email">henri.bedie@digifaz.ci</field><field name="entreprise_id" ref="demo_partner_digifaz"/><field name="active" eval="False"/></record>
+
+    <!-- Orange (14) -->
+    <record id="demo_emp_o01" model="lagunes.employe"><field name="nom">Gnahoua</field><field name="prenom">Patricia</field><field name="email">patricia.gnahoua@orange.ci</field><field name="entreprise_id" ref="demo_partner_orange"/></record>
+    <record id="demo_emp_o02" model="lagunes.employe"><field name="nom">Dagnogo</field><field name="prenom">Alain</field><field name="email">alain.dagnogo@orange.ci</field><field name="entreprise_id" ref="demo_partner_orange"/></record>
+    <record id="demo_emp_o03" model="lagunes.employe"><field name="nom">Kouamé</field><field name="prenom">Jocelyn</field><field name="email">jocelyn.kouame@orange.ci</field><field name="entreprise_id" ref="demo_partner_orange"/></record>
+    <record id="demo_emp_o04" model="lagunes.employe"><field name="nom">Zadi</field><field name="prenom">Ghislaine</field><field name="email">ghislaine.zadi@orange.ci</field><field name="entreprise_id" ref="demo_partner_orange"/><field name="plat_type_ids" eval="[(6, 0, [ref('lagunes_cantine.plat_type_entree'), ref('lagunes_cantine.plat_type_plat_resistance')])]"/></record>
+    <record id="demo_emp_o05" model="lagunes.employe"><field name="nom">Bakayoko</field><field name="prenom">Serge</field><field name="email">serge.bakayoko@orange.ci</field><field name="entreprise_id" ref="demo_partner_orange"/></record>
+    <record id="demo_emp_o06" model="lagunes.employe"><field name="nom">N'Dri</field><field name="prenom">Aïssata</field><field name="email">aissata.ndri@orange.ci</field><field name="entreprise_id" ref="demo_partner_orange"/></record>
+    <record id="demo_emp_o07" model="lagunes.employe"><field name="nom">Boa</field><field name="prenom">Kouamé</field><field name="email">kouame.boa@orange.ci</field><field name="entreprise_id" ref="demo_partner_orange"/></record>
+    <record id="demo_emp_o08" model="lagunes.employe"><field name="nom">Soro</field><field name="prenom">Evelyne</field><field name="email">evelyne.soro@orange.ci</field><field name="entreprise_id" ref="demo_partner_orange"/></record>
+    <record id="demo_emp_o09" model="lagunes.employe"><field name="nom">Brou</field><field name="prenom">Kouassi</field><field name="email">kouassi.brou@orange.ci</field><field name="entreprise_id" ref="demo_partner_orange"/></record>
+    <record id="demo_emp_o10" model="lagunes.employe"><field name="nom">Aké</field><field name="prenom">Adèle</field><field name="email">adele.ake@orange.ci</field><field name="entreprise_id" ref="demo_partner_orange"/></record>
+    <record id="demo_emp_o11" model="lagunes.employe"><field name="nom">Séry</field><field name="prenom">Pierre</field><field name="email">pierre.sery@orange.ci</field><field name="entreprise_id" ref="demo_partner_orange"/></record>
+    <record id="demo_emp_o12" model="lagunes.employe"><field name="nom">Koffi</field><field name="prenom">Honoré</field><field name="email">honore.koffi@orange.ci</field><field name="entreprise_id" ref="demo_partner_orange"/></record>
+    <record id="demo_emp_o13" model="lagunes.employe"><field name="nom">Miaffo</field><field name="prenom">Sandrine</field><field name="email">sandrine.miaffo@orange.ci</field><field name="entreprise_id" ref="demo_partner_orange"/><field name="peut_commander_pour_autres" eval="True"/><field name="nb_personnes_autorisees">2</field></record>
+    <record id="demo_emp_o14" model="lagunes.employe"><field name="nom">Diakité</field><field name="prenom">Issa</field><field name="email">issa.diakite@orange.ci</field><field name="entreprise_id" ref="demo_partner_orange"/></record>
+
+    <!-- MTN (8) -->
+    <record id="demo_emp_m01" model="lagunes.employe"><field name="nom">Sekongo</field><field name="prenom">Moussa</field><field name="email">moussa.sekongo@mtn.ci</field><field name="entreprise_id" ref="demo_partner_mtn"/></record>
+    <record id="demo_emp_m02" model="lagunes.employe"><field name="nom">Koné</field><field name="prenom">Isabelle</field><field name="email">isabelle.kone@mtn.ci</field><field name="entreprise_id" ref="demo_partner_mtn"/></record>
+    <record id="demo_emp_m03" model="lagunes.employe"><field name="nom">N'Guessan</field><field name="prenom">Simon</field><field name="email">simon.nguessan@mtn.ci</field><field name="entreprise_id" ref="demo_partner_mtn"/></record>
+    <record id="demo_emp_m04" model="lagunes.employe"><field name="nom">Abo</field><field name="prenom">Gisèle</field><field name="email">gisele.abo@mtn.ci</field><field name="entreprise_id" ref="demo_partner_mtn"/><field name="menu_category_ids" eval="[(6, 0, [ref('lagunes_cantine.menu_cat_africain')])]"/></record>
+    <record id="demo_emp_m05" model="lagunes.employe"><field name="nom">Kouassi</field><field name="prenom">Emmanuel</field><field name="email">emmanuel.kouassi@mtn.ci</field><field name="entreprise_id" ref="demo_partner_mtn"/></record>
+    <record id="demo_emp_m06" model="lagunes.employe"><field name="nom">Loba</field><field name="prenom">Françoise</field><field name="email">francoise.loba@mtn.ci</field><field name="entreprise_id" ref="demo_partner_mtn"/></record>
+    <record id="demo_emp_m07" model="lagunes.employe"><field name="nom">Ouattara</field><field name="prenom">Théodore</field><field name="email">theodore.ouattara@mtn.ci</field><field name="entreprise_id" ref="demo_partner_mtn"/></record>
+    <record id="demo_emp_m08" model="lagunes.employe"><field name="nom">Aka</field><field name="prenom">Rose</field><field name="email">rose.aka@mtn.ci</field><field name="entreprise_id" ref="demo_partner_mtn"/><field name="peut_commander_pour_autres" eval="True"/><field name="nb_personnes_autorisees">4</field></record>
+
+    <!-- SGBCI (8) -->
+    <record id="demo_emp_s01" model="lagunes.employe"><field name="nom">Beda</field><field name="prenom">Bernard</field><field name="email">bernard.beda@sgbci.ci</field><field name="entreprise_id" ref="demo_partner_sgbci"/></record>
+    <record id="demo_emp_s02" model="lagunes.employe"><field name="nom">Goua</field><field name="prenom">Charlotte</field><field name="email">charlotte.goua@sgbci.ci</field><field name="entreprise_id" ref="demo_partner_sgbci"/></record>
+    <record id="demo_emp_s03" model="lagunes.employe"><field name="nom">Kouadio</field><field name="prenom">Cédric</field><field name="email">cedric.kouadio@sgbci.ci</field><field name="entreprise_id" ref="demo_partner_sgbci"/><field name="plat_type_ids" eval="[(6, 0, [ref('lagunes_cantine.plat_type_plat_resistance'), ref('lagunes_cantine.plat_type_dessert')])]"/><field name="menu_category_ids" eval="[(6, 0, [ref('lagunes_cantine.menu_cat_europeen')])]"/></record>
+    <record id="demo_emp_s04" model="lagunes.employe"><field name="nom">Boni</field><field name="prenom">Diane</field><field name="email">diane.boni@sgbci.ci</field><field name="entreprise_id" ref="demo_partner_sgbci"/></record>
+    <record id="demo_emp_s05" model="lagunes.employe"><field name="nom">Loba</field><field name="prenom">Etienne</field><field name="email">etienne.loba@sgbci.ci</field><field name="entreprise_id" ref="demo_partner_sgbci"/></record>
+    <record id="demo_emp_s06" model="lagunes.employe"><field name="nom">Soro</field><field name="prenom">Fanta</field><field name="email">fanta.soro@sgbci.ci</field><field name="entreprise_id" ref="demo_partner_sgbci"/></record>
+    <record id="demo_emp_s07" model="lagunes.employe"><field name="nom">Zoh</field><field name="prenom">Gérald</field><field name="email">gerald.zoh@sgbci.ci</field><field name="entreprise_id" ref="demo_partner_sgbci"/></record>
+    <record id="demo_emp_s08" model="lagunes.employe"><field name="nom">Abe</field><field name="prenom">Hortense</field><field name="email">hortense.abe@sgbci.ci</field><field name="entreprise_id" ref="demo_partner_sgbci"/></record>
+
+    <!-- TotalEnergies (8) -->
+    <record id="demo_emp_t01" model="lagunes.employe"><field name="nom">Atcho</field><field name="prenom">Arthur</field><field name="email">arthur.atcho@total.ci</field><field name="entreprise_id" ref="demo_partner_total"/></record>
+    <record id="demo_emp_t02" model="lagunes.employe"><field name="nom">Diomandé</field><field name="prenom">Brigitte</field><field name="email">brigitte.diomande@total.ci</field><field name="entreprise_id" ref="demo_partner_total"/></record>
+    <record id="demo_emp_t03" model="lagunes.employe"><field name="nom">Kanga</field><field name="prenom">Charles</field><field name="email">charles.kanga@total.ci</field><field name="entreprise_id" ref="demo_partner_total"/></record>
+    <record id="demo_emp_t04" model="lagunes.employe"><field name="nom">Legré</field><field name="prenom">Danièle</field><field name="email">daniele.legre@total.ci</field><field name="entreprise_id" ref="demo_partner_total"/></record>
+    <record id="demo_emp_t05" model="lagunes.employe"><field name="nom">Bley</field><field name="prenom">Édouard</field><field name="email">edouard.bley@total.ci</field><field name="entreprise_id" ref="demo_partner_total"/></record>
+    <record id="demo_emp_t06" model="lagunes.employe"><field name="nom">Yéo</field><field name="prenom">Françoise</field><field name="email">francoise.yeo@total.ci</field><field name="entreprise_id" ref="demo_partner_total"/></record>
+    <record id="demo_emp_t07" model="lagunes.employe"><field name="nom">Zogbo</field><field name="prenom">Grégoire</field><field name="email">gregoire.zogbo@total.ci</field><field name="entreprise_id" ref="demo_partner_total"/></record>
+    <record id="demo_emp_t08" model="lagunes.employe"><field name="nom">Adjé</field><field name="prenom">Inès</field><field name="email">ines.adje@total.ci</field><field name="entreprise_id" ref="demo_partner_total"/></record>
+
+    <!-- NSIA (6) -->
+    <record id="demo_emp_n01" model="lagunes.employe"><field name="nom">Abo</field><field name="prenom">Jean</field><field name="email">jean.abo@nsia.ci</field><field name="entreprise_id" ref="demo_partner_nsia"/></record>
+    <record id="demo_emp_n02" model="lagunes.employe"><field name="nom">Koné</field><field name="prenom">Kadiatou</field><field name="email">kadiatou.kone@nsia.ci</field><field name="entreprise_id" ref="demo_partner_nsia"/></record>
+    <record id="demo_emp_n03" model="lagunes.employe"><field name="nom">Lohou</field><field name="prenom">Luc</field><field name="email">luc.lohou@nsia.ci</field><field name="entreprise_id" ref="demo_partner_nsia"/></record>
+    <record id="demo_emp_n04" model="lagunes.employe"><field name="nom">N'takpé</field><field name="prenom">Myriam</field><field name="email">myriam.ntakpe@nsia.ci</field><field name="entreprise_id" ref="demo_partner_nsia"/></record>
+    <record id="demo_emp_n05" model="lagunes.employe"><field name="nom">Obé</field><field name="prenom">Nestor</field><field name="email">nestor.obe@nsia.ci</field><field name="entreprise_id" ref="demo_partner_nsia"/></record>
+    <record id="demo_emp_n06" model="lagunes.employe"><field name="nom">Poho</field><field name="prenom">Olivia</field><field name="email">olivia.poho@nsia.ci</field><field name="entreprise_id" ref="demo_partner_nsia"/></record>
+
+    <!-- TechHub (4) -->
+    <record id="demo_emp_h01" model="lagunes.employe"><field name="nom">Amar</field><field name="prenom">Paul</field><field name="email">paul.amar@techhub.ci</field><field name="entreprise_id" ref="demo_partner_startup"/></record>
+    <record id="demo_emp_h02" model="lagunes.employe"><field name="nom">Boka</field><field name="prenom">Quentin</field><field name="email">quentin.boka@techhub.ci</field><field name="entreprise_id" ref="demo_partner_startup"/></record>
+    <record id="demo_emp_h03" model="lagunes.employe"><field name="nom">Coffie</field><field name="prenom">Raoul</field><field name="email">raoul.coffie@techhub.ci</field><field name="entreprise_id" ref="demo_partner_startup"/></record>
+    <record id="demo_emp_h04" model="lagunes.employe"><field name="nom">Dahi</field><field name="prenom">Sylvie</field><field name="email">sylvie.dahi@techhub.ci</field><field name="entreprise_id" ref="demo_partner_startup"/></record>
+
+    <!-- Cabinet (5) -->
+    <record id="demo_emp_c01" model="lagunes.employe"><field name="nom">Aké</field><field name="prenom">Théodore</field><field name="email">theodore.ake@kouassi.ci</field><field name="entreprise_id" ref="demo_partner_cabinet"/></record>
+    <record id="demo_emp_c02" model="lagunes.employe"><field name="nom">Bié</field><field name="prenom">Ursula</field><field name="email">ursula.bie@kouassi.ci</field><field name="entreprise_id" ref="demo_partner_cabinet"/></record>
+    <record id="demo_emp_c03" model="lagunes.employe"><field name="nom">Dozo</field><field name="prenom">Victor</field><field name="email">victor.dozo@kouassi.ci</field><field name="entreprise_id" ref="demo_partner_cabinet"/></record>
+    <record id="demo_emp_c04" model="lagunes.employe"><field name="nom">Ehou</field><field name="prenom">Wilfried</field><field name="email">wilfried.ehou@kouassi.ci</field><field name="entreprise_id" ref="demo_partner_cabinet"/></record>
+    <record id="demo_emp_c05" model="lagunes.employe"><field name="nom">Fofana</field><field name="prenom">Xavier</field><field name="email">xavier.fofana@kouassi.ci</field><field name="entreprise_id" ref="demo_partner_cabinet"/></record>
+
+    <!-- École (10) -->
+    <record id="demo_emp_e01" model="lagunes.employe"><field name="nom">Assa</field><field name="prenom">Yolande</field><field name="email">yolande.assa@eil.ci</field><field name="entreprise_id" ref="demo_partner_ecole"/></record>
+    <record id="demo_emp_e02" model="lagunes.employe"><field name="nom">Boka</field><field name="prenom">Zacharie</field><field name="email">zacharie.boka@eil.ci</field><field name="entreprise_id" ref="demo_partner_ecole"/></record>
+    <record id="demo_emp_e03" model="lagunes.employe"><field name="nom">Coulibaly</field><field name="prenom">André</field><field name="email">andre.coulibaly@eil.ci</field><field name="entreprise_id" ref="demo_partner_ecole"/></record>
+    <record id="demo_emp_e04" model="lagunes.employe"><field name="nom">Da</field><field name="prenom">Béatrice</field><field name="email">beatrice.da@eil.ci</field><field name="entreprise_id" ref="demo_partner_ecole"/></record>
+    <record id="demo_emp_e05" model="lagunes.employe"><field name="nom">Eba</field><field name="prenom">Christine</field><field name="email">christine.eba@eil.ci</field><field name="entreprise_id" ref="demo_partner_ecole"/></record>
+    <record id="demo_emp_e06" model="lagunes.employe"><field name="nom">Fao</field><field name="prenom">Denis</field><field name="email">denis.fao@eil.ci</field><field name="entreprise_id" ref="demo_partner_ecole"/></record>
+    <record id="demo_emp_e07" model="lagunes.employe"><field name="nom">Gba</field><field name="prenom">Eugénie</field><field name="email">eugenie.gba@eil.ci</field><field name="entreprise_id" ref="demo_partner_ecole"/></record>
+    <record id="demo_emp_e08" model="lagunes.employe"><field name="nom">Hoa</field><field name="prenom">Félix</field><field name="email">felix.hoa@eil.ci</field><field name="entreprise_id" ref="demo_partner_ecole"/></record>
+    <record id="demo_emp_e09" model="lagunes.employe"><field name="nom">Ibo</field><field name="prenom">Geneviève</field><field name="email">genevieve.ibo@eil.ci</field><field name="entreprise_id" ref="demo_partner_ecole"/></record>
+    <record id="demo_emp_e10" model="lagunes.employe"><field name="nom">Joa</field><field name="prenom">Hervé</field><field name="email">herve.joa@eil.ci</field><field name="entreprise_id" ref="demo_partner_ecole"/><field name="peut_commander_pour_autres" eval="True"/><field name="nb_personnes_autorisees">5</field></record>
+
+</odoo>

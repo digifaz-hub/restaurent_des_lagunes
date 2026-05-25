@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_traiteur_production_consolidated" model="ir.actions.report">
+        <field name="name">Fiche de Production Consolidée</field>
+        <field name="model">lagunes.traiteur.production.wizard</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">lagunes_traiteur.report_production_consolidated_template</field>
+        <field name="report_file">lagunes_traiteur.report_production_consolidated_template</field>
+        <field name="binding_model_id" ref="lagunes_traiteur.model_lagunes_traiteur_production_wizard"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="report_production_consolidated_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page" style="font-family: 'Helvetica', 'Arial', sans-serif;">
+                        <div class="text-center mb-5">
+                            <h2 style="color: #16166d; text-transform: uppercase; font-weight: bold; border-bottom: 2px solid #16166d; padding-bottom: 10px;">
+                                Fiche de Production Consolidée
+                            </h2>
+                            <h4 class="mt-2">Date : <span t-field="o.date_production"/></h4>
+                        </div>
+
+                        <t t-set="data" t-value="o.get_production_data()"/>
+
+                        <!-- 1. Résumé des Plats à préparer -->
+                        <div class="mb-5">
+                            <h5 style="background-color: #f8f9fa; padding: 10px; border-left: 5px solid #16166d;">
+                                <i class="fa fa-cutlery me-2"/> RÉSUMÉ DES PLATS DU JOUR
+                            </h5>
+                            <table class="table table-sm table-bordered mt-3">
+                                <thead style="background-color: #16166d; color: white;">
+                                    <tr>
+                                        <th>Plat / Menu</th>
+                                        <th>Événement / Client</th>
+                                        <th class="text-center">Quantité (Pers.)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="data['plats_details']" t-as="p">
+                                        <td><strong><t t-esc="p['plat']"/></strong></td>
+                                        <td><t t-esc="p['event']"/></td>
+                                        <td class="text-center"><t t-esc="p['qty']"/></td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <!-- 2. Liste Consolidée des Ingrédients -->
+                        <div class="mb-5">
+                            <h5 style="background-color: #f8f9fa; padding: 10px; border-left: 5px solid #2ecc71;">
+                                <i class="fa fa-shopping-basket me-2"/> BESOINS TOTAUX EN INGRÉDIENTS
+                            </h5>
+                            <table class="table table-bordered mt-3">
+                                <thead style="background-color: #2ecc71; color: white;">
+                                    <tr>
+                                        <th>Ingrédient (Article Marché)</th>
+                                        <th class="text-center">Quantité Totale</th>
+                                        <th>Unités</th>
+                                        <th>Utilisé par (Prestations)</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="data['ingredients']" t-as="i">
+                                        <td><strong><t t-esc="i['name']"/></strong></td>
+                                        <td class="text-center fw-bold" style="font-size: 1.1em; color: #15803d;">
+                                            <t t-esc="i['qty']"/>
+                                        </td>
+                                        <td><t t-esc="i['unit']"/></td>
+                                        <td class="small text-muted">
+                                            <t t-esc="', '.join(i['events'])"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+
+                        <div class="mt-5 pt-5">
+                            <div class="row">
+                                <div class="col-6">
+                                    <div style="border: 1px solid #ddd; height: 100px; padding: 10px;">
+                                        <strong>Visa Responsable Stock (Marché) :</strong>
+                                    </div>
+                                </div>
+                                <div class="col-6">
+                                    <div style="border: 1px solid #ddd; height: 100px; padding: 10px;">
+                                        <strong>Visa Chef de Cuisine :</strong>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="footer">
+                            <div class="text-center small text-muted border-top pt-3">
+                                Restaurant des Lagunes — Document de Production Interne
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

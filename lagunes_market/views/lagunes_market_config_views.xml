@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_market_config_settings" model="ir.ui.view">
+        <field name="name">lagunes.market.config.settings</field>
+        <field name="model">res.config.settings</field>
+        <field name="inherit_id" ref="base.res_config_settings_view_form"/>
+        <field name="arch" type="xml">
+            <xpath expr="//form" position="inside">
+                <app data-string="Gestion des marchés" string="Gestion des marchés"
+                     name="lagunes_market" groups="lagunes_market.group_market_manager">
+                    <block title="Paramètres comptables">
+                        <setting string="Compte de dépense marché"
+                                 help="Compte comptable débité lors de la validation d'un marché (type Dépense)">
+                            <field name="lagunes_market_account_id"
+                                   placeholder="Sélectionner un compte de dépense…"/>
+                        </setting>
+                        <setting string="Journal de dépense marché"
+                                 help="Journal utilisé pour les écritures des marchés (caisse ou banque)">
+                            <field name="lagunes_market_journal_id"
+                                   placeholder="Sélectionner un journal…"/>
+                            <div class="text-muted mt-2">
+                                <i class="fa fa-info-circle me-1"/>
+                                <strong>Note :</strong> Ce module génère des écritures directes (Débit Charge / Crédit Caisse). 
+                                Idéal pour les achats au comptant en marché sans facture fournisseur.
+                            </div>
+                        </setting>
+                    </block>
+                </app>
+            </xpath>
+        </field>
+    </record>
+
+    <!-- Action qui ouvre les paramètres directement sur la section lagunes_market -->
+    <record id="action_market_config_settings" model="ir.actions.act_window">
+        <field name="name">Paramètres comptables</field>
+        <field name="res_model">res.config.settings</field>
+        <field name="view_mode">form</field>
+        <field name="target">inline</field>
+        <field name="context">{'module': 'lagunes_market'}</field>
+    </record>
+
+</odoo>

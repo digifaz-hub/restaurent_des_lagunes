@@ -1,0 +1,311 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <!-- Vue formulaire des plats - DESIGN MODERNE -->
+    <record id="view_lagunes_plat_form" model="ir.ui.view">
+        <field name="name">lagunes.plat.form</field>
+        <field name="model">lagunes.plat</field>
+        <field name="arch" type="xml">
+            <form string="Plat" class="o_lagunes_view">
+                <sheet>
+                    <div class="row g-4">
+                        <!-- Colonne image et prix -->
+                        <div class="col-md-3">
+                            <div class="card border-0 bg-light">
+                                <div class="card-body text-center">
+                                    <field name="image_1920" widget="image" class="oe_avatar mb-3"/>
+                                    <div class="alert alert-primary py-2 mb-0" role="status">
+                                        <div class="small text-muted mb-1">
+                                        <i class="fa fa-money me-1" aria-hidden="true" title="Prix"/>
+                                        Prix unitaire
+                                    </div>
+                                        <field name="prix_unitaire" readonly="1" class="h4 fw-bold text-primary mb-0"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Colonne informations -->
+                        <div class="col-md-9">
+                            <div class="oe_title mb-4">
+                                <label for="name" class="text-muted small text-uppercase fw-bold mb-1 d-block">
+                                    <i class="fa fa-utensils me-1" aria-label="Plat"/>
+                                    Nom du plat
+                                </label>
+                                <h1 class="mb-2">
+                                    <field name="display_name_website" class="text-primary fw-bold"/>
+                                </h1>
+                                <div class="mb-2">
+                                    <label class="text-muted small text-uppercase fw-bold" for="name">Nom interne</label>
+                                    <field name="name" placeholder="ex: Riz sauce arachide" class="fw-semibold"/>
+                                </div>
+                                <div class="d-flex gap-2">
+                                    <field name="active" widget="boolean_toggle"/>
+                                    <field name="is_global_available" widget="boolean_toggle"/>
+                                </div>
+                            </div>
+                            
+                            <div class="mb-4">
+                                <h3 class="o_horizontal_separator">
+                                    <i class="fa fa-tags me-2" aria-hidden="true" title="Classification"/>
+                                    <span>Classification</span>
+                                </h3>
+                                <div class="row g-3">
+                                    <div class="col-md-6">
+                                        <group>
+                                            <field name="plat_type_id" required="1" string="Type de plat"/>
+                                            <field name="category_id" string="Catégorie"/>
+                                            <field name="sequence" string="Ordre d'affichage"/>
+                                        </group>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <group>
+                                            <field name="menu_category_id"
+                                                   options="{'no_create': True}"
+                                                   invisible="not is_plat_resistance"
+                                                   string="Type de menu"
+                                                   help="Disponible uniquement pour les plats de résistance. Définit le menu auquel ce plat appartient (Africain, Européen, etc.)."/>
+                                            <div class="alert alert-light border py-2" invisible="is_plat_resistance" role="status">
+                                                <i class="fa fa-info-circle text-info me-2" title="Info"/>
+                                                <small>Le type de menu n'est disponible que pour les plats de résistance.</small>
+                                            </div>
+                                            <field name="is_plat_resistance" invisible="1"/>
+                                            <field name="product_id" options="{'no_create': True}" string="Produit principal"/>
+                                            <field name="accompagnement_product_id"
+                                                   options="{'no_create': True}"
+                                                   invisible="not is_plat_resistance"
+                                                   string="Accompagnement"
+                                                   help="Produit d'accompagnement (ex: Riz Nature, Attiéké). Affiché comme 'Principal / Accompagnement' sur le site."/>
+                                        </group>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <notebook>
+                        <page string="Description">
+                            <div class="alert alert-light border mb-3" role="status">
+                                <i class="fa fa-lightbulb text-warning me-2" title="Astuce"/>
+                                Décrivez le plat pour aider les employés à faire leur choix (ingrédients principaux, saveurs, etc.)
+                            </div>
+                            <field name="description" placeholder="Description appétissante du plat..."/>
+                        </page>
+                        <page string="Ingrédients (Marché)">
+                            <div class="alert alert-light border mb-3" role="status">
+                                <i class="fa fa-info-circle text-primary me-2" title="Info"/>
+                                Définissez les ingrédients nécessaires à la préparation de ce plat pour le suivi des stocks marché
+                            </div>
+                            <field name="ingredient_ids" class="o_lagunes_view">
+                                <list editable="bottom">
+                                    <field name="sequence" widget="handle"/>
+                                    <field name="market_article_id" options="{'no_create': True}" string="Article marché"/>
+                                    <field name="quantity" string="Qté"/>
+                                    <field name="unit_id" options="{'no_create': True}" string="Unité"/>
+                                    <field name="notes" optional="show" string="Notes"/>
+                                </list>
+                                <form string="Ingrédient">
+                                    <group>
+                                        <group>
+                                            <field name="market_article_id" options="{'no_create': True}" string="Article marché"/>
+                                            <field name="quantity" string="Quantité"/>
+                                            <field name="unit_id" options="{'no_create': True}" string="Unité"/>
+                                        </group>
+                                        <group>
+                                            <field name="sequence" string="Ordre"/>
+                                        </group>
+                                    </group>
+                                    <group string="Notes">
+                                        <field name="notes" nolabel="1" placeholder="Notes sur cet ingrédient..."/>
+                                    </group>
+                                </form>
+                            </field>
+                        </page>
+                        <page string="Options disponibles">
+                            <div class="alert alert-light border mb-3" role="status">
+                                <i class="fa fa-cog text-primary me-2" title="Options"/>
+                                Sélectionnez les options personnalisables pour ce plat (ex: avec/sans piment, portion double, etc.)
+                            </div>
+                            <field name="option_ids" widget="many2many_tags"/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+    
+    <!-- Vue liste des plats - DESIGN MODERNE -->
+    <record id="view_lagunes_plat_tree" model="ir.ui.view">
+        <field name="name">lagunes.plat.list</field>
+        <field name="model">lagunes.plat</field>
+        <field name="arch" type="xml">
+            <list string="Plats" 
+                  decoration-muted="not active"
+                  multi_edit="1"
+                  class="o_lagunes_view">
+                <!-- Image et nom -->
+                <field name="sequence" widget="handle" width="30"/>
+                <field name="image_128" widget="image" width="60" string="Image"/>
+                <field name="display_name_website" width="250" string="Nom du plat"/>
+                
+                <!-- Classification -->
+                <field name="plat_type_id" width="120" string="Type"/>
+                <field name="menu_category_id" optional="show" width="120" string="Menu"/>
+                <field name="category_id" optional="show" width="120" string="Catégorie"/>
+                
+                <!-- Prix et disponibilité -->
+                <field name="prix_unitaire" width="100" string="Prix" widget="monetary"/>
+                <field name="is_global_available" widget="boolean_toggle" optional="show" width="100" string="Global"/>
+                <field name="active" widget="boolean_toggle" width="80" string="Actif"/>
+            </list>
+        </field>
+    </record>
+    
+    <!-- Vue kanban pour lagunes.plat -->
+    <record id="view_lagunes_plat_kanban" model="ir.ui.view">
+        <field name="name">lagunes.plat.kanban</field>
+        <field name="model">lagunes.plat</field>
+        <field name="arch" type="xml">
+            <kanban>
+                <field name="id"/>
+                <field name="name"/>
+                <field name="image_128"/>
+                <field name="prix_unitaire"/>
+                <field name="menu_category_id"/>
+                <field name="is_plat_resistance"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_global_click p-0 border-0 shadow-sm overflow-hidden" style="border-radius: 12px; background: #fff;">
+                            <div class="position-relative">
+                                <img t-att-src="'/web/image/lagunes.plat/' + record.id.raw_value + '/image_128'" 
+                                     alt="Plat" class="w-100 object-fit-cover" style="height: 140px;"/>
+                                <div class="position-absolute top-0 end-0 p-2">
+                                    <span class="badge rounded-pill bg-white text-primary shadow-sm px-2 py-1 fw-bold">
+                                        <field name="prix_unitaire"/> FCFA
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="p-3">
+                                <strong class="o_kanban_record_title d-block mb-1 text-truncate">
+                                    <field name="display_name_website"/>
+                                </strong>
+                                <div class="text-muted small mb-2 d-flex align-items-center gap-1">
+                                    <i class="fa fa-tag x-small" title="Tag"/>
+                                    <field name="category_id"/>
+                                </div>
+                                <div class="d-flex justify-content-between align-items-center mt-2 pt-2 border-top">
+                                    <span class="badge bg-secondary-subtle text-secondary rounded-pill x-small">
+                                        <field name="plat_type_id"/>
+                                    </span>
+                                    <t t-if="record.menu_category_id.raw_value and record.is_plat_resistance.raw_value">
+                                        <span class="badge rounded-pill x-small" style="background:#7f910c20; color:#3a5a1a;">
+                                            <field name="menu_category_id"/>
+                                        </span>
+                                    </t>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+    
+    <!-- Vue recherche des plats - DESIGN MODERNE -->
+    <record id="view_lagunes_plat_search" model="ir.ui.view">
+        <field name="name">lagunes.plat.search</field>
+        <field name="model">lagunes.plat</field>
+        <field name="arch" type="xml">
+            <search string="Rechercher dans les plats">
+                <!-- Champs de recherche -->
+                <field name="name" string="Nom du plat"/>
+                <field name="category_id" string="Catégorie"/>
+                <field name="menu_category_id" string="Type de menu"/>
+                <field name="plat_type_id" string="Type de plat"/>
+                
+                <!-- ════════════════════════════════════════════════════════════════
+                     FILTRES PAR STATUT
+                ════════════════════════════════════════════════════════════════ -->
+                <filter string="Plats actifs" name="active" domain="[('active', '=', True)]"
+                        help="Plats actuellement visibles et commandables"/>
+                <filter string="Plats inactifs" name="inactive" domain="[('active', '=', False)]"
+                        help="Plats désactivés"/>
+                
+                <!-- ════════════════════════════════════════════════════════════════
+                     FILTRES PAR TYPE
+                ════════════════════════════════════════════════════════════════ -->
+                <separator/>
+                <filter string="Plats de résistance" name="resistance" domain="[('is_plat_resistance', '=', True)]"
+                        help="Plats principaux (Africain, Européen, etc.)"/>
+                <filter string="Disponible hors menu" name="hors_menu" domain="[('is_global_available', '=', True)]"
+                        help="Plats accessibles en dehors des menus programmés"/>
+                
+                <!-- ════════════════════════════════════════════════════════════════
+                     GROUPEMENTS
+                ════════════════════════════════════════════════════════════════ -->
+                <separator/>
+                <group expand="0" string="Grouper par">
+                    <filter string="Type de plat" name="group_type"
+                            context="{'group_by': 'plat_type_id'}"/>
+                    <filter string="Type de menu" name="group_menu_cat"
+                            context="{'group_by': 'menu_category_id'}"/>
+                    <filter string="Catégorie" name="group_category" 
+                            context="{'group_by': 'category_id'}"/>
+                    <filter string="Actif/Inactif" name="group_active" 
+                            context="{'group_by': 'active'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+    
+    <!-- Action pour les plats - DESIGN MODERNE -->
+    <record id="action_lagunes_plat" model="ir.actions.act_window">
+        <field name="name">Plats</field>
+        <field name="res_model">lagunes.plat</field>
+        <field name="view_mode">kanban,list,form</field>
+        <field name="context">{'search_default_active': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Aucun plat créé</p>
+            <div class="p-3 bg-light rounded">
+                <h5 class="mb-3"><i class="fa fa-utensils text-primary me-2" title="Cuisine"/>Gérez votre carte des plats</h5>
+                <p>Créez et configurez les plats qui composeront vos menus quotidiens.</p>
+                
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-start gap-2">
+                            <i class="fa fa-camera text-success mt-1" title="Photo"/>
+                            <div>
+                                <strong>Visuel</strong>
+                                <p class="small text-muted mb-0">Ajoutez une photo appétissante</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-start gap-2">
+                            <i class="fa fa-tags text-info mt-1" title="Tags"/>
+                            <div>
+                                <strong>Classification</strong>
+                                <p class="small text-muted mb-0">Type de plat et catégorie</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-start gap-2">
+                            <i class="fa fa-cog text-warning mt-1" title="Réglages"/>
+                            <div>
+                                <strong>Options</strong>
+                                <p class="small text-muted mb-0">Personnalisation disponible</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="alert alert-info mb-0 py-2" role="status">
+                    <i class="fa fa-info-circle me-2" title="Note"/>
+                    <strong>Note :</strong> Le <em>type de menu</em> (Africain, Européen…) n'est disponible que pour les plats de résistance
+                </div>
+            </div>
+        </field>
+    </record>
+
+</odoo>

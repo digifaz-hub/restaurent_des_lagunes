@@ -1,0 +1,297 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Vue Liste : Demandes -->
+    <record id="view_traiteur_demande_list" model="ir.ui.view">
+        <field name="name">lagunes.traiteur.demande.list</field>
+        <field name="model">lagunes.traiteur.demande</field>
+        <field name="arch" type="xml">
+            <list string="Demandes Traiteur" decoration-info="state in ['new', 'en_cours']" decoration-warning="state in ['devis_cree', 'devis_envoye']" decoration-muted="state == 'annule'" decoration-danger="state == 'refuse'" decoration-success="state == 'accepte'">
+                <field name="reference"/>
+                <field name="date_demande"/>
+                <field name="nom_entreprise"/>
+                <field name="nom_contact"/>
+                <field name="main_type_prestation_id"/>
+                <field name="date_debut"/>
+                <field name="total_nb_personnes" string="Convives"/>
+
+                <field name="montant_total_estime" sum="Total Estimé" widget="monetary"/>
+                <field name="stock_status" widget="badge" decoration-success="stock_status == 'available'" decoration-warning="stock_status == 'partial'" decoration-danger="stock_status == 'missing'" decoration-muted="stock_status == 'draft'"/>
+                <field name="state" widget="badge" decoration-warning="state == 'new'" decoration-info="state == 'en_cours'" decoration-primary="state in ['devis_cree', 'devis_envoye']" decoration-success="state == 'accepte'" decoration-danger="state == 'refuse'" decoration-muted="state == 'annule'"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Vue Formulaire : Demande -->
+    <record id="view_traiteur_demande_form" model="ir.ui.view">
+        <field name="name">lagunes.traiteur.demande.form</field>
+        <field name="model">lagunes.traiteur.demande</field>
+        <field name="arch" type="xml">
+            <form string="Demande Traiteur">
+                <header>
+                    <button name="action_assign_to_me" type="object" string="S'assigner" class="oe_highlight" invisible="user_id or state != 'new'"/>
+                    <button name="action_check_stock" type="object" string="Vérifier Stock" class="btn-info" invisible="state not in ['new', 'en_cours']"/>
+                    <button name="action_create_devis" type="object" string="Générer Devis" class="oe_highlight" invisible="state not in ['new', 'en_cours']"/>
+                    <button name="action_post_consumption" type="object" string="Valider Consommation" class="btn-warning" invisible="state != 'accepte' or is_stock_deducted" confirm="Voulez-vous déduire réellement les ingrédients du stock Marché ?"/>
+                    <button name="action_accept" type="object" string="Accepter" class="btn-success" invisible="state != 'devis_envoye'"/>
+                    <button name="action_open_menu_proposition" type="object" string="Proposition Menu" class="btn-info" invisible="state not in ['new', 'en_cours', 'devis_cree', 'devis_envoye', 'accepte']"/>
+                    <button name="%(action_report_traiteur_logistique)d" type="action" string="Fiche Logistique" class="btn-secondary" invisible="state not in ['en_cours', 'devis_cree', 'devis_envoye', 'accepte']"/>
+                    <button name="action_refuse" type="object" string="Refuser" class="btn-danger" invisible="state != 'devis_envoye'"/>
+                    <button name="action_cancel" type="object" string="Annuler" invisible="state in ['accepte', 'refuse', 'annule']"/>
+                    <field name="state" widget="statusbar" statusbar_visible="new,en_cours,devis_cree,devis_envoye,accepte"/>
+                </header>
+                <sheet>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_sale_order" type="object" class="oe_stat_button" icon="fa-usd" invisible="not sale_order_id">
+                            <div class="o_stat_info">
+                                <span class="o_stat_text">Bon de</span>
+                                <span class="o_stat_text">Commande</span>
+                            </div>
+                        </button>
+                    </div>
+                    <widget name="web_ribbon" title="Stock OK" bg_color="bg-success" invisible="stock_status != 'available'"/>
+                    <widget name="web_ribbon" title="Stock Partiel" bg_color="bg-warning" invisible="stock_status != 'partial'"/>
+                    <widget name="web_ribbon" title="Rupture Stock" bg_color="bg-danger" invisible="stock_status != 'missing'"/>
+                    <widget name="web_ribbon" title="Retard Facture" bg_color="bg-danger" invisible="not is_overdue_invoicing"/>
+                    <div class="oe_button_box" name="button_box">
+
+                        <button name="action_view_invoices" type="object" class="oe_stat_button" icon="fa-pencil-square-o" invisible="invoice_count == 0">
+                            <field name="invoice_count" widget="statinfo" string="Factures"/>
+                        </button>
+                        <button name="action_view_propositions" type="object" class="oe_stat_button" icon="fa-cutlery" invisible="proposition_count == 0">
+                            <field name="proposition_count" widget="statinfo" string="Propositions"/>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+
+                        <h1><field name="reference"/></h1>
+                    </div>
+                    <group>
+                        <group string="Client">
+                            <field name="nom_entreprise" placeholder="Entreprise / Client"/>
+                            <field name="nom_contact"/>
+                            <field name="email_contact" widget="email"/>
+                            <label for="telephone_contact"/>
+                            <div class="o_row">
+                                <field name="telephone_contact" widget="phone"/>
+                                <button name="action_send_whatsapp" type="object" class="btn-success btn-sm p-1" icon="fa-whatsapp" title="Envoyer WhatsApp" invisible="not telephone_contact"/>
+                            </div>
+                            <field name="adresse_prestation"/>
+                        </group>
+                        <group string="Prestation">
+                            <label for="date_debut" string="Période"/>
+                            <div class="o_row">
+                                <field name="date_debut" class="oe_inline"/> au <field name="date_fin" class="oe_inline"/>
+                                (<field name="nb_jours" class="oe_inline"/> jours)
+                            </div>
+                            <field name="user_id" readonly="1"/>
+                            <field name="is_stock_deducted" invisible="not is_stock_deducted"/>
+                            <field name="stock_status" widget="badge" decoration-success="stock_status == 'available'" decoration-warning="stock_status == 'partial'" decoration-danger="stock_status == 'missing'" decoration-muted="stock_status == 'draft'"/>
+                            <div class="o_row" invisible="is_stock_deducted">
+                                <field name="stock_availability_info" widget="badge"
+                                       decoration-success="stock_availability_color == 'success'"
+                                       decoration-warning="stock_availability_color == 'warning'"
+                                       decoration-danger="stock_availability_color == 'danger'"/>
+                                <field name="stock_availability_color" invisible="1"/>
+                            </div>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Menus par jour" name="jours">
+                            <field name="jour_ids">
+                                <list>
+                                    <field name="date"/>
+                                    <field name="jour_semaine"/>
+                                    <field name="prestation_ids" widget="many2many_tags" string="Prestations"/>
+                                    <button name="action_open_day_menu" type="object" string="Gérer Prestations" icon="fa-edit" class="btn-primary"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Logistique &amp; Options" name="logistique">
+                            <field name="logistique_line_ids">
+                                <list editable="bottom">
+                                    <field name="logistique_id"/>
+                                    <field name="quantite"/>
+                                    <field name="prix_unitaire"/>
+                                    <field name="sous_total" sum="Total Logistique"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Historique des Devis" name="devis_history" invisible="not devis_ids">
+                            <field name="active_devis_id" string="Devis Actif"/>
+                            <field name="devis_ids" readonly="1">
+                                <list>
+                                    <field name="name"/>
+                                    <field name="state"/>
+                                    <field name="date_envoi"/>
+                                    <field name="montant_total"/>
+                                </list>
+                            </field>
+                        </page>
+                        <page string="Notes &amp; Observations" name="notes">
+                            <group>
+                                <field name="notes_client"/>
+                                <field name="notes_internes"/>
+                            </group>
+                        </page>
+                        <page string="Disponibilité Stock" name="stock_details">
+                            <div class="alert alert-info" invisible="stock_status == 'available'" role="status">
+                                <i class="fa fa-info-circle me-2" title="Info"/>
+                                Cette section liste les ingrédients à commander au marché pour honorer cette prestation.
+                            </div>
+                            <group>
+                                <field name="reservation_details" nolabel="1" placeholder="Vérifiez le stock pour voir les détails ici..."/>
+                            </group>
+                        </page>
+                    </notebook>
+                    <group class="oe_left" invisible="not sale_order_id">
+                        <field name="invoice_status" widget="badge" decoration-success="invoice_status == 'invoiced'" decoration-info="invoice_status == 'to invoice'"/>
+                        <field name="amount_invoiced" widget="monetary" options="{'currency_field': 'currency_id'}"/>
+                    </group>
+                    <group class="oe_subtotal_footer oe_right">
+
+                        <field name="montant_estime"/>
+                        <field name="montant_logistique"/>
+                        <div class="oe_subtotal_footer_separator oe_inline o_td_label">
+                            <label for="montant_total_estime"/>
+                        </div>
+                        <field name="montant_total_estime" nolabel="1" class="oe_subtotal_footer_separator"/>
+                    </group>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vue Kanban : Demandes -->
+    <record id="view_traiteur_demande_kanban" model="ir.ui.view">
+        <field name="name">lagunes.traiteur.demande.kanban</field>
+        <field name="model">lagunes.traiteur.demande</field>
+        <field name="arch" type="xml">
+            <kanban default_group_by="state" class="o_kanban_small_column">
+                <field name="reference"/>
+                <field name="nom_entreprise"/>
+                <field name="total_nb_personnes"/>
+                <field name="date_debut"/>
+                <field name="montant_total_estime"/>
+                <templates>
+                    <t t-name="card">
+                        <div class="oe_kanban_global_click">
+                            <div class="o_kanban_record_top">
+                                <strong class="o_kanban_record_title"><field name="reference"/></strong>
+                            </div>
+                            <div class="o_kanban_record_body">
+                                <div><field name="nom_entreprise"/></div>
+                                <div><i class="fa fa-users" title="Convives"/> <field name="total_nb_personnes"/> convives</div>
+                                <div><i class="fa fa-calendar" title="Date"/> <field name="date_debut"/></div>
+                            </div>
+
+                            <div class="o_kanban_record_bottom">
+                                <div class="oe_kanban_bottom_right">
+                                    <field name="montant_total_estime" widget="monetary"/>
+                                </div>
+                            </div>
+                        </div>
+                    </t>
+                </templates>
+            </kanban>
+        </field>
+    </record>
+
+    <!-- Vue Calendrier : Demandes -->
+    <record id="view_traiteur_demande_calendar" model="ir.ui.view">
+        <field name="name">lagunes.traiteur.demande.calendar</field>
+        <field name="model">lagunes.traiteur.demande</field>
+        <field name="arch" type="xml">
+            <calendar string="Planning Prestations" date_start="date_debut" date_stop="date_fin" color="main_type_prestation_id" mode="month">
+                <field name="nom_entreprise"/>
+                <field name="main_type_prestation_id" filters="1"/>
+                <field name="total_nb_personnes"/>
+                <field name="state" filters="1"/>
+            </calendar>
+        </field>
+    </record>
+
+    <!-- Actions -->
+    <record id="action_traiteur_demande_all" model="ir.actions.act_window">
+        <field name="name">Toutes les demandes</field>
+        <field name="res_model">lagunes.traiteur.demande</field>
+        <field name="view_mode">list,kanban,calendar,form</field>
+    </record>
+
+    <record id="action_traiteur_demande_calendar_only" model="ir.actions.act_window">
+        <field name="name">Calendrier des Prestations</field>
+        <field name="res_model">lagunes.traiteur.demande</field>
+        <field name="view_mode">calendar,list,form</field>
+        <field name="context">{'search_default_state': 'accepte'}</field>
+    </record>
+
+    <!-- Vue Formulaire : Jour (Pop-up) -->
+    <record id="view_traiteur_demande_jour_form" model="ir.ui.view">
+        <field name="name">lagunes.traiteur.demande.jour.form</field>
+        <field name="model">lagunes.traiteur.demande.jour</field>
+        <field name="arch" type="xml">
+            <form string="Détails du Jour">
+                <sheet>
+                    <group>
+                        <group>
+                            <field name="date" readonly="1"/>
+                            <field name="jour_semaine" readonly="1"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Prestations" name="prestations">
+                            <field name="prestation_ids">
+                                <list>
+                                    <field name="heure_prestation" widget="float_time"/>
+                                    <field name="type_prestation_id"/>
+                                    <field name="niveau_id"/>
+                                    <field name="nb_personnes"/>
+                                    <field name="nb_jours"/>
+                                    <field name="prix_unitaire" string="Prix / Pers"/>
+                                    <field name="montant_total" sum="Total Jour"/>
+
+                                </list>
+                                <form>
+                                    <sheet>
+                                        <group>
+                                            <group>
+                                                <field name="type_prestation_id"/>
+                                                <field name="niveau_id"/>
+                                                <field name="heure_prestation" widget="float_time"/>
+                                            </group>
+                                            <group>
+                                                <field name="nb_personnes"/>
+                                                <field name="nb_jours" readonly="1"/>
+                                                <field name="prix_unitaire"/>
+                                                <field name="montant_total"/>
+                                            </group>
+
+                                        </group>
+                                        <notebook>
+                                            <page string="Composition (Plats &amp; Équipements)" name="plats">
+                                                <field name="plat_line_ids">
+                                                    <list editable="bottom">
+                                                        <field name="description"/>
+                                                        <field name="plat_id" optional="show"/>
+                                                        <field name="accompagnement_id" optional="show" placeholder="Accompagnement"/>
+                                                        <field name="logistique_id" optional="show"/>
+                                                        <field name="quantite"/>
+                                                        <field name="prix_unitaire"/>
+                                                        <field name="sous_total" sum="Total"/>
+                                                    </list>
+                                                </field>
+                                            </page>
+                                        </notebook>
+                                    </sheet>
+                                </form>
+                            </field>
+                        </page>
+                        <page string="Notes" name="notes">
+                            <field name="notes" placeholder="Notes spécifiques à ce jour..."/>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+</odoo>

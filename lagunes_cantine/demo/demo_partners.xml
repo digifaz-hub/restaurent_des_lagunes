@@ -1,0 +1,239 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+    <!-- ═══════════════════════════════════════════════════════════════════
+         10 ENTREPRISES CLIENTES variées
+         Couvre différents profils (taille, règles d'accès, heure limite…)
+         ═══════════════════════════════════════════════════════════════════ -->
+
+    <!-- 1. DIGIFAZ : société principale, inscription active, heure limite 10h30 -->
+    <record id="demo_partner_digifaz" model="res.partner">
+        <field name="name">DIGIFAZ Services</field>
+        <field name="is_company">True</field>
+        <field name="is_cantine_client">True</field>
+        <field name="total_headcount">45</field>
+        <field name="cantine_access_code">DIGIFAZ2026</field>
+        <field name="max_orders_per_session">2</field>
+        <field name="heure_limite_active">True</field>
+        <field name="heure_limite_commande">10.5</field>
+        <field name="inscription_active">True</field>
+        <field name="inscription_token">digifaz-token-demo-2026-XXXX</field>
+        <field name="street">Boulevard Valéry Giscard d'Estaing</field>
+        <field name="city">Abidjan</field>
+        <field name="country_id" ref="base.ci"/>
+        <field name="phone">+225 27 21 00 00 01</field>
+        <field name="email">contact@digifaz.ci</field>
+    </record>
+
+    <!-- 2. ORANGE CI : gros compte, heure limite stricte -->
+    <record id="demo_partner_orange" model="res.partner">
+        <field name="name">Orange Côte d'Ivoire</field>
+        <field name="is_company">True</field>
+        <field name="is_cantine_client">True</field>
+        <field name="total_headcount">120</field>
+        <field name="cantine_access_code">ORANGE2026</field>
+        <field name="max_orders_per_session">1</field>
+        <field name="heure_limite_active">True</field>
+        <field name="heure_limite_commande">9.75</field>
+        <field name="street">Immeuble Orange, Plateau</field>
+        <field name="city">Abidjan</field>
+        <field name="country_id" ref="base.ci"/>
+        <field name="phone">+225 27 20 30 40 50</field>
+        <field name="email">contact@orange.ci</field>
+    </record>
+
+    <!-- 3. MTN CI : managers peuvent commander pour autres -->
+    <record id="demo_partner_mtn" model="res.partner">
+        <field name="name">MTN Côte d'Ivoire</field>
+        <field name="is_company">True</field>
+        <field name="is_cantine_client">True</field>
+        <field name="total_headcount">80</field>
+        <field name="cantine_access_code">MTN2026</field>
+        <field name="max_orders_per_session">3</field>
+        <field name="heure_limite_active">False</field>
+        <field name="street">Zone 4, Marcory</field>
+        <field name="city">Abidjan</field>
+        <field name="country_id" ref="base.ci"/>
+        <field name="phone">+225 27 21 75 00 00</field>
+        <field name="email">cantine@mtn.ci</field>
+    </record>
+
+    <!-- 4. SGBCI : banque, règles strictes, menu européen uniquement -->
+    <record id="demo_partner_sgbci" model="res.partner">
+        <field name="name">SGBCI</field>
+        <field name="is_company">True</field>
+        <field name="is_cantine_client">True</field>
+        <field name="total_headcount">60</field>
+        <field name="cantine_access_code">SGBCI2026</field>
+        <field name="max_orders_per_session">1</field>
+        <field name="heure_limite_active">True</field>
+        <field name="heure_limite_commande">10.0</field>
+        <field name="street">Avenue Houdaille, Plateau</field>
+        <field name="city">Abidjan</field>
+        <field name="country_id" ref="base.ci"/>
+        <field name="phone">+225 27 20 20 10 00</field>
+        <field name="email">contact@sgbci.ci</field>
+    </record>
+
+    <!-- 5. TOTAL ENERGIES : code simple -->
+    <record id="demo_partner_total" model="res.partner">
+        <field name="name">TotalEnergies Côte d'Ivoire</field>
+        <field name="is_company">True</field>
+        <field name="is_cantine_client">True</field>
+        <field name="total_headcount">50</field>
+        <field name="cantine_access_code">TOTAL2026</field>
+        <field name="max_orders_per_session">2</field>
+        <field name="street">Marcory</field>
+        <field name="city">Abidjan</field>
+        <field name="country_id" ref="base.ci"/>
+        <field name="phone">+225 27 21 75 70 00</field>
+        <field name="email">contact@total.ci</field>
+    </record>
+
+    <!-- 6. NSIA ASSURANCES : heure limite stricte 9h, taille moyenne -->
+    <record id="demo_partner_nsia" model="res.partner">
+        <field name="name">NSIA Assurances</field>
+        <field name="is_company">True</field>
+        <field name="is_cantine_client">True</field>
+        <field name="total_headcount">35</field>
+        <field name="cantine_access_code">NSIA2026</field>
+        <field name="max_orders_per_session">1</field>
+        <field name="heure_limite_active">True</field>
+        <field name="heure_limite_commande">9.0</field>
+        <field name="street">Plateau</field>
+        <field name="city">Abidjan</field>
+        <field name="country_id" ref="base.ci"/>
+        <field name="phone">+225 27 20 30 95 00</field>
+        <field name="email">contact@nsia.ci</field>
+    </record>
+
+    <!-- 7. STARTUP ABIDJAN : petite boîte, règles souples -->
+    <record id="demo_partner_startup" model="res.partner">
+        <field name="name">Abidjan Tech Hub</field>
+        <field name="is_company">True</field>
+        <field name="is_cantine_client">True</field>
+        <field name="total_headcount">15</field>
+        <field name="cantine_access_code">TECHHUB2026</field>
+        <field name="max_orders_per_session">5</field>
+        <field name="heure_limite_active">False</field>
+        <field name="street">Riviera Golf</field>
+        <field name="city">Abidjan</field>
+        <field name="country_id" ref="base.ci"/>
+        <field name="phone">+225 05 05 05 05 05</field>
+        <field name="email">hello@abidjantechhub.ci</field>
+    </record>
+
+    <!-- 8. CABINET D'AVOCATS : haut de gamme -->
+    <record id="demo_partner_cabinet" model="res.partner">
+        <field name="name">Cabinet Kouassi &amp; Associés</field>
+        <field name="is_company">True</field>
+        <field name="is_cantine_client">True</field>
+        <field name="total_headcount">20</field>
+        <field name="cantine_access_code">KOUASSI2026</field>
+        <field name="max_orders_per_session">2</field>
+        <field name="heure_limite_active">True</field>
+        <field name="heure_limite_commande">10.75</field>
+        <field name="street">Cocody, II Plateaux</field>
+        <field name="city">Abidjan</field>
+        <field name="country_id" ref="base.ci"/>
+        <field name="phone">+225 27 22 44 55 66</field>
+        <field name="email">contact@kouassi-associes.ci</field>
+    </record>
+
+    <!-- 9. ÉCOLE : cantine scolaire, gros volumes, menu spécifique -->
+    <record id="demo_partner_ecole" model="res.partner">
+        <field name="name">École Internationale des Lagunes</field>
+        <field name="is_company">True</field>
+        <field name="is_cantine_client">True</field>
+        <field name="total_headcount">200</field>
+        <field name="cantine_access_code">EIL2026</field>
+        <field name="max_orders_per_session">1</field>
+        <field name="heure_limite_active">True</field>
+        <field name="heure_limite_commande">8.5</field>
+        <field name="inscription_active">True</field>
+        <field name="inscription_token">eil-token-demo-2026-XXXX</field>
+        <field name="street">Riviera</field>
+        <field name="city">Abidjan</field>
+        <field name="country_id" ref="base.ci"/>
+        <field name="phone">+225 27 22 43 00 00</field>
+        <field name="email">direction@eil.ci</field>
+    </record>
+
+    <!-- 10. ANCIEN CLIENT : désactivé (is_cantine_client=False) -->
+    <record id="demo_partner_ancien" model="res.partner">
+        <field name="name">Ancien Client (désactivé)</field>
+        <field name="is_company">True</field>
+        <field name="is_cantine_client">True</field>
+        <field name="active">False</field>
+        <field name="total_headcount">5</field>
+        <field name="cantine_access_code">ANCIEN2025</field>
+        <field name="street">Adjamé</field>
+        <field name="city">Abidjan</field>
+        <field name="country_id" ref="base.ci"/>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+         RÈGLES plat_type_rule (par entreprise)
+         ═══════════════════════════════════════════════════════════════════ -->
+    <!-- DIGIFAZ : config complète -->
+    <record id="demo_rule_digifaz_entree" model="lagunes.partner.plat.type.rule">
+        <field name="partner_id" ref="demo_partner_digifaz"/>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_entree"/>
+        <field name="is_proposed">True</field>
+        <field name="is_mandatory">False</field>
+        <field name="max_choices">1</field>
+    </record>
+    <record id="demo_rule_digifaz_resistance" model="lagunes.partner.plat.type.rule">
+        <field name="partner_id" ref="demo_partner_digifaz"/>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_plat_resistance"/>
+        <field name="is_proposed">True</field>
+        <field name="is_mandatory">True</field>
+        <field name="max_choices">1</field>
+    </record>
+    <record id="demo_rule_digifaz_dessert" model="lagunes.partner.plat.type.rule">
+        <field name="partner_id" ref="demo_partner_digifaz"/>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_dessert"/>
+        <field name="is_proposed">True</field>
+        <field name="is_mandatory">False</field>
+        <field name="max_choices">1</field>
+    </record>
+
+    <!-- SGBCI : plat principal obligatoire seulement -->
+    <record id="demo_rule_sgbci_resistance" model="lagunes.partner.plat.type.rule">
+        <field name="partner_id" ref="demo_partner_sgbci"/>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_plat_resistance"/>
+        <field name="is_proposed">True</field>
+        <field name="is_mandatory">True</field>
+        <field name="max_choices">1</field>
+    </record>
+    <record id="demo_rule_sgbci_dessert" model="lagunes.partner.plat.type.rule">
+        <field name="partner_id" ref="demo_partner_sgbci"/>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_dessert"/>
+        <field name="is_proposed">True</field>
+        <field name="is_mandatory">False</field>
+        <field name="max_choices">1</field>
+    </record>
+
+    <!-- ORANGE : 3 types tous obligatoires -->
+    <record id="demo_rule_orange_entree" model="lagunes.partner.plat.type.rule">
+        <field name="partner_id" ref="demo_partner_orange"/>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_entree"/>
+        <field name="is_proposed">True</field>
+        <field name="is_mandatory">True</field>
+        <field name="max_choices">1</field>
+    </record>
+    <record id="demo_rule_orange_resistance" model="lagunes.partner.plat.type.rule">
+        <field name="partner_id" ref="demo_partner_orange"/>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_plat_resistance"/>
+        <field name="is_proposed">True</field>
+        <field name="is_mandatory">True</field>
+        <field name="max_choices">1</field>
+    </record>
+    <record id="demo_rule_orange_dessert" model="lagunes.partner.plat.type.rule">
+        <field name="partner_id" ref="demo_partner_orange"/>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_dessert"/>
+        <field name="is_proposed">True</field>
+        <field name="is_mandatory">True</field>
+        <field name="max_choices">1</field>
+    </record>
+
+</odoo>

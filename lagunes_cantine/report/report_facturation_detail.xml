@@ -1,0 +1,84 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="action_report_facturation_detail" model="ir.actions.report">
+        <field name="name">Justificatif de Facturation (Détail)</field>
+        <field name="model">lagunes.facturation.periode</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">lagunes_cantine.report_facturation_detail_template</field>
+        <field name="report_file">lagunes_cantine.report_facturation_detail_template</field>
+        <field name="binding_model_id" ref="model_lagunes_facturation_periode"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <template id="report_facturation_detail_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.external_layout">
+                    <div class="page" style="font-family: 'Helvetica', 'Arial', sans-serif; font-size: 12px;">
+                        
+                        <div class="text-center mb-4">
+                            <h2 style="color: #16166d; font-weight: bold; text-transform: uppercase;">Justificatif de Facturation</h2>
+                            <h4>Période : <span t-field="o.date_start"/> au <span t-field="o.date_end"/></h4>
+                        </div>
+
+                        <div class="row mb-4">
+                            <div class="col-6">
+                                <strong>Entreprise :</strong> <span t-field="o.entreprise_id.name"/><br/>
+                                <strong>Référence :</strong> <span t-field="o.name"/>
+                            </div>
+                            <div class="col-6 text-end">
+                                <strong>Date d'émission :</strong> <span t-esc="context_today().strftime('%d/%m/%Y')"/><br/>
+                                <strong>Total Commandes :</strong> <span t-field="o.total_commandes"/>
+                            </div>
+                        </div>
+
+                        <table class="table table-sm table-bordered">
+                            <thead style="background-color: #f8f9fa;">
+                                <tr>
+                                    <th>Date</th>
+                                    <th>Réf. Commande</th>
+                                    <th>Employé / Matricule</th>
+                                    <th>Menu Consommé</th>
+                                    <th class="text-end">Prix Unit.</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <t t-foreach="o.commande_ids.sorted(key=lambda r: r.date)" t-as="c">
+                                    <tr>
+                                        <td><span t-field="c.date"/></td>
+                                        <td><span t-field="c.reference"/></td>
+                                        <td>
+                                            <span t-field="c.employee_id.name"/> 
+                                            <t t-if="c.employee_id.matricule">
+                                                (<span t-field="c.employee_id.matricule"/>)
+                                            </t>
+                                        </td>
+                                        <td>
+                                            <span t-field="c.display_menu"/>
+                                        </td>
+
+                                        <td class="text-end"><span t-field="c.prix_total" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/></td>
+                                    </tr>
+                                </t>
+                            </tbody>
+                            <tfoot>
+                                <tr style="background-color: #f8f9fa; font-weight: bold;">
+                                    <td colspan="4" class="text-end">MONTANT TOTAL NET À PAYER</td>
+                                    <td class="text-end" style="color: #16166d; font-size: 1.2em;">
+                                        <span t-field="o.montant_total" t-options='{"widget": "monetary", "display_currency": o.company_id.currency_id}'/>
+                                    </td>
+                                </tr>
+                            </tfoot>
+                        </table>
+
+                        <div class="footer">
+                            <div class="text-center border-top pt-2 small text-muted">
+                                <span t-field="o.company_id.name"/> — <span t-field="o.company_id.street"/> — <span t-field="o.company_id.phone"/>
+                            </div>
+                        </div>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,607 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+    <!-- ═══════════════════════════════════════════════════════════════════
+         CATALOGUE DE PLATS (≈ 45 plats avec ingrédients inline)
+         Les produits associés sont créés automatiquement par le create()
+         override de lagunes.plat. prix_unitaire est related->product.list_price
+         ═══════════════════════════════════════════════════════════════════ -->
+
+    <!-- ╔═════════════════════════════════════════════════════════════════╗
+         ║  ENTRÉES (10 plats)                                              ║
+         ╚═════════════════════════════════════════════════════════════════╝ -->
+    <record id="demo_plat_salade_composee" model="lagunes.plat">
+        <field name="name">Salade composée</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_entree"/>
+        <field name="prix_unitaire">1500.0</field>
+        <field name="description">Salade verte, tomates, œuf dur, thon.</field>
+        <field name="sequence">10</field>
+        <field name="ingredient_ids" eval="[
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_salade'), 'quantity': 1.0, 'unit_id': ref('lagunes_market.uom_unit')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_tomate'), 'quantity': 0.1, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_oeufs'), 'quantity': 1.0, 'unit_id': ref('lagunes_market.uom_unit')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_thon'), 'quantity': 0.05, 'unit_id': ref('lagunes_market.uom_kg')}),
+        ]"/>
+    </record>
+
+    <record id="demo_plat_salade_cesar" model="lagunes.plat">
+        <field name="name">Salade César</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_entree"/>
+        <field name="prix_unitaire">2000.0</field>
+        <field name="description">Salade romaine, poulet grillé, parmesan, croûtons.</field>
+        <field name="sequence">20</field>
+        <field name="ingredient_ids" eval="[
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_salade'), 'quantity': 1.0, 'unit_id': ref('lagunes_market.uom_unit')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_poulet_frais'), 'quantity': 0.1, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_fromage'), 'quantity': 0.03, 'unit_id': ref('lagunes_market.uom_kg')}),
+        ]"/>
+    </record>
+
+    <record id="demo_plat_soupe_legumes" model="lagunes.plat">
+        <field name="name">Soupe de légumes</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_entree"/>
+        <field name="prix_unitaire">1200.0</field>
+        <field name="description">Soupe onctueuse aux légumes de saison.</field>
+        <field name="sequence">30</field>
+        <field name="ingredient_ids" eval="[
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_carotte'), 'quantity': 0.1, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_courgette'), 'quantity': 0.1, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_oignon'), 'quantity': 0.05, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_cube_maggi'), 'quantity': 1.0, 'unit_id': ref('lagunes_market.uom_unit')}),
+        ]"/>
+    </record>
+
+    <record id="demo_plat_soupe_poisson" model="lagunes.plat">
+        <field name="name">Soupe de poisson</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_entree"/>
+        <field name="prix_unitaire">2500.0</field>
+        <field name="description">Soupe de tilapia relevée au piment doux.</field>
+        <field name="sequence">40</field>
+        <field name="ingredient_ids" eval="[
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_tilapia'), 'quantity': 0.15, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_tomate'), 'quantity': 0.1, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_oignon'), 'quantity': 0.05, 'unit_id': ref('lagunes_market.uom_kg')}),
+        ]"/>
+    </record>
+
+    <record id="demo_plat_crudites" model="lagunes.plat">
+        <field name="name">Assiette de crudités</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_entree"/>
+        <field name="prix_unitaire">1000.0</field>
+        <field name="description">Carottes râpées, tomates, concombre.</field>
+        <field name="sequence">50</field>
+        <field name="ingredient_ids" eval="[
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_carotte'), 'quantity': 0.1, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_tomate'), 'quantity': 0.1, 'unit_id': ref('lagunes_market.uom_kg')}),
+        ]"/>
+    </record>
+
+    <record id="demo_plat_avocat_crevettes" model="lagunes.plat">
+        <field name="name">Avocat aux crevettes</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_entree"/>
+        <field name="prix_unitaire">2800.0</field>
+        <field name="description">Demi-avocat garni de crevettes sauce cocktail.</field>
+        <field name="sequence">60</field>
+        <field name="ingredient_ids" eval="[
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_crevettes'), 'quantity': 0.08, 'unit_id': ref('lagunes_market.uom_kg')}),
+        ]"/>
+    </record>
+
+    <record id="demo_plat_oeuf_mayo" model="lagunes.plat">
+        <field name="name">Œufs mayonnaise</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_entree"/>
+        <field name="prix_unitaire">800.0</field>
+        <field name="description">Œufs durs mayonnaise et salade verte.</field>
+        <field name="sequence">70</field>
+        <field name="ingredient_ids" eval="[
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_oeufs'), 'quantity': 2.0, 'unit_id': ref('lagunes_market.uom_unit')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_salade'), 'quantity': 0.5, 'unit_id': ref('lagunes_market.uom_unit')}),
+        ]"/>
+    </record>
+
+    <record id="demo_plat_accras" model="lagunes.plat">
+        <field name="name">Accras de poisson</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_entree"/>
+        <field name="prix_unitaire">1500.0</field>
+        <field name="description">Beignets de poisson, sauce pimentée.</field>
+        <field name="sequence">80</field>
+        <field name="ingredient_ids" eval="[
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_capitaine'), 'quantity': 0.08, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_farine_ble'), 'quantity': 0.05, 'unit_id': ref('lagunes_market.uom_kg')}),
+        ]"/>
+    </record>
+
+    <record id="demo_plat_gombos_vapeur" model="lagunes.plat">
+        <field name="name">Gombos vapeur à l'huile rouge</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_entree"/>
+        <field name="prix_unitaire">1200.0</field>
+        <field name="description">Gombos frais à la vapeur, huile de palme.</field>
+        <field name="sequence">90</field>
+        <field name="is_global_available">True</field>
+        <field name="ingredient_ids" eval="[
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_gombo'), 'quantity': 0.15, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_huile_palme'), 'quantity': 0.02, 'unit_id': ref('lagunes_market.uom_litre')}),
+        ]"/>
+    </record>
+
+    <record id="demo_plat_toast_avocat" model="lagunes.plat">
+        <field name="name">Toast à l'avocat</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_entree"/>
+        <field name="prix_unitaire">1400.0</field>
+        <field name="description">Pain grillé, avocat écrasé, piment.</field>
+        <field name="sequence">100</field>
+        <field name="ingredient_ids" eval="[
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_pain'), 'quantity': 0.5, 'unit_id': ref('lagunes_market.uom_unit')}),
+        ]"/>
+    </record>
+
+    <!-- ╔═════════════════════════════════════════════════════════════════╗
+         ║  PLATS DE RÉSISTANCE — MENU AFRICAIN (10 plats)                   ║
+         ╚═════════════════════════════════════════════════════════════════╝ -->
+    <record id="demo_plat_djoumble_poulet" model="lagunes.plat">
+        <field name="name">Sauce djoumblé poulet fumé</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_plat_resistance"/>
+        <field name="menu_category_id" ref="lagunes_cantine.menu_cat_africain"/>
+        <field name="accompagnement_product_id" ref="demo_product_accomp_riz_nature"/>
+        <field name="prix_unitaire">3500.0</field>
+        <field name="description">Spécialité ivoirienne aux graines de djoumblé.</field>
+        <field name="sequence">110</field>
+        <field name="ingredient_ids" eval="[
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_poulet_fume'), 'quantity': 0.15, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_graines_djoumble'), 'quantity': 0.03, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_huile_palme'), 'quantity': 0.05, 'unit_id': ref('lagunes_market.uom_litre')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_riz_parfume'), 'quantity': 0.2, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_cube_maggi'), 'quantity': 1.0, 'unit_id': ref('lagunes_market.uom_unit')}),
+        ]"/>
+    </record>
+
+    <record id="demo_plat_sauce_graine" model="lagunes.plat">
+        <field name="name">Sauce graine boeuf</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_plat_resistance"/>
+        <field name="menu_category_id" ref="lagunes_cantine.menu_cat_africain"/>
+        <field name="accompagnement_product_id" ref="demo_product_accomp_riz_nature"/>
+        <field name="prix_unitaire">3800.0</field>
+        <field name="description">Sauce aux graines de palme, viande de bœuf.</field>
+        <field name="sequence">120</field>
+        <field name="ingredient_ids" eval="[
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_boeuf'), 'quantity': 0.15, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_huile_palme'), 'quantity': 0.1, 'unit_id': ref('lagunes_market.uom_litre')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_riz_parfume'), 'quantity': 0.2, 'unit_id': ref('lagunes_market.uom_kg')}),
+        ]"/>
+    </record>
+
+    <record id="demo_plat_kedjenou_poulet" model="lagunes.plat">
+        <field name="name">Kedjenou de poulet</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_plat_resistance"/>
+        <field name="menu_category_id" ref="lagunes_cantine.menu_cat_africain"/>
+        <field name="accompagnement_product_id" ref="demo_product_accomp_attieke"/>
+        <field name="prix_unitaire">3500.0</field>
+        <field name="description">Poulet mijoté en canari, tomate, oignon, piment.</field>
+        <field name="sequence">130</field>
+        <field name="ingredient_ids" eval="[
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_poulet_frais'), 'quantity': 0.25, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_tomate'), 'quantity': 0.1, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_oignon'), 'quantity': 0.1, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_attieke'), 'quantity': 0.15, 'unit_id': ref('lagunes_market.uom_kg')}),
+        ]"/>
+    </record>
+
+    <record id="demo_plat_poisson_braise" model="lagunes.plat">
+        <field name="name">Poisson braisé &amp; attiéké</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_plat_resistance"/>
+        <field name="menu_category_id" ref="lagunes_cantine.menu_cat_africain"/>
+        <field name="accompagnement_product_id" ref="demo_product_accomp_attieke"/>
+        <field name="prix_unitaire">4500.0</field>
+        <field name="description">Tilapia braisé mariné, servi avec attiéké.</field>
+        <field name="sequence">140</field>
+        <field name="ingredient_ids" eval="[
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_tilapia'), 'quantity': 0.3, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_attieke'), 'quantity': 0.2, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_oignon'), 'quantity': 0.05, 'unit_id': ref('lagunes_market.uom_kg')}),
+        ]"/>
+    </record>
+
+    <record id="demo_plat_garba" model="lagunes.plat">
+        <field name="name">Garba (thon frit)</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_plat_resistance"/>
+        <field name="menu_category_id" ref="lagunes_cantine.menu_cat_africain"/>
+        <field name="accompagnement_product_id" ref="demo_product_accomp_attieke"/>
+        <field name="prix_unitaire">2500.0</field>
+        <field name="description">Thon frit, attiéké, tomate, oignon, piment.</field>
+        <field name="sequence">150</field>
+        <field name="is_global_available">True</field>
+        <field name="ingredient_ids" eval="[
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_thon'), 'quantity': 0.2, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_attieke'), 'quantity': 0.2, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_huile_arachide'), 'quantity': 0.05, 'unit_id': ref('lagunes_market.uom_litre')}),
+        ]"/>
+    </record>
+
+    <record id="demo_plat_mafe_agneau" model="lagunes.plat">
+        <field name="name">Mafé d'agneau</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_plat_resistance"/>
+        <field name="menu_category_id" ref="lagunes_cantine.menu_cat_africain"/>
+        <field name="accompagnement_product_id" ref="demo_product_accomp_riz_nature"/>
+        <field name="prix_unitaire">4200.0</field>
+        <field name="description">Ragoût d'agneau à la pâte d'arachide.</field>
+        <field name="sequence">160</field>
+        <field name="ingredient_ids" eval="[
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_agneau'), 'quantity': 0.18, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_riz_parfume'), 'quantity': 0.2, 'unit_id': ref('lagunes_market.uom_kg')}),
+        ]"/>
+    </record>
+
+    <record id="demo_plat_foutou_sauce_arachide" model="lagunes.plat">
+        <field name="name">Foutou banane sauce arachide</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_plat_resistance"/>
+        <field name="menu_category_id" ref="lagunes_cantine.menu_cat_africain"/>
+        <field name="accompagnement_product_id" ref="demo_product_accomp_foutou"/>
+        <field name="prix_unitaire">3200.0</field>
+        <field name="description">Foutou banane accompagné de sauce arachide.</field>
+        <field name="sequence">170</field>
+        <field name="ingredient_ids" eval="[
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_foutou_banane'), 'quantity': 0.25, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_boeuf'), 'quantity': 0.1, 'unit_id': ref('lagunes_market.uom_kg')}),
+        ]"/>
+    </record>
+
+    <record id="demo_plat_alloco_poulet" model="lagunes.plat">
+        <field name="name">Poulet rôti &amp; alloco</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_plat_resistance"/>
+        <field name="menu_category_id" ref="lagunes_cantine.menu_cat_africain"/>
+        <field name="accompagnement_product_id" ref="demo_product_accomp_alloco"/>
+        <field name="prix_unitaire">3800.0</field>
+        <field name="description">Poulet rôti servi avec alloco (banane plantain frite).</field>
+        <field name="sequence">180</field>
+        <field name="ingredient_ids" eval="[
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_poulet_frais'), 'quantity': 0.25, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_banane_plantain'), 'quantity': 0.2, 'unit_id': ref('lagunes_market.uom_kg')}),
+        ]"/>
+    </record>
+
+    <record id="demo_plat_riz_gras" model="lagunes.plat">
+        <field name="name">Riz gras au poulet</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_plat_resistance"/>
+        <field name="menu_category_id" ref="lagunes_cantine.menu_cat_africain"/>
+        <field name="accompagnement_product_id" ref="demo_product_accomp_riz_nature"/>
+        <field name="prix_unitaire">3200.0</field>
+        <field name="description">Riz gras à la tomate et poulet rôti.</field>
+        <field name="sequence">190</field>
+        <field name="ingredient_ids" eval="[
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_riz_parfume'), 'quantity': 0.25, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_poulet_frais'), 'quantity': 0.15, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_concentre_tomate'), 'quantity': 0.5, 'unit_id': ref('lagunes_market.uom_boite')}),
+        ]"/>
+    </record>
+
+    <record id="demo_plat_sauce_feuille" model="lagunes.plat">
+        <field name="name">Sauce feuille &amp; poisson fumé</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_plat_resistance"/>
+        <field name="menu_category_id" ref="lagunes_cantine.menu_cat_africain"/>
+        <field name="accompagnement_product_id" ref="demo_product_accomp_foutou"/>
+        <field name="prix_unitaire">3500.0</field>
+        <field name="description">Sauce feuille traditionnelle, poisson machoiron fumé.</field>
+        <field name="sequence">200</field>
+        <field name="ingredient_ids" eval="[
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_epinards'), 'quantity': 2.0, 'unit_id': ref('lagunes_market.uom_botte')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_machoiron'), 'quantity': 0.1, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_foutou_igname'), 'quantity': 0.25, 'unit_id': ref('lagunes_market.uom_kg')}),
+        ]"/>
+    </record>
+
+    <!-- ╔═════════════════════════════════════════════════════════════════╗
+         ║  PLATS DE RÉSISTANCE — MENU EUROPÉEN (10 plats)                   ║
+         ╚═════════════════════════════════════════════════════════════════╝ -->
+    <record id="demo_plat_steak_frites" model="lagunes.plat">
+        <field name="name">Steak haché &amp; frites</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_plat_resistance"/>
+        <field name="menu_category_id" ref="lagunes_cantine.menu_cat_europeen"/>
+        <field name="accompagnement_product_id" ref="demo_product_accomp_frites"/>
+        <field name="prix_unitaire">3500.0</field>
+        <field name="description">Steak haché grillé, frites dorées.</field>
+        <field name="sequence">210</field>
+        <field name="ingredient_ids" eval="[
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_boeuf'), 'quantity': 0.15, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_frites_surgelees'), 'quantity': 0.2, 'unit_id': ref('lagunes_market.uom_kg')}),
+        ]"/>
+    </record>
+
+    <record id="demo_plat_escalope_milanaise" model="lagunes.plat">
+        <field name="name">Escalope milanaise &amp; pâtes</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_plat_resistance"/>
+        <field name="menu_category_id" ref="lagunes_cantine.menu_cat_europeen"/>
+        <field name="accompagnement_product_id" ref="demo_product_accomp_pates"/>
+        <field name="prix_unitaire">3800.0</field>
+        <field name="description">Escalope de poulet panée, pâtes au beurre.</field>
+        <field name="sequence">220</field>
+        <field name="ingredient_ids" eval="[
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_poulet_frais'), 'quantity': 0.2, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_pates'), 'quantity': 0.15, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_beurre'), 'quantity': 0.02, 'unit_id': ref('lagunes_market.uom_kg')}),
+        ]"/>
+    </record>
+
+    <record id="demo_plat_poisson_meuniere" model="lagunes.plat">
+        <field name="name">Poisson meunière</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_plat_resistance"/>
+        <field name="menu_category_id" ref="lagunes_cantine.menu_cat_europeen"/>
+        <field name="accompagnement_product_id" ref="demo_product_accomp_legumes"/>
+        <field name="prix_unitaire">4000.0</field>
+        <field name="description">Filet de bar meunière, légumes vapeur.</field>
+        <field name="sequence">230</field>
+        <field name="ingredient_ids" eval="[
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_bar'), 'quantity': 0.2, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_legumes_surgeles'), 'quantity': 0.15, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_beurre'), 'quantity': 0.02, 'unit_id': ref('lagunes_market.uom_kg')}),
+        ]"/>
+    </record>
+
+    <record id="demo_plat_poulet_roti_legumes" model="lagunes.plat">
+        <field name="name">Poulet rôti aux légumes</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_plat_resistance"/>
+        <field name="menu_category_id" ref="lagunes_cantine.menu_cat_europeen"/>
+        <field name="accompagnement_product_id" ref="demo_product_accomp_legumes"/>
+        <field name="prix_unitaire">3500.0</field>
+        <field name="description">Demi-poulet rôti, légumes de saison.</field>
+        <field name="sequence">240</field>
+        <field name="ingredient_ids" eval="[
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_poulet_frais'), 'quantity': 0.3, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_carotte'), 'quantity': 0.1, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_pomme_terre'), 'quantity': 0.15, 'unit_id': ref('lagunes_market.uom_kg')}),
+        ]"/>
+    </record>
+
+    <record id="demo_plat_lasagnes" model="lagunes.plat">
+        <field name="name">Lasagnes à la bolognaise</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_plat_resistance"/>
+        <field name="menu_category_id" ref="lagunes_cantine.menu_cat_europeen"/>
+        <field name="accompagnement_product_id" ref="demo_product_accomp_salade"/>
+        <field name="prix_unitaire">4200.0</field>
+        <field name="description">Lasagnes maison, salade verte.</field>
+        <field name="sequence">250</field>
+        <field name="ingredient_ids" eval="[
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_boeuf'), 'quantity': 0.12, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_concentre_tomate'), 'quantity': 1.0, 'unit_id': ref('lagunes_market.uom_boite')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_fromage'), 'quantity': 0.05, 'unit_id': ref('lagunes_market.uom_kg')}),
+        ]"/>
+    </record>
+
+    <record id="demo_plat_quiche" model="lagunes.plat">
+        <field name="name">Quiche lorraine</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_plat_resistance"/>
+        <field name="menu_category_id" ref="lagunes_cantine.menu_cat_europeen"/>
+        <field name="accompagnement_product_id" ref="demo_product_accomp_salade"/>
+        <field name="prix_unitaire">3000.0</field>
+        <field name="description">Quiche lorraine, salade verte.</field>
+        <field name="sequence">260</field>
+        <field name="ingredient_ids" eval="[
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_farine_ble'), 'quantity': 0.1, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_oeufs'), 'quantity': 2.0, 'unit_id': ref('lagunes_market.uom_unit')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_creme_fraiche'), 'quantity': 0.05, 'unit_id': ref('lagunes_market.uom_litre')}),
+        ]"/>
+    </record>
+
+    <record id="demo_plat_gratin_dauphinois" model="lagunes.plat">
+        <field name="name">Gratin dauphinois &amp; porc</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_plat_resistance"/>
+        <field name="menu_category_id" ref="lagunes_cantine.menu_cat_europeen"/>
+        <field name="accompagnement_product_id" ref="demo_product_accomp_legumes"/>
+        <field name="prix_unitaire">3800.0</field>
+        <field name="description">Rôti de porc, gratin de pommes de terre.</field>
+        <field name="sequence">270</field>
+        <field name="ingredient_ids" eval="[
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_porc'), 'quantity': 0.15, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_pomme_terre'), 'quantity': 0.2, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_lait'), 'quantity': 0.05, 'unit_id': ref('lagunes_market.uom_litre')}),
+        ]"/>
+    </record>
+
+    <record id="demo_plat_boeuf_bourguignon" model="lagunes.plat">
+        <field name="name">Bœuf bourguignon</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_plat_resistance"/>
+        <field name="menu_category_id" ref="lagunes_cantine.menu_cat_europeen"/>
+        <field name="accompagnement_product_id" ref="demo_product_accomp_pates"/>
+        <field name="prix_unitaire">4500.0</field>
+        <field name="description">Bœuf mijoté au vin, carottes, pâtes.</field>
+        <field name="sequence">280</field>
+        <field name="ingredient_ids" eval="[
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_boeuf'), 'quantity': 0.18, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_carotte'), 'quantity': 0.1, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_pates'), 'quantity': 0.15, 'unit_id': ref('lagunes_market.uom_kg')}),
+        ]"/>
+    </record>
+
+    <record id="demo_plat_saucisses_puree" model="lagunes.plat">
+        <field name="name">Saucisses purée</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_plat_resistance"/>
+        <field name="menu_category_id" ref="lagunes_cantine.menu_cat_europeen"/>
+        <field name="accompagnement_product_id" ref="demo_product_accomp_legumes"/>
+        <field name="prix_unitaire">2800.0</field>
+        <field name="description">Saucisses grillées, purée de pommes de terre.</field>
+        <field name="sequence">290</field>
+        <field name="ingredient_ids" eval="[
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_saucisses'), 'quantity': 0.15, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_pomme_terre'), 'quantity': 0.2, 'unit_id': ref('lagunes_market.uom_kg')}),
+        ]"/>
+    </record>
+
+    <record id="demo_plat_omelette" model="lagunes.plat">
+        <field name="name">Omelette gratinée</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_plat_resistance"/>
+        <field name="menu_category_id" ref="lagunes_cantine.menu_cat_europeen"/>
+        <field name="accompagnement_product_id" ref="demo_product_accomp_salade"/>
+        <field name="prix_unitaire">2500.0</field>
+        <field name="description">Omelette au fromage, salade.</field>
+        <field name="sequence">300</field>
+        <field name="is_global_available">True</field>
+        <field name="ingredient_ids" eval="[
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_oeufs'), 'quantity': 3.0, 'unit_id': ref('lagunes_market.uom_unit')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_fromage'), 'quantity': 0.03, 'unit_id': ref('lagunes_market.uom_kg')}),
+        ]"/>
+    </record>
+
+    <!-- ╔═════════════════════════════════════════════════════════════════╗
+         ║  PLATS DE RÉSISTANCE — MENU MÉDITERRANÉEN (4 plats)               ║
+         ╚═════════════════════════════════════════════════════════════════╝ -->
+    <record id="demo_plat_tagliatelles_crevettes" model="lagunes.plat">
+        <field name="name">Tagliatelles aux crevettes</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_plat_resistance"/>
+        <field name="menu_category_id" ref="demo_menu_cat_mediterraneen"/>
+        <field name="accompagnement_product_id" ref="demo_product_accomp_pates"/>
+        <field name="prix_unitaire">4500.0</field>
+        <field name="description">Pâtes fraîches, crevettes, ail, tomate.</field>
+        <field name="sequence">310</field>
+        <field name="ingredient_ids" eval="[
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_pates'), 'quantity': 0.15, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_crevettes'), 'quantity': 0.08, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_ail'), 'quantity': 0.02, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_huile_olive'), 'quantity': 0.02, 'unit_id': ref('lagunes_market.uom_litre')}),
+        ]"/>
+    </record>
+
+    <record id="demo_plat_ratatouille" model="lagunes.plat">
+        <field name="name">Ratatouille provençale &amp; poulet</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_plat_resistance"/>
+        <field name="menu_category_id" ref="demo_menu_cat_mediterraneen"/>
+        <field name="accompagnement_product_id" ref="demo_product_accomp_riz_nature"/>
+        <field name="prix_unitaire">3500.0</field>
+        <field name="description">Ratatouille, poulet grillé, riz.</field>
+        <field name="sequence">320</field>
+        <field name="ingredient_ids" eval="[
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_aubergine'), 'quantity': 0.1, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_courgette'), 'quantity': 0.1, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_poivron'), 'quantity': 0.08, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_poulet_frais'), 'quantity': 0.15, 'unit_id': ref('lagunes_market.uom_kg')}),
+        ]"/>
+    </record>
+
+    <record id="demo_plat_paella" model="lagunes.plat">
+        <field name="name">Paëlla aux fruits de mer</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_plat_resistance"/>
+        <field name="menu_category_id" ref="demo_menu_cat_mediterraneen"/>
+        <field name="accompagnement_product_id" ref="demo_product_accomp_riz_nature"/>
+        <field name="prix_unitaire">5000.0</field>
+        <field name="description">Riz safrané, poulet, crevettes, moules.</field>
+        <field name="sequence">330</field>
+        <field name="ingredient_ids" eval="[
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_riz_parfume'), 'quantity': 0.2, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_crevettes'), 'quantity': 0.05, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_poulet_frais'), 'quantity': 0.1, 'unit_id': ref('lagunes_market.uom_kg')}),
+        ]"/>
+    </record>
+
+    <record id="demo_plat_tajine_agneau" model="lagunes.plat">
+        <field name="name">Tajine d'agneau aux abricots</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_plat_resistance"/>
+        <field name="menu_category_id" ref="demo_menu_cat_mediterraneen"/>
+        <field name="accompagnement_product_id" ref="demo_product_accomp_riz_nature"/>
+        <field name="prix_unitaire">4800.0</field>
+        <field name="description">Tajine parfumé aux épices, accompagné de semoule.</field>
+        <field name="sequence">340</field>
+        <field name="ingredient_ids" eval="[
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_agneau'), 'quantity': 0.2, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_oignon'), 'quantity': 0.1, 'unit_id': ref('lagunes_market.uom_kg')}),
+        ]"/>
+    </record>
+
+    <!-- ╔═════════════════════════════════════════════════════════════════╗
+         ║  DESSERTS (8 plats)                                              ║
+         ╚═════════════════════════════════════════════════════════════════╝ -->
+    <record id="demo_plat_salade_fruits" model="lagunes.plat">
+        <field name="name">Salade de fruits frais</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_dessert"/>
+        <field name="prix_unitaire">1500.0</field>
+        <field name="description">Mélange d'ananas, mangue, papaye, banane.</field>
+        <field name="sequence">400</field>
+        <field name="ingredient_ids" eval="[
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_ananas'), 'quantity': 0.2, 'unit_id': ref('lagunes_market.uom_unit')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_mangue'), 'quantity': 0.1, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_papaye'), 'quantity': 0.25, 'unit_id': ref('lagunes_market.uom_unit')}),
+        ]"/>
+    </record>
+
+    <record id="demo_plat_ananas_frais" model="lagunes.plat">
+        <field name="name">Ananas frais</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_dessert"/>
+        <field name="prix_unitaire">800.0</field>
+        <field name="description">Tranches d'ananas frais.</field>
+        <field name="sequence">410</field>
+        <field name="is_global_available">True</field>
+        <field name="ingredient_ids" eval="[
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_ananas'), 'quantity': 0.33, 'unit_id': ref('lagunes_market.uom_unit')}),
+        ]"/>
+    </record>
+
+    <record id="demo_plat_yaourt" model="lagunes.plat">
+        <field name="name">Yaourt nature ou aux fruits</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_dessert"/>
+        <field name="prix_unitaire">600.0</field>
+        <field name="description">Yaourt individuel.</field>
+        <field name="sequence">420</field>
+        <field name="is_global_available">True</field>
+        <field name="ingredient_ids" eval="[
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_yaourt'), 'quantity': 1.0, 'unit_id': ref('lagunes_market.uom_unit')}),
+        ]"/>
+    </record>
+
+    <record id="demo_plat_creme_caramel" model="lagunes.plat">
+        <field name="name">Crème caramel</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_dessert"/>
+        <field name="prix_unitaire">1200.0</field>
+        <field name="description">Crème caramel maison.</field>
+        <field name="sequence">430</field>
+        <field name="ingredient_ids" eval="[
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_lait'), 'quantity': 0.15, 'unit_id': ref('lagunes_market.uom_litre')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_oeufs'), 'quantity': 1.0, 'unit_id': ref('lagunes_market.uom_unit')}),
+        ]"/>
+    </record>
+
+    <record id="demo_plat_gateau_banane" model="lagunes.plat">
+        <field name="name">Gâteau à la banane</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_dessert"/>
+        <field name="prix_unitaire">1500.0</field>
+        <field name="description">Part de cake à la banane maison.</field>
+        <field name="sequence">440</field>
+        <field name="ingredient_ids" eval="[
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_banane'), 'quantity': 0.1, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_farine_ble'), 'quantity': 0.08, 'unit_id': ref('lagunes_market.uom_kg')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_oeufs'), 'quantity': 1.0, 'unit_id': ref('lagunes_market.uom_unit')}),
+        ]"/>
+    </record>
+
+    <record id="demo_plat_mousse_chocolat" model="lagunes.plat">
+        <field name="name">Mousse au chocolat</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_dessert"/>
+        <field name="prix_unitaire">1800.0</field>
+        <field name="description">Mousse au chocolat onctueuse.</field>
+        <field name="sequence">450</field>
+        <field name="ingredient_ids" eval="[
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_oeufs'), 'quantity': 2.0, 'unit_id': ref('lagunes_market.uom_unit')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_creme_fraiche'), 'quantity': 0.05, 'unit_id': ref('lagunes_market.uom_litre')}),
+        ]"/>
+    </record>
+
+    <record id="demo_plat_flan_coco" model="lagunes.plat">
+        <field name="name">Flan à la noix de coco</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_dessert"/>
+        <field name="prix_unitaire">1400.0</field>
+        <field name="description">Flan noix de coco tropical.</field>
+        <field name="sequence">460</field>
+        <field name="ingredient_ids" eval="[
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_lait'), 'quantity': 0.15, 'unit_id': ref('lagunes_market.uom_litre')}),
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_oeufs'), 'quantity': 1.0, 'unit_id': ref('lagunes_market.uom_unit')}),
+        ]"/>
+    </record>
+
+    <record id="demo_plat_fruit_saison" model="lagunes.plat">
+        <field name="name">Fruit de saison (mangue, orange)</field>
+        <field name="plat_type_id" ref="lagunes_cantine.plat_type_dessert"/>
+        <field name="prix_unitaire">500.0</field>
+        <field name="description">Fruit frais au choix selon la saison.</field>
+        <field name="sequence">470</field>
+        <field name="is_global_available">True</field>
+        <field name="ingredient_ids" eval="[
+            (0, 0, {'market_article_id': ref('lagunes_market.demo_art_mangue'), 'quantity': 0.15, 'unit_id': ref('lagunes_market.uom_kg')}),
+        ]"/>
+    </record>
+
+</odoo>

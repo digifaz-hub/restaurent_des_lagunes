@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- Action rapport PDF pour la fiche de marché -->
+    <record id="action_report_market" model="ir.actions.report">
+        <field name="name">Fiche de marché</field>
+        <field name="model">lagunes.market</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">lagunes_market.report_market_template</field>
+        <field name="report_file">lagunes_market.report_market_template</field>
+        <field name="binding_model_id" ref="model_lagunes_market"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="base.paperformat_euro"/>
+    </record>
+</odoo>

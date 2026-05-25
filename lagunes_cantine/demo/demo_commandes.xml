@@ -1,0 +1,650 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+
+    <!-- ===== COMMANDES SEMAINE 1 (1-7 mars 2025) - MENU 1 ===== -->
+    <!-- Entreprise 1 : TechCorp Côte d'Ivoire -->
+    <record id="demo_cmd_01_001" model="lagunes.commande">
+        <field name="reference">CMD-2025-001</field>
+        <field name="date">2025-03-01</field>
+        <field name="entreprise_id" ref="demo_partner_digifaz"/><field name="employee_name">Jean-Marc Kouassi</field>
+        <field name="week_menu_id" ref="demo_wm_01"/>
+        <field name="day">0</field>
+        <field name="state">delivered</field>
+    </record>
+    <record id="demo_cmd_001_001_l1" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_01_001"/>
+        <field name="plat_id" ref="demo_plat_accras"/>
+    </record>
+    <record id="demo_cmd_001_001_l2" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_01_001"/>
+        <field name="plat_id" ref="demo_plat_djoumble_poulet"/>
+    </record>
+    <record id="demo_cmd_001_001_l3" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_01_001"/>
+        <field name="plat_id" ref="demo_plat_salade_fruits"/>
+    </record>
+
+    <record id="demo_cmd_01_002" model="lagunes.commande">
+        <field name="reference">CMD-2025-002</field>
+        <field name="date">2025-03-01</field>
+        <field name="entreprise_id" ref="demo_partner_digifaz"/><field name="employee_name">Aïcha Bamba</field>
+        <field name="week_menu_id" ref="demo_wm_01"/>
+        <field name="day">0</field>
+        <field name="state">delivered</field>
+    </record>
+    <record id="demo_cmd_001_002_l1" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_01_002"/>
+        <field name="plat_id" ref="demo_plat_oeuf_mayo"/>
+    </record>
+    <record id="demo_cmd_001_002_l2" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_01_002"/>
+        <field name="plat_id" ref="demo_plat_steak_frites"/>
+    </record>
+
+    <record id="demo_cmd_01_003" model="lagunes.commande">
+        <field name="reference">CMD-2025-003</field>
+        <field name="date">2025-03-02</field>
+        <field name="entreprise_id" ref="demo_partner_digifaz"/><field name="employee_name">Ibrahim Diallo</field>
+        <field name="week_menu_id" ref="demo_wm_01"/>
+        <field name="day">1</field>
+        <field name="state">delivered</field>
+    </record>
+    <record id="demo_cmd_001_003_l1" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_01_003"/>
+        <field name="plat_id" ref="demo_plat_soupe_legumes"/>
+    </record>
+    <record id="demo_cmd_001_003_l2" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_01_003"/>
+        <field name="plat_id" ref="demo_plat_kedjenou_poulet"/>
+    </record>
+    <record id="demo_cmd_001_003_l3" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_01_003"/>
+        <field name="plat_id" ref="demo_plat_ananas_frais"/>
+    </record>
+
+    <record id="demo_cmd_01_004" model="lagunes.commande">
+        <field name="reference">CMD-2025-004</field>
+        <field name="date">2025-03-02</field>
+        <field name="entreprise_id" ref="demo_partner_digifaz"/><field name="employee_name">Marie-C Yao</field>
+        <field name="week_menu_id" ref="demo_wm_01"/>
+        <field name="day">1</field>
+        <field name="state">delivered</field>
+    </record>
+    <record id="demo_cmd_001_004_l1" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_01_004"/>
+        <field name="plat_id" ref="demo_plat_gombos_vapeur"/>
+    </record>
+    <record id="demo_cmd_001_004_l2" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_01_004"/>
+        <field name="plat_id" ref="demo_plat_poisson_meuniere"/>
+    </record>
+
+    <record id="demo_cmd_01_005" model="lagunes.commande">
+        <field name="reference">CMD-2025-005</field>
+        <field name="date">2025-03-03</field>
+        <field name="entreprise_id" ref="demo_partner_digifaz"/><field name="employee_name">Koffi N'Guessan</field>
+        <field name="week_menu_id" ref="demo_wm_01"/>
+        <field name="day">2</field>
+        <field name="state">delivered</field>
+    </record>
+    <record id="demo_cmd_001_005_l1" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_01_005"/>
+        <field name="plat_id" ref="demo_plat_crudites"/>
+    </record>
+    <record id="demo_cmd_001_005_l2" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_01_005"/>
+        <field name="plat_id" ref="demo_plat_mafe_agneau"/>
+    </record>
+    <record id="demo_cmd_001_005_l3" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_01_005"/>
+        <field name="plat_id" ref="demo_plat_gateau_banane"/>
+    </record>
+
+    <!-- Entreprise 2 : Banque Sahélo-Saharienne -->
+    <record id="demo_cmd_01_006" model="lagunes.commande">
+        <field name="reference">CMD-2025-006</field>
+        <field name="date">2025-03-03</field>
+        <field name="entreprise_id" ref="demo_partner_orange"/><field name="employee_name">Patricia Gnahoua</field>
+        <field name="week_menu_id" ref="demo_wm_01"/>
+        <field name="day">2</field>
+        <field name="state">delivered</field>
+    </record>
+    <record id="demo_cmd_001_006_l1" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_01_006"/>
+        <field name="plat_id" ref="demo_plat_toast_avocat"/>
+    </record>
+    <record id="demo_cmd_001_006_l2" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_01_006"/>
+        <field name="plat_id" ref="demo_plat_lasagnes"/>
+    </record>
+
+    <record id="demo_cmd_01_007" model="lagunes.commande">
+        <field name="reference">CMD-2025-007</field>
+        <field name="date">2025-03-04</field>
+        <field name="entreprise_id" ref="demo_partner_orange"/><field name="employee_name">Alain Dagnogo</field>
+        <field name="week_menu_id" ref="demo_wm_01"/>
+        <field name="day">3</field>
+        <field name="state">delivered</field>
+    </record>
+    <record id="demo_cmd_001_007_l1" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_01_007"/>
+        <field name="plat_id" ref="demo_plat_salade_composee"/>
+    </record>
+    <record id="demo_cmd_001_007_l2" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_01_007"/>
+        <field name="plat_id" ref="demo_plat_poisson_braise"/>
+    </record>
+    <record id="demo_cmd_001_007_l3" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_01_007"/>
+        <field name="plat_id" ref="demo_plat_mousse_chocolat"/>
+    </record>
+
+    <record id="demo_cmd_01_008" model="lagunes.commande">
+        <field name="reference">CMD-2025-008</field>
+        <field name="date">2025-03-04</field>
+        <field name="entreprise_id" ref="demo_partner_orange"/><field name="employee_name">Jocelyn Kouamé</field>
+        <field name="week_menu_id" ref="demo_wm_01"/>
+        <field name="day">3</field>
+        <field name="state">preparing</field>
+    </record>
+    <record id="demo_cmd_001_008_l1" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_01_008"/>
+        <field name="plat_id" ref="demo_plat_accras"/>
+    </record>
+    <record id="demo_cmd_001_008_l2" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_01_008"/>
+        <field name="plat_id" ref="demo_plat_steak_frites"/>
+    </record>
+
+    <record id="demo_cmd_01_009" model="lagunes.commande">
+        <field name="reference">CMD-2025-009</field>
+        <field name="date">2025-03-05</field>
+        <field name="entreprise_id" ref="demo_partner_orange"/><field name="employee_name">Ghislaine Zadi</field>
+        <field name="week_menu_id" ref="demo_wm_01"/>
+        <field name="day">4</field>
+        <field name="state">delivered</field>
+    </record>
+    <record id="demo_cmd_001_009_l1" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_01_009"/>
+        <field name="plat_id" ref="demo_plat_oeuf_mayo"/>
+    </record>
+    <record id="demo_cmd_001_009_l2" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_01_009"/>
+        <field name="plat_id" ref="demo_plat_poisson_meuniere"/>
+    </record>
+    <record id="demo_cmd_001_009_l3" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_01_009"/>
+        <field name="plat_id" ref="demo_plat_yaourt"/>
+    </record>
+
+    <record id="demo_cmd_01_010" model="lagunes.commande">
+        <field name="reference">CMD-2025-010</field>
+        <field name="date">2025-03-05</field>
+        <field name="entreprise_id" ref="demo_partner_orange"/><field name="employee_name">Serge Bakayoko</field>
+        <field name="week_menu_id" ref="demo_wm_01"/>
+        <field name="day">4</field>
+        <field name="state">cancelled</field>
+        <field name="notes">Employé absent</field>
+    </record>
+
+    <!-- Entreprise 3 : SODECI -->
+    <record id="demo_cmd_01_011" model="lagunes.commande">
+        <field name="reference">CMD-2025-011</field>
+        <field name="date">2025-03-06</field>
+        <field name="entreprise_id" ref="demo_partner_mtn"/><field name="employee_name">Moussa Sekongo</field>
+        <field name="week_menu_id" ref="demo_wm_01"/>
+        <field name="day">5</field>
+        <field name="state">delivered</field>
+    </record>
+    <record id="demo_cmd_001_011_l1" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_01_011"/>
+        <field name="plat_id" ref="demo_plat_soupe_legumes"/>
+    </record>
+    <record id="demo_cmd_001_011_l2" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_01_011"/>
+        <field name="plat_id" ref="demo_plat_kedjenou_poulet"/>
+    </record>
+
+    <record id="demo_cmd_01_012" model="lagunes.commande">
+        <field name="reference">CMD-2025-012</field>
+        <field name="date">2025-03-06</field>
+        <field name="entreprise_id" ref="demo_partner_mtn"/><field name="employee_name">Isabelle Koné</field>
+        <field name="week_menu_id" ref="demo_wm_01"/>
+        <field name="day">5</field>
+        <field name="state">delivered</field>
+    </record>
+    <record id="demo_cmd_001_012_l1" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_01_012"/>
+        <field name="plat_id" ref="demo_plat_gombos_vapeur"/>
+    </record>
+    <record id="demo_cmd_001_012_l2" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_01_012"/>
+        <field name="plat_id" ref="demo_plat_lasagnes"/>
+    </record>
+    <record id="demo_cmd_001_012_l3" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_01_012"/>
+        <field name="plat_id" ref="demo_plat_creme_caramel"/>
+    </record>
+
+    <record id="demo_cmd_01_013" model="lagunes.commande">
+        <field name="reference">CMD-2025-013</field>
+        <field name="date">2025-03-07</field>
+        <field name="entreprise_id" ref="demo_partner_mtn"/><field name="employee_name">Simon N'Guessan</field>
+        <field name="week_menu_id" ref="demo_wm_01"/>
+        <field name="day">6</field>
+        <field name="state">delivered</field>
+    </record>
+    <record id="demo_cmd_001_013_l1" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_01_013"/>
+        <field name="plat_id" ref="demo_plat_crudites"/>
+    </record>
+    <record id="demo_cmd_001_013_l2" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_01_013"/>
+        <field name="plat_id" ref="demo_plat_mafe_agneau"/>
+    </record>
+
+    <record id="demo_cmd_01_014" model="lagunes.commande">
+        <field name="reference">CMD-2025-014</field>
+        <field name="date">2025-03-07</field>
+        <field name="entreprise_id" ref="demo_partner_mtn"/><field name="employee_name">Gisèle Abo</field>
+        <field name="week_menu_id" ref="demo_wm_01"/>
+        <field name="day">6</field>
+        <field name="state">preparing</field>
+    </record>
+    <record id="demo_cmd_001_014_l1" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_01_014"/>
+        <field name="plat_id" ref="demo_plat_toast_avocat"/>
+    </record>
+    <record id="demo_cmd_001_014_l2" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_01_014"/>
+        <field name="plat_id" ref="demo_plat_poulet_roti_legumes"/>
+    </record>
+    <record id="demo_cmd_001_014_l3" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_01_014"/>
+        <field name="plat_id" ref="demo_plat_flan_coco"/>
+    </record>
+        <!-- ===== COMMANDES SEMAINE 2 (8-14 mars 2025) - MENU 2 ===== -->
+    <!-- Entreprise 1 : TechCorp Côte d'Ivoire -->
+    <record id="demo_cmd_02_001" model="lagunes.commande">
+        <field name="reference">CMD-2025-015</field>
+        <field name="date">2025-03-08</field>
+        <field name="entreprise_id" ref="demo_partner_digifaz"/><field name="employee_name">Jean-Marc Kouassi</field>
+        <field name="week_menu_id" ref="demo_wm_02"/>
+        <field name="day">0</field>
+        <field name="state">delivered</field>
+    </record>
+    <record id="demo_cmd_002_001_l1" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_02_001"/>
+        <field name="plat_id" ref="demo_plat_oeuf_mayo"/>
+    </record>
+    <record id="demo_cmd_002_001_l2" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_02_001"/>
+        <field name="plat_id" ref="demo_plat_steak_frites"/>
+    </record>
+    <record id="demo_cmd_002_001_l3" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_02_001"/>
+        <field name="plat_id" ref="demo_plat_mousse_chocolat"/>
+    </record>
+
+    <record id="demo_cmd_02_002" model="lagunes.commande">
+        <field name="reference">CMD-2025-016</field>
+        <field name="date">2025-03-09</field>
+        <field name="entreprise_id" ref="demo_partner_digifaz"/><field name="employee_name">Aïcha Bamba</field>
+        <field name="week_menu_id" ref="demo_wm_02"/>
+        <field name="day">1</field>
+        <field name="state">delivered</field>
+    </record>
+    <record id="demo_cmd_002_002_l1" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_02_002"/>
+        <field name="plat_id" ref="demo_plat_salade_composee"/>
+    </record>
+    <record id="demo_cmd_002_002_l2" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_02_002"/>
+        <field name="plat_id" ref="demo_plat_lasagnes"/>
+    </record>
+    <record id="demo_cmd_002_002_l3" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_02_002"/>
+        <field name="plat_id" ref="demo_plat_yaourt"/>
+    </record>
+
+    <record id="demo_cmd_02_003" model="lagunes.commande">
+        <field name="reference">CMD-2025-017</field>
+        <field name="date">2025-03-10</field>
+        <field name="entreprise_id" ref="demo_partner_digifaz"/><field name="employee_name">Ibrahim Diallo</field>
+        <field name="week_menu_id" ref="demo_wm_02"/>
+        <field name="day">2</field>
+        <field name="state">preparing</field>
+    </record>
+    <record id="demo_cmd_002_003_l1" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_02_003"/>
+        <field name="plat_id" ref="demo_plat_crudites"/>
+    </record>
+    <record id="demo_cmd_002_003_l2" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_02_003"/>
+        <field name="plat_id" ref="demo_plat_poisson_meuniere"/>
+    </record>
+
+    <record id="demo_cmd_02_004" model="lagunes.commande">
+        <field name="reference">CMD-2025-018</field>
+        <field name="date">2025-03-11</field>
+        <field name="entreprise_id" ref="demo_partner_digifaz"/><field name="employee_name">Marie-C Yao</field>
+        <field name="week_menu_id" ref="demo_wm_02"/>
+        <field name="day">3</field>
+        <field name="state">delivered</field>
+    </record>
+    <record id="demo_cmd_002_004_l1" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_02_004"/>
+        <field name="plat_id" ref="demo_plat_toast_avocat"/>
+    </record>
+    <record id="demo_cmd_002_004_l2" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_02_004"/>
+        <field name="plat_id" ref="demo_plat_poulet_roti_legumes"/>
+    </record>
+    <record id="demo_cmd_002_004_l3" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_02_004"/>
+        <field name="plat_id" ref="demo_plat_creme_caramel"/>
+    </record>
+
+    <!-- Entreprise 2 : Banque Sahélo-Saharienne -->
+    <record id="demo_cmd_02_005" model="lagunes.commande">
+        <field name="reference">CMD-2025-019</field>
+        <field name="date">2025-03-12</field>
+        <field name="entreprise_id" ref="demo_partner_orange"/><field name="employee_name">Patricia Gnahoua</field>
+        <field name="week_menu_id" ref="demo_wm_02"/>
+        <field name="day">4</field>
+        <field name="state">delivered</field>
+    </record>
+    <record id="demo_cmd_002_005_l1" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_02_005"/>
+        <field name="plat_id" ref="demo_plat_soupe_legumes"/>
+    </record>
+    <record id="demo_cmd_002_005_l2" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_02_005"/>
+        <field name="plat_id" ref="demo_plat_steak_frites"/>
+    </record>
+    <record id="demo_cmd_002_005_l3" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_02_005"/>
+        <field name="plat_id" ref="demo_plat_salade_fruits"/>
+    </record>
+
+    <record id="demo_cmd_02_006" model="lagunes.commande">
+        <field name="reference">CMD-2025-020</field>
+        <field name="date">2025-03-13</field>
+        <field name="entreprise_id" ref="demo_partner_orange"/><field name="employee_name">Alain Dagnogo</field>
+        <field name="week_menu_id" ref="demo_wm_02"/>
+        <field name="day">5</field>
+        <field name="state">delivered</field>
+    </record>
+    <record id="demo_cmd_002_006_l1" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_02_006"/>
+        <field name="plat_id" ref="demo_plat_gombos_vapeur"/>
+    </record>
+    <record id="demo_cmd_002_006_l2" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_02_006"/>
+        <field name="plat_id" ref="demo_plat_lasagnes"/>
+    </record>
+
+    <record id="demo_cmd_02_007" model="lagunes.commande">
+        <field name="reference">CMD-2025-021</field>
+        <field name="date">2025-03-14</field>
+        <field name="entreprise_id" ref="demo_partner_orange"/><field name="employee_name">Jocelyn Kouamé</field>
+        <field name="week_menu_id" ref="demo_wm_02"/>
+        <field name="day">6</field>
+        <field name="state">cancelled</field>
+        <field name="notes">Réunion imprévue</field>
+    </record>
+
+    <!-- Entreprise 3 : SODECI -->
+    <record id="demo_cmd_02_008" model="lagunes.commande">
+        <field name="reference">CMD-2025-022</field>
+        <field name="date">2025-03-10</field>
+        <field name="entreprise_id" ref="demo_partner_mtn"/><field name="employee_name">Moussa Sekongo</field>
+        <field name="week_menu_id" ref="demo_wm_02"/>
+        <field name="day">2</field>
+        <field name="state">delivered</field>
+    </record>
+    <record id="demo_cmd_002_008_l1" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_02_008"/>
+        <field name="plat_id" ref="demo_plat_accras"/>
+    </record>
+    <record id="demo_cmd_002_008_l2" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_02_008"/>
+        <field name="plat_id" ref="demo_plat_poisson_braise"/>
+    </record>
+    <record id="demo_cmd_002_008_l3" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_02_008"/>
+        <field name="plat_id" ref="demo_plat_flan_coco"/>
+    </record>
+
+    <record id="demo_cmd_02_009" model="lagunes.commande">
+        <field name="reference">CMD-2025-023</field>
+        <field name="date">2025-03-12</field>
+        <field name="entreprise_id" ref="demo_partner_mtn"/><field name="employee_name">Isabelle Koné</field>
+        <field name="week_menu_id" ref="demo_wm_02"/>
+        <field name="day">4</field>
+        <field name="state">preparing</field>
+    </record>
+    <record id="demo_cmd_002_009_l1" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_02_009"/>
+        <field name="plat_id" ref="demo_plat_oeuf_mayo"/>
+    </record>
+    <record id="demo_cmd_002_009_l2" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_02_009"/>
+        <field name="plat_id" ref="demo_plat_mafe_agneau"/>
+    </record>
+
+    <record id="demo_cmd_02_010" model="lagunes.commande">
+        <field name="reference">CMD-2025-024</field>
+        <field name="date">2025-03-13</field>
+        <field name="entreprise_id" ref="demo_partner_mtn"/><field name="employee_name">Simon N'Guessan</field>
+        <field name="week_menu_id" ref="demo_wm_02"/>
+        <field name="day">5</field>
+        <field name="state">delivered</field>
+    </record>
+    <record id="demo_cmd_002_010_l1" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_02_010"/>
+        <field name="plat_id" ref="demo_plat_salade_composee"/>
+    </record>
+    <record id="demo_cmd_002_010_l2" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_02_010"/>
+        <field name="plat_id" ref="demo_plat_djoumble_poulet"/>
+    </record>
+    <record id="demo_cmd_002_010_l3" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_02_010"/>
+        <field name="plat_id" ref="demo_plat_gateau_banane"/>
+    </record>
+
+    <!-- ===== COMMANDES SEMAINE 3 (15-21 mars 2025) - MENU 3 ===== -->
+    <!-- Entreprise 1 : TechCorp Côte d'Ivoire -->
+    <record id="demo_cmd_03_001" model="lagunes.commande">
+        <field name="reference">CMD-2025-025</field>
+        <field name="date">2025-03-15</field>
+        <field name="entreprise_id" ref="demo_partner_digifaz"/><field name="employee_name">Koffi N'Guessan</field>
+        <field name="week_menu_id" ref="demo_wm_03"/>
+        <field name="day">0</field>
+        <field name="state">delivered</field>
+    </record>
+    <record id="demo_cmd_003_001_l1" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_03_001"/>
+        <field name="plat_id" ref="demo_plat_accras"/>
+    </record>
+    <record id="demo_cmd_003_001_l2" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_03_001"/>
+        <field name="plat_id" ref="demo_plat_kedjenou_poulet"/>
+    </record>
+    <record id="demo_cmd_003_001_l3" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_03_001"/>
+        <field name="plat_id" ref="demo_plat_ananas_frais"/>
+    </record>
+
+    <record id="demo_cmd_03_002" model="lagunes.commande">
+        <field name="reference">CMD-2025-026</field>
+        <field name="date">2025-03-16</field>
+        <field name="entreprise_id" ref="demo_partner_digifaz"/><field name="employee_name">Fatou Touré</field>
+        <field name="week_menu_id" ref="demo_wm_03"/>
+        <field name="day">1</field>
+        <field name="state">delivered</field>
+    </record>
+    <record id="demo_cmd_003_002_l1" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_03_002"/>
+        <field name="plat_id" ref="demo_plat_gombos_vapeur"/>
+    </record>
+    <record id="demo_cmd_003_002_l2" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_03_002"/>
+        <field name="plat_id" ref="demo_plat_mafe_agneau"/>
+    </record>
+    <record id="demo_cmd_003_002_l3" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_03_002"/>
+        <field name="plat_id" ref="demo_plat_flan_coco"/>
+    </record>
+
+    <!-- Entreprise 2 : Banque Sahélo-Saharienne -->
+    <record id="demo_cmd_03_003" model="lagunes.commande">
+        <field name="reference">CMD-2025-027</field>
+        <field name="date">2025-03-17</field>
+        <field name="entreprise_id" ref="demo_partner_orange"/><field name="employee_name">Ghislaine Zadi</field>
+        <field name="week_menu_id" ref="demo_wm_03"/>
+        <field name="day">2</field>
+        <field name="state">delivered</field>
+    </record>
+    <record id="demo_cmd_003_003_l1" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_03_003"/>
+        <field name="plat_id" ref="demo_plat_soupe_legumes"/>
+    </record>
+    <record id="demo_cmd_003_003_l2" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_03_003"/>
+        <field name="plat_id" ref="demo_plat_poisson_braise"/>
+    </record>
+    <record id="demo_cmd_003_003_l3" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_03_003"/>
+        <field name="plat_id" ref="demo_plat_yaourt"/>
+    </record>
+
+    <record id="demo_cmd_03_004" model="lagunes.commande">
+        <field name="reference">CMD-2025-028</field>
+        <field name="date">2025-03-18</field>
+        <field name="entreprise_id" ref="demo_partner_orange"/><field name="employee_name">Serge Bakayoko</field>
+        <field name="week_menu_id" ref="demo_wm_03"/>
+        <field name="day">3</field>
+        <field name="state">preparing</field>
+    </record>
+    <record id="demo_cmd_003_004_l1" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_03_004"/>
+        <field name="plat_id" ref="demo_plat_crudites"/>
+    </record>
+    <record id="demo_cmd_003_004_l2" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_03_004"/>
+        <field name="plat_id" ref="demo_plat_djoumble_poulet"/>
+    </record>
+
+    <record id="demo_cmd_03_005" model="lagunes.commande">
+        <field name="reference">CMD-2025-029</field>
+        <field name="date">2025-03-19</field>
+        <field name="entreprise_id" ref="demo_partner_orange"/><field name="employee_name">Aïssata N'Dri</field>
+        <field name="week_menu_id" ref="demo_wm_03"/>
+        <field name="day">4</field>
+        <field name="state">cancelled</field>
+        <field name="notes">Télétravail</field>
+    </record>
+
+    <!-- Entreprise 3 : SODECI -->
+    <record id="demo_cmd_03_006" model="lagunes.commande">
+        <field name="reference">CMD-2025-030</field>
+        <field name="date">2025-03-20</field>
+        <field name="entreprise_id" ref="demo_partner_mtn"/><field name="employee_name">Gisèle Abo</field>
+        <field name="week_menu_id" ref="demo_wm_03"/>
+        <field name="day">5</field>
+        <field name="state">delivered</field>
+    </record>
+    <record id="demo_cmd_003_006_l1" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_03_006"/>
+        <field name="plat_id" ref="demo_plat_toast_avocat"/>
+    </record>
+    <record id="demo_cmd_003_006_l2" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_03_006"/>
+        <field name="plat_id" ref="demo_plat_kedjenou_poulet"/>
+    </record>
+    <record id="demo_cmd_003_006_l3" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_03_006"/>
+        <field name="plat_id" ref="demo_plat_mousse_chocolat"/>
+    </record>
+
+    <record id="demo_cmd_03_007" model="lagunes.commande">
+        <field name="reference">CMD-2025-031</field>
+        <field name="date">2025-03-21</field>
+        <field name="entreprise_id" ref="demo_partner_mtn"/><field name="employee_name">Emmanuel Kouassi</field>
+        <field name="week_menu_id" ref="demo_wm_03"/>
+        <field name="day">6</field>
+        <field name="state">delivered</field>
+    </record>
+    <record id="demo_cmd_003_007_l1" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_03_007"/>
+        <field name="plat_id" ref="demo_plat_oeuf_mayo"/>
+    </record>
+    <record id="demo_cmd_003_007_l2" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_03_007"/>
+        <field name="plat_id" ref="demo_plat_steak_frites"/>
+    </record>
+    <record id="demo_cmd_003_007_l3" model="lagunes.commande.ligne">
+        <field name="commande_id" ref="demo_cmd_03_007"/>
+        <field name="plat_id" ref="demo_plat_creme_caramel"/>
+    </record>
+
+    <!-- ===== SEMAINE 4 (22-28 mars) - MENU 4 ===== -->
+    <record id="demo_cmd_04_001" model="lagunes.commande"><field name="reference">CMD-2025-032</field><field name="date">2025-03-22</field><field name="entreprise_id" ref="demo_partner_digifaz"/><field name="employee_name">Fatou Touré</field><field name="week_menu_id" ref="demo_wm_04"/><field name="day">0</field><field name="state">delivered</field></record>
+    <record id="demo_cmd_004_001_l1" model="lagunes.commande.ligne"><field name="commande_id" ref="demo_cmd_04_001"/><field name="plat_id" ref="demo_plat_soupe_legumes"/></record>
+    <record id="demo_cmd_004_001_l2" model="lagunes.commande.ligne"><field name="commande_id" ref="demo_cmd_04_001"/><field name="plat_id" ref="demo_plat_kedjenou_poulet"/></record>
+    <record id="demo_cmd_004_001_l3" model="lagunes.commande.ligne"><field name="commande_id" ref="demo_cmd_04_001"/><field name="plat_id" ref="demo_plat_flan_coco"/></record>
+
+    <record id="demo_cmd_04_002" model="lagunes.commande"><field name="reference">CMD-2025-033</field><field name="date">2025-03-23</field><field name="entreprise_id" ref="demo_partner_digifaz"/><field name="employee_name">Seydou Koné</field><field name="week_menu_id" ref="demo_wm_04"/><field name="day">1</field><field name="state">delivered</field></record>
+    <record id="demo_cmd_004_002_l1" model="lagunes.commande.ligne"><field name="commande_id" ref="demo_cmd_04_002"/><field name="plat_id" ref="demo_plat_toast_avocat"/></record>
+    <record id="demo_cmd_004_002_l2" model="lagunes.commande.ligne"><field name="commande_id" ref="demo_cmd_04_002"/><field name="plat_id" ref="demo_plat_mafe_agneau"/></record>
+
+    <record id="demo_cmd_04_003" model="lagunes.commande"><field name="reference">CMD-2025-034</field><field name="date">2025-03-24</field><field name="entreprise_id" ref="demo_partner_digifaz"/><field name="employee_name">Éric Ouattara</field><field name="week_menu_id" ref="demo_wm_04"/><field name="day">2</field><field name="state">preparing</field></record>
+    <record id="demo_cmd_004_003_l1" model="lagunes.commande.ligne"><field name="commande_id" ref="demo_cmd_04_003"/><field name="plat_id" ref="demo_plat_crudites"/></record>
+    <record id="demo_cmd_004_003_l2" model="lagunes.commande.ligne"><field name="commande_id" ref="demo_cmd_04_003"/><field name="plat_id" ref="demo_plat_poisson_braise"/></record>
+    <record id="demo_cmd_004_003_l3" model="lagunes.commande.ligne"><field name="commande_id" ref="demo_cmd_04_003"/><field name="plat_id" ref="demo_plat_salade_fruits"/></record>
+
+    <record id="demo_cmd_04_004" model="lagunes.commande"><field name="reference">CMD-2025-035</field><field name="date">2025-03-25</field><field name="entreprise_id" ref="demo_partner_orange"/><field name="employee_name">Alain Dagnogo</field><field name="week_menu_id" ref="demo_wm_04"/><field name="day">3</field><field name="state">delivered</field></record>
+    <record id="demo_cmd_004_004_l1" model="lagunes.commande.ligne"><field name="commande_id" ref="demo_cmd_04_004"/><field name="plat_id" ref="demo_plat_salade_composee"/></record>
+    <record id="demo_cmd_004_004_l2" model="lagunes.commande.ligne"><field name="commande_id" ref="demo_cmd_04_004"/><field name="plat_id" ref="demo_plat_djoumble_poulet"/></record>
+    <record id="demo_cmd_004_004_l3" model="lagunes.commande.ligne"><field name="commande_id" ref="demo_cmd_04_004"/><field name="plat_id" ref="demo_plat_yaourt"/></record>
+
+    <record id="demo_cmd_04_005" model="lagunes.commande"><field name="reference">CMD-2025-036</field><field name="date">2025-03-26</field><field name="entreprise_id" ref="demo_partner_orange"/><field name="employee_name">Jocelyn Kouamé</field><field name="week_menu_id" ref="demo_wm_04"/><field name="day">4</field><field name="state">cancelled</field><field name="notes">Déplacement professionnel</field></record>
+
+    <record id="demo_cmd_04_006" model="lagunes.commande"><field name="reference">CMD-2025-037</field><field name="date">2025-03-27</field><field name="entreprise_id" ref="demo_partner_mtn"/><field name="employee_name">Isabelle Koné</field><field name="week_menu_id" ref="demo_wm_04"/><field name="day">5</field><field name="state">delivered</field></record>
+    <record id="demo_cmd_004_006_l1" model="lagunes.commande.ligne"><field name="commande_id" ref="demo_cmd_04_006"/><field name="plat_id" ref="demo_plat_accras"/></record>
+    <record id="demo_cmd_004_006_l2" model="lagunes.commande.ligne"><field name="commande_id" ref="demo_cmd_04_006"/><field name="plat_id" ref="demo_plat_steak_frites"/></record>
+    <record id="demo_cmd_004_006_l3" model="lagunes.commande.ligne"><field name="commande_id" ref="demo_cmd_04_006"/><field name="plat_id" ref="demo_plat_creme_caramel"/></record>
+
+    <record id="demo_cmd_04_007" model="lagunes.commande"><field name="reference">CMD-2025-038</field><field name="date">2025-03-28</field><field name="entreprise_id" ref="demo_partner_mtn"/><field name="employee_name">Simon N'Guessan</field><field name="week_menu_id" ref="demo_wm_04"/><field name="day">6</field><field name="state">delivered</field></record>
+    <record id="demo_cmd_004_007_l1" model="lagunes.commande.ligne"><field name="commande_id" ref="demo_cmd_04_007"/><field name="plat_id" ref="demo_plat_gombos_vapeur"/></record>
+    <record id="demo_cmd_004_007_l2" model="lagunes.commande.ligne"><field name="commande_id" ref="demo_cmd_04_007"/><field name="plat_id" ref="demo_plat_lasagnes"/></record>
+
+    <!-- ===== SEMAINE 5 (29 mars-4 avril) - MENU 5 ===== -->
+    <record id="demo_cmd_05_001" model="lagunes.commande"><field name="reference">CMD-2025-039</field><field name="date">2025-03-29</field><field name="entreprise_id" ref="demo_partner_digifaz"/><field name="employee_name">Sandrine Bakayoko</field><field name="week_menu_id" ref="demo_wm_05"/><field name="day">0</field><field name="state">delivered</field></record>
+    <record id="demo_cmd_005_001_l1" model="lagunes.commande.ligne"><field name="commande_id" ref="demo_cmd_05_001"/><field name="plat_id" ref="demo_plat_oeuf_mayo"/></record>
+    <record id="demo_cmd_005_001_l2" model="lagunes.commande.ligne"><field name="commande_id" ref="demo_cmd_05_001"/><field name="plat_id" ref="demo_plat_poulet_roti_legumes"/></record>
+    <record id="demo_cmd_005_001_l3" model="lagunes.commande.ligne"><field name="commande_id" ref="demo_cmd_05_001"/><field name="plat_id" ref="demo_plat_mousse_chocolat"/></record>
+
+    <record id="demo_cmd_05_002" model="lagunes.commande"><field name="reference">CMD-2025-040</field><field name="date">2025-03-30</field><field name="entreprise_id" ref="demo_partner_digifaz"/><field name="employee_name">Laurent Kouamé</field><field name="week_menu_id" ref="demo_wm_05"/><field name="day">1</field><field name="state">preparing</field></record>
+    <record id="demo_cmd_005_002_l1" model="lagunes.commande.ligne"><field name="commande_id" ref="demo_cmd_05_002"/><field name="plat_id" ref="demo_plat_soupe_legumes"/></record>
+    <record id="demo_cmd_005_002_l2" model="lagunes.commande.ligne"><field name="commande_id" ref="demo_cmd_05_002"/><field name="plat_id" ref="demo_plat_poisson_meuniere"/></record>
+
+    <record id="demo_cmd_05_003" model="lagunes.commande"><field name="reference">CMD-2025-041</field><field name="date">2025-03-31</field><field name="entreprise_id" ref="demo_partner_orange"/><field name="employee_name">Ghislaine Zadi</field><field name="week_menu_id" ref="demo_wm_05"/><field name="day">2</field><field name="state">delivered</field></record>
+    <record id="demo_cmd_005_003_l1" model="lagunes.commande.ligne"><field name="commande_id" ref="demo_cmd_05_003"/><field name="plat_id" ref="demo_plat_crudites"/></record>
+    <record id="demo_cmd_005_003_l2" model="lagunes.commande.ligne"><field name="commande_id" ref="demo_cmd_05_003"/><field name="plat_id" ref="demo_plat_mafe_agneau"/></record>
+    <record id="demo_cmd_005_003_l3" model="lagunes.commande.ligne"><field name="commande_id" ref="demo_cmd_05_003"/><field name="plat_id" ref="demo_plat_gateau_banane"/></record>
+
+    <record id="demo_cmd_05_004" model="lagunes.commande"><field name="reference">CMD-2025-042</field><field name="date">2025-04-01</field><field name="entreprise_id" ref="demo_partner_orange"/><field name="employee_name">Serge Bakayoko</field><field name="week_menu_id" ref="demo_wm_05"/><field name="day">3</field><field name="state">delivered</field></record>
+    <record id="demo_cmd_005_004_l1" model="lagunes.commande.ligne"><field name="commande_id" ref="demo_cmd_05_004"/><field name="plat_id" ref="demo_plat_toast_avocat"/></record>
+    <record id="demo_cmd_005_004_l2" model="lagunes.commande.ligne"><field name="commande_id" ref="demo_cmd_05_004"/><field name="plat_id" ref="demo_plat_kedjenou_poulet"/></record>
+
+    <record id="demo_cmd_05_005" model="lagunes.commande"><field name="reference">CMD-2025-043</field><field name="date">2025-04-02</field><field name="entreprise_id" ref="demo_partner_mtn"/><field name="employee_name">Gisèle Abo</field><field name="week_menu_id" ref="demo_wm_05"/><field name="day">4</field><field name="state">preparing</field></record>
+    <record id="demo_cmd_005_005_l1" model="lagunes.commande.ligne"><field name="commande_id" ref="demo_cmd_05_005"/><field name="plat_id" ref="demo_plat_salade_composee"/></record>
+    <record id="demo_cmd_005_005_l2" model="lagunes.commande.ligne"><field name="commande_id" ref="demo_cmd_05_005"/><field name="plat_id" ref="demo_plat_djoumble_poulet"/></record>
+    <record id="demo_cmd_005_005_l3" model="lagunes.commande.ligne"><field name="commande_id" ref="demo_cmd_05_005"/><field name="plat_id" ref="demo_plat_ananas_frais"/></record>
+
+    <record id="demo_cmd_05_006" model="lagunes.commande"><field name="reference">CMD-2025-044</field><field name="date">2025-04-03</field><field name="entreprise_id" ref="demo_partner_mtn"/><field name="employee_name">Emmanuel Kouassi</field><field name="week_menu_id" ref="demo_wm_05"/><field name="day">5</field><field name="state">cancelled</field><field name="notes">Formation externe</field></record>
+
+</odoo>

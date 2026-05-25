@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- Séquence pour les demandes traiteur : TRT/2026/00001 -->
+        <record id="seq_traiteur_demande" model="ir.sequence">
+            <field name="name">Séquence Demande Traiteur</field>
+            <field name="code">lagunes.traiteur.demande</field>
+            <field name="prefix">TRT/%(year)s/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+
+        <!-- Séquence pour les devis traiteur : DEV-TRT/2026/00001 -->
+        <record id="seq_traiteur_devis" model="ir.sequence">
+            <field name="name">Séquence Devis Traiteur</field>
+            <field name="code">lagunes.traiteur.devis</field>
+            <field name="prefix">DEV-TRT/%(year)s/</field>
+            <field name="padding">5</field>
+            <field name="company_id" eval="False"/>
+        </record>
+    </data>
+</odoo>

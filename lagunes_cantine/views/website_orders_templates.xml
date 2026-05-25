@@ -1,0 +1,334 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Template : Historique des commandes -->
+    <template id="lagunes_cantine.my_orders_list" name="My Orders List">
+        <t t-call="website.layout">
+            <div class="container mt-4 mb-5 lagunes-frontend">
+                <!-- Breadcrumb -->
+                <nav aria-label="breadcrumb" class="mb-4">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item">
+                            <a href="/cantine">Cantine</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="/cantine/menu">Menu de la semaine</a>
+                        </li>
+                        <li class="breadcrumb-item active">Mes commandes</li>
+                    </ol>
+                </nav>
+
+                <!-- Header -->
+                <div class="row mb-4">
+                    <div class="col-12">
+                        <h1 class="text-primary">
+                            <i class="fa fa-history me-2"></i>Historique de mes commandes
+                        </h1>
+                        <p class="text-muted">Consultez toutes vos commandes passées et leurs statuts</p>
+                    </div>
+                </div>
+
+                <!-- Commandes groupées par date -->
+                <t t-if="commandes_by_date">
+                    <t t-foreach="commandes_by_date.items()" t-as="date_group">
+                        <t t-set="date_key" t-value="date_group[0]"/>
+                        <t t-set="cmds" t-value="date_group[1]"/>
+
+                        <!-- En-tête date en français -->
+                        <div class="d-flex align-items-center mb-3 mt-4">
+                            <!-- Mapping des jours en français -->
+                            <t t-set="jours_fr" t-value="{'Monday': 'Lundi', 'Tuesday': 'Mardi', 'Wednesday': 'Mercredi', 'Thursday': 'Jeudi', 'Friday': 'Vendredi', 'Saturday': 'Samedi', 'Sunday': 'Dimanche'}"/>
+                            <t t-set="mois_fr" t-value="{'January': 'janvier', 'February': 'février', 'March': 'mars', 'April': 'avril', 'May': 'mai', 'June': 'juin', 'July': 'juillet', 'August': 'août', 'September': 'septembre', 'October': 'octobre', 'November': 'novembre', 'December': 'décembre'}"/>
+                            <t t-set="jour_en" t-value="date_key.strftime('%A')"/>
+                            <t t-set="mois_en" t-value="date_key.strftime('%B')"/>
+                            <h3 class="mb-0">
+                                <t t-esc="jours_fr.get(jour_en, jour_en)"/>
+                                <t t-esc="date_key.strftime(' %d ')"/>
+                                <t t-esc="mois_fr.get(mois_en, mois_en)"/>
+                                <t t-esc="date_key.strftime(' %Y')"/>
+                            </h3>
+                            <span class="badge bg-secondary ms-2" t-esc="str(len(cmds)) + ' commande(s)'"/>
+                        </div>
+
+                        <!-- Liste commandes du jour -->
+                        <div class="row g-3">
+                            <t t-foreach="cmds" t-as="commande_item">
+                                <div class="col-md-6 col-lg-4">
+                                    <div class="card h-100 command-card" t-att-data-status="commande_item.state">
+                                        <!-- Badge statut uniquement (pas de facturation) -->
+                                        <div class="card-header d-flex justify-content-between align-items-center">
+                                            <span>
+                                                <span t-if="commande_item.state == 'draft'" class="badge text-bg-secondary">Brouillon</span>
+                                                <span t-elif="commande_item.state == 'confirmed'" class="badge text-bg-info">Confirmée</span>
+                                                <span t-elif="commande_item.state == 'preparing'" class="badge text-bg-warning">En préparation</span>
+                                                <span t-elif="commande_item.state == 'ready'" class="badge text-bg-primary">Prêt</span>
+                                                <span t-elif="commande_item.state == 'delivered'" class="badge text-bg-success">Livré</span>
+                                                <span t-elif="commande_item.state == 'cancelled'" class="badge text-bg-danger">Annulé</span>
+                                            </span>
+                                            <span class="text-muted small" t-esc="commande_item.create_date.strftime('%H:%M')"/>
+                                        </div>
+
+                                        <!-- Corps -->
+                                        <div class="card-body">
+                                            <h5 class="card-title" t-esc="commande_item.reference"/>
+
+                                            <!-- Détails des plats par rôle -->
+                                            <div class="mb-3">
+                                                <div class="small text-muted mb-1">Détails de la commande</div>
+                                                <t t-if="commande_item.entree_plat_id">
+                                                    <div class="mb-1" style="line-height: 1.2;">
+                                                        <i class="fa fa-leaf me-1" style="color:#28a745;"/>
+                                                        <strong t-esc="commande_item.entree_plat_id.display_name_website"/>
+                                                        <span class="badge ms-1" style="font-size: 8px; background:#d1e7dd; color:#155724;">Entrée</span>
+                                                    </div>
+                                                </t>
+                                                <t t-if="commande_item.resistance_plat_id">
+                                                    <div class="mb-1" style="line-height: 1.2;">
+                                                        <i class="fa fa-cutlery me-1" style="color:#16166d;"/>
+                                                        <strong t-esc="commande_item.resistance_plat_id.display_name_website"/>
+                                                        <span class="badge ms-1" style="font-size: 8px; background:#e8e9f5; color:#16166d;">Résistance</span>
+                                                    </div>
+                                                </t>
+                                                <t t-if="commande_item.dessert_plat_id">
+                                                    <div class="mb-1" style="line-height: 1.2;">
+                                                        <i class="fa fa-birthday-cake me-1" style="color:#fd7e14;"/>
+                                                        <strong t-esc="commande_item.dessert_plat_id.display_name_website"/>
+                                                        <span class="badge ms-1" style="font-size: 8px; background:#fff3cd; color:#856404;">Dessert</span>
+                                                    </div>
+                                                </t>
+                                            </div>
+
+
+                                            <!-- Commande passée pour quelqu'un d'autre -->
+                                            <t t-if="commande_item.ordered_for_name">
+                                                <div class="mb-2 small">
+                                                    <span class="badge" style="background:#f0f4e8; color:#3a5a1a; border:1px solid #7f910c40;">
+                                                        <i class="fa fa-user me-1"/>
+                                                        Pour : <t t-esc="commande_item.ordered_for_name"/>
+                                                    </span>
+                                                </div>
+                                            </t>
+
+                                            <!-- Composition par rôle -->
+                                            <div class="row g-2 small mb-3">
+                                                <div class="col-8">
+                                                    <div class="small text-muted">Composition</div>
+                                                    <t t-set="comp_parts" t-value="(['Entrée'] if commande_item.entree_plat_id else []) + (['Résistance'] if commande_item.resistance_plat_id else []) + (['Dessert'] if commande_item.dessert_plat_id else [])"/>
+                                                    <t t-if="comp_parts">
+                                                        <span class="fw-semibold" style="color: #16166d;" t-esc="' • '.join(comp_parts)"/>
+                                                    </t>
+                                                    <t t-else=""><span class="text-muted">—</span></t>
+                                                </div>
+                                                <div class="col-4">
+                                                    <div class="small text-muted">Quantité</div>
+                                                    <strong t-esc="commande_item.quantity"/>
+                                                </div>
+                                            </div>
+
+                                            <!-- Options si présentes -->
+                                            <t t-if="commande_item.option_ids">
+                                                <div class="mb-3">
+                                                    <div class="small text-muted">Options</div>
+                                                    <t t-foreach="commande_item.option_ids" t-as="opt">
+                                                        <span class="badge text-bg-light text-dark me-1" t-esc="opt.name"/>
+                                                    </t>
+                                                </div>
+                                            </t>
+
+                                            <!-- Notes si présentes -->
+                                            <t t-if="commande_item.notes">
+                                                <div class="small text-muted fst-italic">
+                                                    <i class="fa fa-comment me-1"/>
+                                                    <t t-esc="commande_item.notes"/>
+                                                </div>
+                                            </t>
+                                        </div>
+
+                                        <!-- Pied : lien détail uniquement -->
+                                        <div class="card-footer bg-light">
+                                            <a t-attf-href="/cantine/commandes/#{commande_item.id}" class="btn btn-sm btn-outline-primary w-100">
+                                                <i class="fa fa-eye me-1"/>Voir détails
+                                            </a>
+                                        </div>
+                                    </div>
+                                </div>
+                            </t>
+                        </div>
+                    </t>
+                </t>
+
+                <!-- Aucune commande -->
+                <t t-if="not commandes_by_date">
+                    <div class="alert alert-info text-center py-5">
+                        <i class="fa fa-inbox fa-3x mb-3 d-block text-muted"/>
+                        <h4>Aucune commande trouvée</h4>
+                        <p class="text-muted">Vous n'avez pas encore passé de commande.</p>
+                    </div>
+                </t>
+            </div>
+
+            <style>
+                .command-card {
+                    transition: all 0.3s ease;
+                    border-left: 4px solid #dee2e6;
+                }
+                .command-card[data-status="delivered"] { border-left-color: #198754; }
+                .command-card[data-status="confirmed"]  { border-left-color: #0dcaf0; }
+                .command-card[data-status="preparing"]  { border-left-color: #ffc107; }
+                .command-card[data-status="ready"]      { border-left-color: #0d6efd; }
+                .command-card[data-status="cancelled"]  { border-left-color: #dc3545; opacity: 0.7; }
+                .command-card:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.15); }
+            </style>
+        </t>
+    </template>
+
+    <!-- Template : Détail d'une commande -->
+    <template id="lagunes_cantine.order_detail" name="Order Detail">
+        <t t-call="website.layout">
+            <div class="container mt-4 mb-5 lagunes-frontend">
+                <!-- Breadcrumb -->
+                <nav aria-label="breadcrumb" class="mb-4">
+                    <ol class="breadcrumb">
+                        <li class="breadcrumb-item"><a href="/cantine">Cantine</a></li>
+                        <li class="breadcrumb-item"><a href="/cantine/menu">Menu</a></li>
+                        <li class="breadcrumb-item"><a href="/cantine/commandes/list">Mes commandes</a></li>
+                        <li class="breadcrumb-item active" t-esc="commande.reference"/>
+                    </ol>
+                </nav>
+
+                <div class="row">
+                    <div class="col-lg-8">
+                        <div class="card mb-4">
+                            <div class="card-header bg-light">
+                                <div class="row align-items-center">
+                                    <div class="col">
+                                        <h2 class="mb-0" t-esc="commande.reference"/>
+                                        <!-- Date en français -->
+                                        <t t-set="mois_fr_det" t-value="{'January': 'janvier', 'February': 'février', 'March': 'mars', 'April': 'avril', 'May': 'mai', 'June': 'juin', 'July': 'juillet', 'August': 'août', 'September': 'septembre', 'October': 'octobre', 'November': 'novembre', 'December': 'décembre'}"/>
+                                        <t t-set="jours_fr_det" t-value="{'Monday': 'Lundi', 'Tuesday': 'Mardi', 'Wednesday': 'Mercredi', 'Thursday': 'Jeudi', 'Friday': 'Vendredi', 'Saturday': 'Samedi', 'Sunday': 'Dimanche'}"/>
+                                        <small class="text-muted">
+                                            <t t-esc="jours_fr_det.get(commande.date.strftime('%A'), commande.date.strftime('%A'))"/>
+                                            <t t-esc="commande.date.strftime(' %d ')"/>
+                                            <t t-esc="mois_fr_det.get(commande.date.strftime('%B'), commande.date.strftime('%B'))"/>
+                                            <t t-esc="commande.date.strftime(' %Y')"/>
+                                        </small>
+                                    </div>
+                                    <div class="col-auto">
+                                        <span t-if="commande.state == 'draft'" class="badge bg-secondary fs-6">Brouillon</span>
+                                        <span t-elif="commande.state == 'confirmed'" class="badge bg-info fs-6">Confirmée</span>
+                                        <span t-elif="commande.state == 'preparing'" class="badge bg-warning fs-6">En préparation</span>
+                                        <span t-elif="commande.state == 'ready'" class="badge bg-primary fs-6">Prêt</span>
+                                        <span t-elif="commande.state == 'delivered'" class="badge bg-success fs-6">Livré</span>
+                                        <span t-elif="commande.state == 'cancelled'" class="badge bg-danger fs-6">Annulé</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="card-body">
+                                <!-- Contenu du plateau par rôle (Entrée → Résistance → Dessert) -->
+                                <div class="mb-4">
+                                    <h6 class="text-muted text-uppercase small border-bottom pb-2">Contenu du plateau</h6>
+                                    <div class="row g-3">
+                                        <t t-if="commande.entree_plat_id">
+                                            <div class="col-md-6">
+                                                <div class="p-3 bg-light rounded-lg border" style="border-left: 3px solid #28a745 !important;">
+                                                    <div class="small text-uppercase fw-bold mb-1" style="font-size: 10px; color:#28a745;">Entrée</div>
+                                                    <h6 class="mb-0 fw-bold" t-esc="commande.entree_plat_id.display_name_website"/>
+                                                </div>
+                                            </div>
+                                        </t>
+                                        <t t-if="commande.resistance_plat_id">
+                                            <div class="col-md-6">
+                                                <div class="p-3 bg-light rounded-lg border" style="border-left: 3px solid #16166d !important;">
+                                                    <div class="small text-uppercase fw-bold mb-1" style="font-size: 10px; color:#16166d;">Plat de résistance</div>
+                                                    <h6 class="mb-0 fw-bold" t-esc="commande.resistance_plat_id.display_name_website"/>
+                                                </div>
+                                            </div>
+                                        </t>
+                                        <t t-if="commande.dessert_plat_id">
+                                            <div class="col-md-6">
+                                                <div class="p-3 bg-light rounded-lg border" style="border-left: 3px solid #fd7e14 !important;">
+                                                    <div class="small text-uppercase fw-bold mb-1" style="font-size: 10px; color:#fd7e14;">Dessert</div>
+                                                    <h6 class="mb-0 fw-bold" t-esc="commande.dessert_plat_id.display_name_website"/>
+                                                </div>
+                                            </div>
+                                        </t>
+                                    </div>
+                                </div>
+
+                                <!-- Commandé pour quelqu'un d'autre -->
+                                <t t-if="commande.ordered_for_name">
+                                    <div class="row mb-3">
+                                        <div class="col-md-6">
+                                            <h6 class="text-muted text-uppercase small">Commande pour</h6>
+                                            <p t-esc="commande.ordered_for_name"/>
+                                        </div>
+                                    </div>
+                                </t>
+                                <div class="row mb-3">
+                                    <div class="col-md-6">
+                                        <h6 class="text-muted text-uppercase small">Entreprise</h6>
+                                        <p t-esc="commande.entreprise_id.name"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <t t-if="commande.option_ids">
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <h5 class="mb-0"><i class="fa fa-check-circle me-2"/>Options sélectionnées</h5>
+                                </div>
+                                <ul class="list-group list-group-flush">
+                                    <t t-foreach="commande.option_ids" t-as="opt_d">
+                                        <li class="list-group-item" t-esc="opt_d.name"/>
+                                    </t>
+                                </ul>
+                            </div>
+                        </t>
+
+                        <t t-if="commande.notes">
+                            <div class="card mb-4">
+                                <div class="card-header">
+                                    <h5 class="mb-0"><i class="fa fa-comment me-2"/>Notes</h5>
+                                </div>
+                                <div class="card-body">
+                                    <p t-esc="commande.notes" style="white-space: pre-wrap;"/>
+                                </div>
+                            </div>
+                        </t>
+                    </div>
+
+                    <div class="col-lg-4">
+                        <div class="card sticky-top" style="top: 20px;">
+                            <div class="card-header bg-light">
+                                <h5 class="mb-0">Résumé</h5>
+                            </div>
+                            <ul class="list-group list-group-flush">
+                                <t t-set="detail_parts" t-value="(['Entrée'] if commande.entree_plat_id else []) + (['Résistance'] if commande.resistance_plat_id else []) + (['Dessert'] if commande.dessert_plat_id else [])"/>
+                                <li class="list-group-item">
+                                    <strong>Composition : </strong>
+                                    <t t-if="detail_parts">
+                                        <span t-esc="' • '.join(detail_parts)"/>
+                                    </t>
+                                    <t t-else=""><span class="text-muted">—</span></t>
+                                </li>
+                                <li class="list-group-item">
+                                    <strong>Nombre de plats : </strong><span t-esc="len(detail_parts)"/>
+                                </li>
+                                <li class="list-group-item">
+                                    <strong>Quantité : </strong><span t-esc="commande.quantity"/>
+                                </li>
+                            </ul>
+                            <div class="card-body pt-3 border-top">
+                                <a href="/cantine/commandes/list" class="btn btn-outline-secondary w-100">
+                                    <i class="fa fa-arrow-left me-2"/>Retour à mes commandes
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+
+</odoo>

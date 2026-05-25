@@ -1,0 +1,556 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+<template id="week_menu_table" name="Menu de la semaine">
+    <t t-call="website.layout">
+        <div id="wrap" class="lagunes-frontend pb-5">
+
+            <!-- Premium Header -->
+            <div class="header-banner py-4 text-white" style="background: linear-gradient(135deg, #16166d 0%, #0a0a4a 100%);">
+                <div class="container">
+                    <div class="row align-items-center">
+                        <div class="col-md-8">
+                            <h2 class="mb-1 fw-bold">Bon appétit, <t t-esc="employe_name.split(' ')[0] if employe_name else 'Cher Client'"/> !</h2>
+                            <p class="opacity-75 mb-0">Ravi de vous revoir chez <strong><t t-esc="entreprise.name"/></strong>.</p>
+                        </div>
+                        <div class="col-md-4 text-md-end mt-3 mt-md-0 d-flex gap-2 justify-content-md-end">
+                            <a href="/cantine/commandes/list" class="btn btn-outline-light btn-sm">
+                                <i class="fa fa-history me-1"/> Mes Commandes
+                            </a>
+                            <a href="/cantine/logout" class="btn btn-outline-light btn-sm opacity-75">
+                                <i class="fa fa-sign-out"/>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="container mt-4">
+                <div class="cantine-wizard-layout">
+
+                    <!-- SIDEBAR GAUCHE : Menu de la semaine (sticky, jours en colonnes / types en lignes) -->
+                    <aside class="sticky-menu-panel">
+                        <div class="sticky-menu-header">
+                            <span><i class="fa fa-calendar-o me-2"/>Menu de la semaine</span>
+                        </div>
+                        <div class="sticky-menu-content p-0">
+                            <t t-if="week_menu">
+                                <div class="table-responsive">
+                                    <table class="table table-bordered table-sm mb-0 sidebar-menu-table">
+                                        <thead>
+                                            <tr>
+                                                <th class="sidebar-type-col"></th>
+                                                <t t-foreach="range(7)" t-as="d_h">
+                                                    <th class="text-center p-1"
+                                                        t-att-style="'background:#f9fdf0; border-bottom:2px solid #7f910c;' if d_h == today_day_idx else 'background:#f8fafc;'">
+                                                        <div style="font-size: 9px; color: #16166d; font-weight: 700;">
+                                                            <t t-esc="jours_labels.get(d_h, '')"/>
+                                                        </div>
+                                                        <t t-if="d_h == today_day_idx">
+                                                            <span class="badge rounded-pill bg-success" style="font-size: 7px;">Auj.</span>
+                                                        </t>
+                                                    </th>
+                                                </t>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            <!-- ENTRÉES -->
+                                            <t t-foreach="plat_types" t-as="pt_sb">
+                                                <t t-if="'entr' in pt_sb.name.lower()">
+                                                    <tr>
+                                                        <th class="sidebar-type-col sidebar-type-entree">
+                                                            <t t-esc="pt_sb.name"/>
+                                                        </th>
+                                                        <t t-foreach="range(7)" t-as="d_sb">
+                                                            <td class="p-1" t-att-style="'background:#f9fdf0;' if d_sb == today_day_idx else ''">
+                                                                <t t-set="cell_sb" t-value="menu_by_day_type.get(d_sb, {}).get(pt_sb.id, [])"/>
+                                                                <t t-if="cell_sb">
+                                                                    <t t-foreach="cell_sb" t-as="cl_sb">
+                                                                        <t t-foreach="cl_sb.plat_ids" t-as="cp_sb">
+                                                                            <div class="sidebar-cell-text"><t t-esc="cp_sb.display_name_website"/></div>
+                                                                        </t>
+                                                                    </t>
+                                                                </t>
+                                                                <t t-else=""><span class="text-muted sidebar-cell-text">—</span></t>
+                                                            </td>
+                                                        </t>
+                                                    </tr>
+                                                </t>
+                                            </t>
+                                            <!-- RÉSISTANCE -->
+                                            <t t-foreach="plat_types" t-as="pt_sb">
+                                                <t t-if="'sist' in pt_sb.name.lower() or 'principal' in pt_sb.name.lower()">
+                                                    <tr>
+                                                        <th class="sidebar-type-col sidebar-type-resistance">
+                                                            <t t-esc="pt_sb.name"/>
+                                                        </th>
+                                                        <t t-foreach="range(7)" t-as="d_sb">
+                                                            <td class="p-1" t-att-style="'background:#f9fdf0;' if d_sb == today_day_idx else ''">
+                                                                <t t-set="cell_sb" t-value="menu_by_day_type.get(d_sb, {}).get(pt_sb.id, [])"/>
+                                                                <t t-if="cell_sb">
+                                                                    <t t-foreach="cell_sb" t-as="cl_sb">
+                                                                        <t t-foreach="cl_sb.plat_ids" t-as="cp_sb">
+                                                                            <div class="sidebar-cell-text"><t t-esc="cp_sb.display_name_website"/></div>
+                                                                        </t>
+                                                                    </t>
+                                                                </t>
+                                                                <t t-else=""><span class="text-muted sidebar-cell-text">—</span></t>
+                                                            </td>
+                                                        </t>
+                                                    </tr>
+                                                </t>
+                                            </t>
+                                            <!-- DESSERTS -->
+                                            <t t-foreach="plat_types" t-as="pt_sb">
+                                                <t t-if="'dessert' in pt_sb.name.lower()">
+                                                    <tr>
+                                                        <th class="sidebar-type-col sidebar-type-dessert">
+                                                            <t t-esc="pt_sb.name"/>
+                                                        </th>
+                                                        <t t-foreach="range(7)" t-as="d_sb">
+                                                            <td class="p-1" t-att-style="'background:#f9fdf0;' if d_sb == today_day_idx else ''">
+                                                                <t t-set="cell_sb" t-value="menu_by_day_type.get(d_sb, {}).get(pt_sb.id, [])"/>
+                                                                <t t-if="cell_sb">
+                                                                    <t t-foreach="cell_sb" t-as="cl_sb">
+                                                                        <t t-foreach="cl_sb.plat_ids" t-as="cp_sb">
+                                                                            <div class="sidebar-cell-text"><t t-esc="cp_sb.display_name_website"/></div>
+                                                                        </t>
+                                                                    </t>
+                                                                </t>
+                                                                <t t-else=""><span class="text-muted sidebar-cell-text">—</span></t>
+                                                            </td>
+                                                        </t>
+                                                    </tr>
+                                                </t>
+                                            </t>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </t>
+                            <t t-else="">
+                                <div class="p-3 text-center text-muted small">Aucun menu publié cette semaine.</div>
+                            </t>
+                        </div>
+                    </aside>
+
+                    <!-- CONTENU PRINCIPAL : Wizard de commande -->
+                    <main class="wizard-main-content">
+
+                        <t t-if="not heure_limite_atteinte and not limit_reached_session">
+                            <!-- Barre de progression -->
+                            <div class="wizard-progress mb-5 px-md-5">
+                                <div class="progress-step active" data-step="1">1</div>
+                                <div class="progress-step" data-step="2">2</div>
+                                <div class="progress-step" data-step="3"><i class="fa fa-check"/></div>
+                            </div>
+
+                            <div id="cantine-wizard"
+                                 t-att-data-entreprise-id="entreprise.id"
+                                 t-att-data-week-menu-id="week_menu.id if week_menu else 0"
+                                 t-att-data-today-day="today_day_idx"
+                                 t-att-data-peut-pour-autres="'true' if peut_commander_pour_autres else 'false'">
+
+                                <!-- ════════════════════════════════════════════
+                                     STEP 1 : Composez votre repas
+                                     Ordre : Entrée → Résistance → Dessert
+                                     ════════════════════════════════════════════ -->
+                                <section class="wizard-step active" id="step-1">
+                                    <div class="step-header mb-4">
+                                        <h3 class="fw-bold" style="color: #16166d;">1. Composez votre repas</h3>
+                                        <p class="text-muted">Choisissez dans l'ordre : une entrée, votre plat de résistance (obligatoire), puis un dessert.</p>
+                                    </div>
+
+                                    <!-- ── ENTRÉE ──────────────────────────────────────────── -->
+                                    <div class="d-flex align-items-center justify-content-between mb-3">
+                                        <h5 class="fw-bold mb-0" style="color: #155724;">
+                                            <i class="fa fa-leaf me-2"/>Entrée
+                                            <span class="text-muted fw-normal small ms-1">(optionnel)</span>
+                                        </h5>
+                                        <div class="d-inline-flex align-items-center bg-light px-3 py-2 rounded-pill border shadow-sm">
+                                            <span class="small fw-bold me-2" style="color: #155724;"><i class="fa fa-shopping-basket me-1"/>Entrée + Dessert :</span>
+                                            <span class="badge rounded-pill bg-success" id="sides-count" style="min-width: 20px;">0</span>
+                                            <span class="small fw-bold ms-1 text-muted">/ 2</span>
+                                        </div>
+                                    </div>
+
+                                    <!-- Entrées au menu du jour -->
+                                    <div class="mb-4">
+                                        <h6 class="mb-3 fw-bold text-uppercase small" style="color: #16166d; letter-spacing: 1px;">
+                                            <i class="fa fa-calendar-check-o me-2"/>Au menu aujourd'hui
+                                        </h6>
+                                        <div class="row g-3">
+                                            <t t-foreach="plat_types" t-as="pt">
+                                                <t t-if="'entr' in pt.name.lower()">
+                                                    <t t-set="today_entrees" t-value="menu_by_day_type.get(today_day_idx, {}).get(pt.id, [])"/>
+                                                    <t t-foreach="today_entrees" t-as="line_e">
+                                                        <t t-foreach="line_e.plat_ids" t-as="plat_e">
+                                                            <div class="col-md-6 col-xl-4">
+                                                                <div class="dish-card plat-choice-card side-choice-card h-100 card shadow-sm border-0"
+                                                                     t-att-data-plat-id="plat_e.id"
+                                                                     data-type-role="entree"
+                                                                     t-att-data-plat-name="plat_e.display_name_website">
+                                                                    <div class="dish-img-container" style="height: 140px;">
+                                                                        <t t-if="plat_e.image_128">
+                                                                            <img t-att-src="'/web/image/lagunes.plat/%s/image_1920' % plat_e.id"
+                                                                                 class="w-100 h-100 object-fit-cover" alt="Entrée"/>
+                                                                        </t>
+                                                                        <t t-else="">
+                                                                            <div class="h-100 w-100 d-flex align-items-center justify-content-center bg-light">
+                                                                                <i class="fa fa-leaf fa-2x opacity-25"/>
+                                                                            </div>
+                                                                        </t>
+                                                                    </div>
+                                                                    <div class="card-body p-3">
+                                                                        <div class="d-flex justify-content-between align-items-start mb-1">
+                                                                            <h6 class="fw-bold mb-0" style="color: #16166d; font-size: 13px;"><t t-esc="plat_e.display_name_website"/></h6>
+                                                                            <span class="badge bg-success" style="font-size: 7px;"><t t-esc="pt.name"/></span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </t>
+                                                    </t>
+                                                </t>
+                                            </t>
+                                        </div>
+                                    </div>
+
+                                    <!-- Entrées hors-menu -->
+                                    <t t-set="has_hm_entrees" t-value="any('entr' in pt_hm_e.name.lower() for pt_hm_e in hors_menu_by_type.keys())"/>
+                                    <t t-if="has_hm_entrees">
+                                        <div class="mb-4">
+                                            <h6 class="mb-3 fw-bold text-uppercase small" style="color: #c29d0b; letter-spacing: 1px;">
+                                                <i class="fa fa-star me-2"/>Disponibles tous les jours
+                                            </h6>
+                                            <div class="row g-3">
+                                                <t t-foreach="hors_menu_by_type.items()" t-as="item_e">
+                                                    <t t-set="pt_hm_e" t-value="item_e[0]"/>
+                                                    <t t-set="plats_hm_e" t-value="item_e[1]"/>
+                                                    <t t-if="'entr' in pt_hm_e.name.lower()">
+                                                        <t t-foreach="plats_hm_e" t-as="plat_hm_e">
+                                                            <div class="col-md-6 col-xl-4">
+                                                                <div class="dish-card plat-choice-card side-choice-card h-100 card shadow-sm border-0"
+                                                                     t-att-data-plat-id="plat_hm_e.id"
+                                                                     data-type-role="entree"
+                                                                     t-att-data-plat-name="plat_hm_e.display_name_website">
+                                                                    <div class="dish-img-container" style="height: 140px;">
+                                                                        <t t-if="plat_hm_e.image_128">
+                                                                            <img t-att-src="'/web/image/lagunes.plat/%s/image_1920' % plat_hm_e.id"
+                                                                                 class="w-100 h-100 object-fit-cover" alt="Entrée hors-menu"/>
+                                                                        </t>
+                                                                        <t t-else="">
+                                                                            <div class="h-100 w-100 d-flex align-items-center justify-content-center bg-light">
+                                                                                <i class="fa fa-leaf fa-2x opacity-25"/>
+                                                                            </div>
+                                                                        </t>
+                                                                    </div>
+                                                                    <div class="card-body p-3">
+                                                                        <div class="d-flex justify-content-between align-items-start mb-1">
+                                                                            <h6 class="fw-bold mb-0" style="color: #16166d; font-size: 13px;"><t t-esc="plat_hm_e.display_name_website"/></h6>
+                                                                            <span class="badge bg-success" style="font-size: 7px;"><t t-esc="pt_hm_e.name"/></span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </t>
+                                                    </t>
+                                                </t>
+                                            </div>
+                                        </div>
+                                    </t>
+
+                                    <!-- ── PLAT DE RÉSISTANCE ──────────────────────────────── -->
+                                    <hr class="my-5"/>
+                                    <h5 class="fw-bold mb-3" style="color: #16166d;">
+                                        <i class="fa fa-cutlery me-2"/>Plat de résistance
+                                        <span class="text-danger ms-1">*</span>
+                                    </h5>
+
+                                    <!-- Résistance au menu du jour -->
+                                    <div class="mb-5">
+                                        <h6 class="mb-3 fw-bold text-uppercase small" style="color: #16166d; letter-spacing: 1px;">
+                                            <i class="fa fa-calendar-check-o me-2"/>Au menu aujourd'hui
+                                        </h6>
+                                        <div class="row g-3">
+                                            <t t-foreach="plat_types" t-as="pt">
+                                                <t t-if="'sist' in pt.name.lower() or 'principal' in pt.name.lower()">
+                                                    <t t-set="today_lines_res" t-value="menu_by_day_type.get(today_day_idx, {}).get(pt.id, [])"/>
+                                                    <t t-foreach="today_lines_res" t-as="line_r">
+                                                        <t t-foreach="line_r.plat_ids" t-as="plat_r">
+                                                            <div class="col-md-6 col-xl-4">
+                                                                <div class="dish-card plat-choice-card h-100 card shadow-sm border-0"
+                                                                     t-att-data-plat-id="plat_r.id"
+                                                                     data-type-role="resistance"
+                                                                     t-att-data-plat-name="plat_r.display_name_website"
+                                                                     t-att-data-options="'[' + ','.join(['{&quot;id&quot;: %d, &quot;name&quot;: &quot;%s&quot;}' % (opt.id, opt.name) for opt in plat_r.option_ids]) + ']'">
+                                                                    <div class="dish-img-container">
+                                                                        <t t-if="plat_r.image_128">
+                                                                            <img t-att-src="'/web/image/lagunes.plat/%s/image_1920' % plat_r.id"
+                                                                                 class="w-100 h-100 object-fit-cover" alt="Plat du jour"/>
+                                                                        </t>
+                                                                        <t t-else="">
+                                                                            <div class="h-100 w-100 d-flex align-items-center justify-content-center bg-light">
+                                                                                <i class="fa fa-cutlery fa-2x opacity-25" title="Icône plat"/>
+                                                                            </div>
+                                                                        </t>
+                                                                    </div>
+                                                                    <div class="card-body p-3">
+                                                                        <h6 class="fw-bold mb-1" style="color: #16166d; font-size: 14px;"><t t-esc="plat_r.display_name_website"/></h6>
+                                                                        <t t-if="line_r.menu_category_id">
+                                                                            <span class="badge mb-2"
+                                                                                  t-att-style="'background:%s15; color:%s; font-size:9px;' % (line_r.menu_category_id.color or '#16166d', line_r.menu_category_id.color or '#16166d')"
+                                                                                  t-esc="line_r.menu_category_id.name"/>
+                                                                        </t>
+                                                                        <t t-if="plat_r.description">
+                                                                            <p class="text-muted small mb-0" style="font-size: 11px;">
+                                                                                <t t-esc="plat_r.description"/>
+                                                                            </p>
+                                                                        </t>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </t>
+                                                    </t>
+                                                </t>
+                                            </t>
+                                        </div>
+                                    </div>
+
+                                    <!-- Résistance hors-menu -->
+                                    <div class="mb-4">
+                                        <h6 class="mb-3 fw-bold text-uppercase small" style="color: #c29d0b; letter-spacing: 1px;">
+                                            <i class="fa fa-star me-2"/>Disponibles tous les jours
+                                        </h6>
+                                        <div class="row g-3">
+                                            <t t-foreach="hors_menu_by_type.items()" t-as="item">
+                                                <t t-set="pt_hm" t-value="item[0]"/>
+                                                <t t-set="plats_hm" t-value="item[1]"/>
+                                                <t t-if="'sist' in pt_hm.name.lower() or 'principal' in pt_hm.name.lower()">
+                                                    <t t-foreach="plats_hm" t-as="plat_hm">
+                                                        <div class="col-md-6 col-xl-4">
+                                                            <div class="dish-card plat-choice-card h-100 card shadow-sm border-0"
+                                                                 t-att-data-plat-id="plat_hm.id"
+                                                                 data-type-role="resistance"
+                                                                 t-att-data-plat-name="plat_hm.display_name_website"
+                                                                 t-att-data-options="'[' + ','.join(['{&quot;id&quot;: %d, &quot;name&quot;: &quot;%s&quot;}' % (opt.id, opt.name) for opt in plat_hm.option_ids]) + ']'">
+                                                                <div class="dish-img-container">
+                                                                    <t t-if="plat_hm.image_128">
+                                                                        <img t-att-src="'/web/image/lagunes.plat/%s/image_1920' % plat_hm.id"
+                                                                             class="w-100 h-100 object-fit-cover" alt="Plat suggestion"/>
+                                                                    </t>
+                                                                    <t t-else="">
+                                                                        <div class="h-100 w-100 d-flex align-items-center justify-content-center bg-light">
+                                                                            <i class="fa fa-cutlery fa-2x opacity-25"/>
+                                                                        </div>
+                                                                    </t>
+                                                                </div>
+                                                                <div class="card-body p-3">
+                                                                    <h6 class="fw-bold mb-1" style="color: #16166d; font-size: 14px;"><t t-esc="plat_hm.display_name_website"/></h6>
+                                                                    <t t-if="plat_hm.description">
+                                                                        <p class="text-muted small mb-0" style="font-size: 11px;">
+                                                                            <t t-esc="plat_hm.description"/>
+                                                                        </p>
+                                                                    </t>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </t>
+                                                </t>
+                                            </t>
+                                        </div>
+                                    </div>
+
+                                    <!-- ── DESSERT ─────────────────────────────────────────── -->
+                                    <hr class="my-5"/>
+                                    <h5 class="fw-bold mb-3" style="color: #856404;">
+                                        <i class="fa fa-birthday-cake me-2"/>Dessert
+                                        <span class="text-muted fw-normal small ms-1">(optionnel)</span>
+                                    </h5>
+
+                                    <!-- Desserts au menu du jour -->
+                                    <div class="mb-4">
+                                        <h6 class="mb-3 fw-bold text-uppercase small" style="color: #16166d; letter-spacing: 1px;">
+                                            <i class="fa fa-calendar-check-o me-2"/>Au menu aujourd'hui
+                                        </h6>
+                                        <div class="row g-3">
+                                            <t t-foreach="plat_types" t-as="pt">
+                                                <t t-if="'dessert' in pt.name.lower()">
+                                                    <t t-set="today_desserts" t-value="menu_by_day_type.get(today_day_idx, {}).get(pt.id, [])"/>
+                                                    <t t-foreach="today_desserts" t-as="line_d">
+                                                        <t t-foreach="line_d.plat_ids" t-as="plat_d">
+                                                            <div class="col-md-6 col-xl-4">
+                                                                <div class="dish-card plat-choice-card side-choice-card h-100 card shadow-sm border-0"
+                                                                     t-att-data-plat-id="plat_d.id"
+                                                                     data-type-role="dessert"
+                                                                     t-att-data-plat-name="plat_d.display_name_website">
+                                                                    <div class="dish-img-container" style="height: 140px;">
+                                                                        <t t-if="plat_d.image_128">
+                                                                            <img t-att-src="'/web/image/lagunes.plat/%s/image_1920' % plat_d.id"
+                                                                                 class="w-100 h-100 object-fit-cover" alt="Dessert"/>
+                                                                        </t>
+                                                                        <t t-else="">
+                                                                            <div class="h-100 w-100 d-flex align-items-center justify-content-center bg-light">
+                                                                                <i class="fa fa-birthday-cake fa-2x opacity-25"/>
+                                                                            </div>
+                                                                        </t>
+                                                                    </div>
+                                                                    <div class="card-body p-3">
+                                                                        <div class="d-flex justify-content-between align-items-start mb-1">
+                                                                            <h6 class="fw-bold mb-0" style="color: #16166d; font-size: 13px;"><t t-esc="plat_d.display_name_website"/></h6>
+                                                                            <span class="badge bg-warning text-dark" style="font-size: 7px;"><t t-esc="pt.name"/></span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </t>
+                                                    </t>
+                                                </t>
+                                            </t>
+                                        </div>
+                                    </div>
+
+                                    <!-- Desserts hors-menu -->
+                                    <t t-set="has_hm_desserts" t-value="any('dessert' in pt_hm_d.name.lower() for pt_hm_d in hors_menu_by_type.keys())"/>
+                                    <t t-if="has_hm_desserts">
+                                        <div class="mb-4">
+                                            <h6 class="mb-3 fw-bold text-uppercase small" style="color: #c29d0b; letter-spacing: 1px;">
+                                                <i class="fa fa-star me-2"/>Disponibles tous les jours
+                                            </h6>
+                                            <div class="row g-3">
+                                                <t t-foreach="hors_menu_by_type.items()" t-as="item_d">
+                                                    <t t-set="pt_hm_d" t-value="item_d[0]"/>
+                                                    <t t-set="plats_hm_d" t-value="item_d[1]"/>
+                                                    <t t-if="'dessert' in pt_hm_d.name.lower()">
+                                                        <t t-foreach="plats_hm_d" t-as="plat_hm_d">
+                                                            <div class="col-md-6 col-xl-4">
+                                                                <div class="dish-card plat-choice-card side-choice-card h-100 card shadow-sm border-0"
+                                                                     t-att-data-plat-id="plat_hm_d.id"
+                                                                     data-type-role="dessert"
+                                                                     t-att-data-plat-name="plat_hm_d.display_name_website">
+                                                                    <div class="dish-img-container" style="height: 140px;">
+                                                                        <t t-if="plat_hm_d.image_128">
+                                                                            <img t-att-src="'/web/image/lagunes.plat/%s/image_1920' % plat_hm_d.id"
+                                                                                 class="w-100 h-100 object-fit-cover" alt="Dessert hors-menu"/>
+                                                                        </t>
+                                                                        <t t-else="">
+                                                                            <div class="h-100 w-100 d-flex align-items-center justify-content-center bg-light">
+                                                                                <i class="fa fa-birthday-cake fa-2x opacity-25"/>
+                                                                            </div>
+                                                                        </t>
+                                                                    </div>
+                                                                    <div class="card-body p-3">
+                                                                        <div class="d-flex justify-content-between align-items-start mb-1">
+                                                                            <h6 class="fw-bold mb-0" style="color: #16166d; font-size: 13px;"><t t-esc="plat_hm_d.display_name_website"/></h6>
+                                                                            <span class="badge bg-warning text-dark" style="font-size: 7px;"><t t-esc="pt_hm_d.name"/></span>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </t>
+                                                    </t>
+                                                </t>
+                                            </div>
+                                        </div>
+                                    </t>
+
+                                    <div class="mt-5 text-end">
+                                        <button class="btn btn-lg btn-primary px-5 shadow-sm btn-next-step" disabled="disabled" style="border-radius: 10px; font-weight: 600;">
+                                            Suivant <i class="fa fa-chevron-right ms-2"/>
+                                        </button>
+                                    </div>
+                                </section>
+
+                                <!-- STEP 2: OPTIONS &amp; PERSONNALISATION -->
+                                <section class="wizard-step" id="step-2">
+                                    <div class="step-header mb-4">
+                                        <button class="btn btn-link btn-sm p-0 mb-3 text-decoration-none btn-prev-step" style="color: #16166d; font-weight: 600;">
+                                            <i class="fa fa-arrow-left me-1"/> Retour au choix du plat
+                                        </button>
+                                        <h3 class="fw-bold" style="color: #16166d;">2. Personnalisation</h3>
+                                        <p class="text-muted">Ajustez votre plat selon vos envies.</p>
+                                    </div>
+
+                                    <div id="plat-options-container" class="mb-4">
+                                        <!-- Populated via JS -->
+                                    </div>
+
+                                    <div class="mb-4">
+                                        <label class="form-label fw-bold small text-uppercase" style="color: #16166d; letter-spacing: 1px;">Notes &amp; Préférences</label>
+                                        <textarea class="form-control border-0 bg-light p-3" id="wizard-notes" rows="3" placeholder="Ex: Sans sel, piment à part, etc..." style="border-radius: 12px;"></textarea>
+                                    </div>
+
+                                    <div class="mt-5 d-flex justify-content-between">
+                                        <button class="btn btn-prev-step px-4">
+                                            <i class="fa fa-arrow-left me-2"/>Précédent
+                                        </button>
+                                        <button class="btn btn-primary px-5 shadow-sm btn-next-step" style="border-radius: 10px; font-weight: 600;">
+                                            Vérifier <i class="fa fa-chevron-right ms-2"/>
+                                        </button>
+                                    </div>
+                                </section>
+
+                                <!-- STEP 3: RÉCAPITULATIF -->
+                                <section class="wizard-step" id="step-3">
+                                    <div class="step-header mb-5 text-center">
+                                        <h3 class="fw-bold" style="color: #16166d;">Votre Sélection</h3>
+                                        <p class="text-muted">Prêt à passer en cuisine ?</p>
+                                    </div>
+
+                                    <div class="row justify-content-center">
+                                        <div class="col-lg-7">
+                                            <div class="card shadow-lg border-0 mb-4" style="border-radius: 20px;">
+                                                <div class="card-body p-4">
+                                                    <div id="wizard-recap-details"></div>
+
+                                                    <t t-if="peut_commander_pour_autres">
+                                                        <hr class="my-4 opacity-50"/>
+                                                        <div class="form-check form-switch mb-2">
+                                                            <input class="form-check-input" type="checkbox" id="order-for-other-check"/>
+                                                            <label class="form-check-label fw-bold small text-muted" for="order-for-other-check">COMMANDER POUR UN COLLÈGUE</label>
+                                                        </div>
+                                                        <div id="order-for-other-input" class="mt-2 d-none">
+                                                            <input type="text" id="order-for-other-name" class="form-control border-0 bg-light" placeholder="Nom complet" style="border-radius: 8px;"/>
+                                                        </div>
+                                                    </t>
+                                                </div>
+                                            </div>
+
+                                            <button class="btn btn-success btn-lg w-100 py-3 shadow" id="btn-final-submit" style="border-radius: 15px; font-weight: 700; letter-spacing: 0.5px;">
+                                                COMMANDER MAINTENANT
+                                            </button>
+                                            <div id="wizard-feedback" class="mt-3 text-center d-none"></div>
+                                        </div>
+                                    </div>
+
+                                    <div class="mt-4 text-center">
+                                        <button class="btn btn-link btn-prev-step text-decoration-none small" style="color: #16166d; font-weight: 600;">
+                                            <i class="fa fa-pencil me-1"/> Modifier ma sélection
+                                        </button>
+                                    </div>
+                                </section>
+                            </div>
+                        </t>
+
+                        <t t-else="">
+                            <div class="text-center py-5 bg-white rounded-lg shadow-sm border">
+                                <i class="fa fa-lock fa-4x mb-3 opacity-25 text-primary" title="Accès restreint"/>
+                                <h4 class="fw-bold">Accès restreint</h4>
+                                <p class="text-muted px-4">
+                                    <t t-if="heure_limite_atteinte">Le service de commande est fermé pour aujourd'hui.</t>
+                                    <t t-else="">Limite quotidienne de commande atteinte.</t>
+                                </p>
+                                <a href="/cantine/commandes/list" class="btn btn-primary px-4 mt-3 rounded-pill">Mes Commandes</a>
+                            </div>
+                        </t>
+
+                    </main>
+
+                </div>
+            </div>
+        </div>
+
+        <script type="module" src="/lagunes_cantine/static/src/js/week_menu.js"/>
+    </t>
+</template>
+
+</odoo>

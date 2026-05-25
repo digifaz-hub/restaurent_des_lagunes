@@ -1,0 +1,401 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+         CATÉGORIES ADDITIONNELLES (complètent celles de lagunes_market_data.xml)
+         ═══════════════════════════════════════════════════════════════════ -->
+    <record id="demo_category_poissons" model="lagunes.market.article.category">
+        <field name="name">Poissons et fruits de mer</field>
+    </record>
+    <record id="demo_category_laitages" model="lagunes.market.article.category">
+        <field name="name">Produits laitiers</field>
+    </record>
+    <record id="demo_category_fruits" model="lagunes.market.article.category">
+        <field name="name">Fruits</field>
+    </record>
+    <record id="demo_category_boissons" model="lagunes.market.article.category">
+        <field name="name">Boissons</field>
+    </record>
+    <record id="demo_category_surgeles" model="lagunes.market.article.category">
+        <field name="name">Produits surgelés</field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+         ARTICLES DE MARCHÉ (60 articles réalistes CI)
+         Utilise les UoM de lagunes_market_uom_data.xml (uom_kg, uom_litre…)
+         ═══════════════════════════════════════════════════════════════════ -->
+
+    <!-- ── CÉRÉALES / FÉCULENTS ──────────────────────────────────────── -->
+    <record id="demo_art_riz_parfume" model="lagunes.market.article">
+        <field name="name">Riz parfumé</field>
+        <field name="category_id" ref="lagunes_market.category_cereales"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+    <record id="demo_art_riz_brise" model="lagunes.market.article">
+        <field name="name">Riz brisé</field>
+        <field name="category_id" ref="lagunes_market.category_cereales"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+    <record id="demo_art_attieke" model="lagunes.market.article">
+        <field name="name">Attiéké frais</field>
+        <field name="category_id" ref="lagunes_market.category_cereales"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+    <record id="demo_art_foutou_banane" model="lagunes.market.article">
+        <field name="name">Foutou banane</field>
+        <field name="category_id" ref="lagunes_market.category_cereales"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+    <record id="demo_art_foutou_igname" model="lagunes.market.article">
+        <field name="name">Foutou igname</field>
+        <field name="category_id" ref="lagunes_market.category_cereales"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+    <record id="demo_art_manioc" model="lagunes.market.article">
+        <field name="name">Manioc</field>
+        <field name="category_id" ref="lagunes_market.category_cereales"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+    <record id="demo_art_pates" model="lagunes.market.article">
+        <field name="name">Pâtes alimentaires</field>
+        <field name="category_id" ref="lagunes_market.category_cereales"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+    <record id="demo_art_farine_ble" model="lagunes.market.article">
+        <field name="name">Farine de blé</field>
+        <field name="category_id" ref="lagunes_market.category_cereales"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+    <record id="demo_art_farine_mais" model="lagunes.market.article">
+        <field name="name">Farine de maïs</field>
+        <field name="category_id" ref="lagunes_market.category_cereales"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+    <record id="demo_art_igname" model="lagunes.market.article">
+        <field name="name">Igname</field>
+        <field name="category_id" ref="lagunes_market.category_cereales"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+    <record id="demo_art_banane_plantain" model="lagunes.market.article">
+        <field name="name">Banane plantain</field>
+        <field name="category_id" ref="lagunes_market.category_cereales"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+    <record id="demo_art_pain" model="lagunes.market.article">
+        <field name="name">Pain (baguette)</field>
+        <field name="category_id" ref="lagunes_market.category_cereales"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_unit"/>
+    </record>
+
+    <!-- ── VIANDES ──────────────────────────────────────────────────── -->
+    <record id="demo_art_poulet_frais" model="lagunes.market.article">
+        <field name="name">Poulet frais (entier)</field>
+        <field name="category_id" ref="lagunes_market.category_viandes"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+    <record id="demo_art_poulet_fume" model="lagunes.market.article">
+        <field name="name">Poulet fumé</field>
+        <field name="category_id" ref="lagunes_market.category_viandes"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+    <record id="demo_art_boeuf" model="lagunes.market.article">
+        <field name="name">Viande de bœuf</field>
+        <field name="category_id" ref="lagunes_market.category_viandes"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+    <record id="demo_art_agneau" model="lagunes.market.article">
+        <field name="name">Viande d'agneau</field>
+        <field name="category_id" ref="lagunes_market.category_viandes"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+    <record id="demo_art_mouton" model="lagunes.market.article">
+        <field name="name">Viande de mouton</field>
+        <field name="category_id" ref="lagunes_market.category_viandes"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+    <record id="demo_art_porc" model="lagunes.market.article">
+        <field name="name">Viande de porc</field>
+        <field name="category_id" ref="lagunes_market.category_viandes"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+    <record id="demo_art_pintade" model="lagunes.market.article">
+        <field name="name">Pintade</field>
+        <field name="category_id" ref="lagunes_market.category_viandes"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_unit"/>
+    </record>
+    <record id="demo_art_oeufs" model="lagunes.market.article">
+        <field name="name">Œufs frais</field>
+        <field name="category_id" ref="lagunes_market.category_viandes"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_unit"/>
+    </record>
+    <record id="demo_art_saucisses" model="lagunes.market.article">
+        <field name="name">Saucisses</field>
+        <field name="category_id" ref="lagunes_market.category_viandes"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+
+    <!-- ── POISSONS ─────────────────────────────────────────────────── -->
+    <record id="demo_art_thon" model="lagunes.market.article">
+        <field name="name">Thon frais</field>
+        <field name="category_id" ref="demo_category_poissons"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+    <record id="demo_art_bar" model="lagunes.market.article">
+        <field name="name">Bar (loup de mer)</field>
+        <field name="category_id" ref="demo_category_poissons"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+    <record id="demo_art_capitaine" model="lagunes.market.article">
+        <field name="name">Capitaine</field>
+        <field name="category_id" ref="demo_category_poissons"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+    <record id="demo_art_machoiron" model="lagunes.market.article">
+        <field name="name">Machoiron fumé</field>
+        <field name="category_id" ref="demo_category_poissons"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+    <record id="demo_art_tilapia" model="lagunes.market.article">
+        <field name="name">Tilapia</field>
+        <field name="category_id" ref="demo_category_poissons"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+    <record id="demo_art_crevettes" model="lagunes.market.article">
+        <field name="name">Crevettes</field>
+        <field name="category_id" ref="demo_category_poissons"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+
+    <!-- ── LÉGUMES ──────────────────────────────────────────────────── -->
+    <record id="demo_art_tomate" model="lagunes.market.article">
+        <field name="name">Tomate fraîche</field>
+        <field name="category_id" ref="lagunes_market.category_legumes"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+    <record id="demo_art_concentre_tomate" model="lagunes.market.article">
+        <field name="name">Concentré de tomate</field>
+        <field name="category_id" ref="lagunes_market.category_legumes"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_boite"/>
+    </record>
+    <record id="demo_art_oignon" model="lagunes.market.article">
+        <field name="name">Oignon</field>
+        <field name="category_id" ref="lagunes_market.category_legumes"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+    <record id="demo_art_ail" model="lagunes.market.article">
+        <field name="name">Ail</field>
+        <field name="category_id" ref="lagunes_market.category_legumes"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+    <record id="demo_art_gombo" model="lagunes.market.article">
+        <field name="name">Gombo frais</field>
+        <field name="category_id" ref="lagunes_market.category_legumes"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+    <record id="demo_art_aubergine" model="lagunes.market.article">
+        <field name="name">Aubergine</field>
+        <field name="category_id" ref="lagunes_market.category_legumes"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+    <record id="demo_art_carotte" model="lagunes.market.article">
+        <field name="name">Carotte</field>
+        <field name="category_id" ref="lagunes_market.category_legumes"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+    <record id="demo_art_courgette" model="lagunes.market.article">
+        <field name="name">Courgette</field>
+        <field name="category_id" ref="lagunes_market.category_legumes"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+    <record id="demo_art_chou" model="lagunes.market.article">
+        <field name="name">Chou</field>
+        <field name="category_id" ref="lagunes_market.category_legumes"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+    <record id="demo_art_salade" model="lagunes.market.article">
+        <field name="name">Salade verte</field>
+        <field name="category_id" ref="lagunes_market.category_legumes"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_unit"/>
+    </record>
+    <record id="demo_art_epinards" model="lagunes.market.article">
+        <field name="name">Épinards</field>
+        <field name="category_id" ref="lagunes_market.category_legumes"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_botte"/>
+    </record>
+    <record id="demo_art_haricots_verts" model="lagunes.market.article">
+        <field name="name">Haricots verts</field>
+        <field name="category_id" ref="lagunes_market.category_legumes"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+    <record id="demo_art_poivron" model="lagunes.market.article">
+        <field name="name">Poivron</field>
+        <field name="category_id" ref="lagunes_market.category_legumes"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+    <record id="demo_art_pomme_terre" model="lagunes.market.article">
+        <field name="name">Pomme de terre</field>
+        <field name="category_id" ref="lagunes_market.category_legumes"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+
+    <!-- ── ÉPICES ───────────────────────────────────────────────────── -->
+    <record id="demo_art_sel" model="lagunes.market.article">
+        <field name="name">Sel fin</field>
+        <field name="category_id" ref="lagunes_market.category_epices"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+    <record id="demo_art_poivre" model="lagunes.market.article">
+        <field name="name">Poivre noir moulu</field>
+        <field name="category_id" ref="lagunes_market.category_epices"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_g"/>
+    </record>
+    <record id="demo_art_piment" model="lagunes.market.article">
+        <field name="name">Piment frais</field>
+        <field name="category_id" ref="lagunes_market.category_epices"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+    <record id="demo_art_cube_maggi" model="lagunes.market.article">
+        <field name="name">Cube Maggi</field>
+        <field name="category_id" ref="lagunes_market.category_epices"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_unit"/>
+    </record>
+    <record id="demo_art_gingembre" model="lagunes.market.article">
+        <field name="name">Gingembre</field>
+        <field name="category_id" ref="lagunes_market.category_epices"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+    <record id="demo_art_curry" model="lagunes.market.article">
+        <field name="name">Curry en poudre</field>
+        <field name="category_id" ref="lagunes_market.category_epices"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_g"/>
+    </record>
+    <record id="demo_art_graines_djoumble" model="lagunes.market.article">
+        <field name="name">Graines de djoumblé</field>
+        <field name="category_id" ref="lagunes_market.category_epices"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+    <record id="demo_art_nete" model="lagunes.market.article">
+        <field name="name">Soumbara (néré)</field>
+        <field name="category_id" ref="lagunes_market.category_epices"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_g"/>
+    </record>
+
+    <!-- ── HUILES ───────────────────────────────────────────────────── -->
+    <record id="demo_art_huile_palme" model="lagunes.market.article">
+        <field name="name">Huile de palme</field>
+        <field name="category_id" ref="lagunes_market.category_huiles"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_litre"/>
+    </record>
+    <record id="demo_art_huile_arachide" model="lagunes.market.article">
+        <field name="name">Huile d'arachide</field>
+        <field name="category_id" ref="lagunes_market.category_huiles"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_litre"/>
+    </record>
+    <record id="demo_art_huile_olive" model="lagunes.market.article">
+        <field name="name">Huile d'olive</field>
+        <field name="category_id" ref="lagunes_market.category_huiles"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_litre"/>
+    </record>
+    <record id="demo_art_beurre" model="lagunes.market.article">
+        <field name="name">Beurre</field>
+        <field name="category_id" ref="lagunes_market.category_huiles"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+
+    <!-- ── LAITAGES ─────────────────────────────────────────────────── -->
+    <record id="demo_art_lait" model="lagunes.market.article">
+        <field name="name">Lait demi-écrémé</field>
+        <field name="category_id" ref="demo_category_laitages"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_litre"/>
+    </record>
+    <record id="demo_art_yaourt" model="lagunes.market.article">
+        <field name="name">Yaourt nature</field>
+        <field name="category_id" ref="demo_category_laitages"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_unit"/>
+    </record>
+    <record id="demo_art_fromage" model="lagunes.market.article">
+        <field name="name">Fromage râpé</field>
+        <field name="category_id" ref="demo_category_laitages"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+    <record id="demo_art_creme_fraiche" model="lagunes.market.article">
+        <field name="name">Crème fraîche</field>
+        <field name="category_id" ref="demo_category_laitages"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_litre"/>
+    </record>
+
+    <!-- ── FRUITS ───────────────────────────────────────────────────── -->
+    <record id="demo_art_ananas" model="lagunes.market.article">
+        <field name="name">Ananas</field>
+        <field name="category_id" ref="demo_category_fruits"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_unit"/>
+    </record>
+    <record id="demo_art_mangue" model="lagunes.market.article">
+        <field name="name">Mangue</field>
+        <field name="category_id" ref="demo_category_fruits"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+    <record id="demo_art_papaye" model="lagunes.market.article">
+        <field name="name">Papaye</field>
+        <field name="category_id" ref="demo_category_fruits"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_unit"/>
+    </record>
+    <record id="demo_art_banane" model="lagunes.market.article">
+        <field name="name">Banane douce</field>
+        <field name="category_id" ref="demo_category_fruits"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+    <record id="demo_art_orange" model="lagunes.market.article">
+        <field name="name">Orange</field>
+        <field name="category_id" ref="demo_category_fruits"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+    <record id="demo_art_pomme" model="lagunes.market.article">
+        <field name="name">Pomme importée</field>
+        <field name="category_id" ref="demo_category_fruits"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+
+    <!-- ── BOISSONS ─────────────────────────────────────────────────── -->
+    <record id="demo_art_eau_minerale" model="lagunes.market.article">
+        <field name="name">Eau minérale</field>
+        <field name="category_id" ref="demo_category_boissons"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_bouteille_1_5l"/>
+    </record>
+    <record id="demo_art_jus_bissap" model="lagunes.market.article">
+        <field name="name">Bissap (jus d'hibiscus)</field>
+        <field name="category_id" ref="demo_category_boissons"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_litre"/>
+    </record>
+    <record id="demo_art_jus_gingembre" model="lagunes.market.article">
+        <field name="name">Jus de gingembre</field>
+        <field name="category_id" ref="demo_category_boissons"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_litre"/>
+    </record>
+    <record id="demo_art_jus_ananas" model="lagunes.market.article">
+        <field name="name">Jus d'ananas</field>
+        <field name="category_id" ref="demo_category_boissons"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_litre"/>
+    </record>
+
+    <!-- ── SURGELÉS & AUTRES ────────────────────────────────────────── -->
+    <record id="demo_art_legumes_surgeles" model="lagunes.market.article">
+        <field name="name">Légumes surgelés mix</field>
+        <field name="category_id" ref="demo_category_surgeles"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+    <record id="demo_art_frites_surgelees" model="lagunes.market.article">
+        <field name="name">Frites surgelées</field>
+        <field name="category_id" ref="demo_category_surgeles"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_kg"/>
+    </record>
+
+    <!-- Article archivé (cas limite) -->
+    <record id="demo_art_ancien_article" model="lagunes.market.article">
+        <field name="name">[Archivé] Ancien article démo</field>
+        <field name="category_id" ref="lagunes_market.category_autres"/>
+        <field name="default_uom_id" ref="lagunes_market.uom_kg"/>
+        <field name="active" eval="False"/>
+    </record>
+
+</odoo>

@@ -1,0 +1,199 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+    <t t-name="lagunes_traiteur.TraiteurDashboard">
+        <div class="o_lagunes_dashboard">
+            
+            <!-- ════════════════ Header ════════════════ -->
+            <header class="ld-header">
+                <div class="ld-header-left">
+                    <div class="ld-header-icon-box">
+                        <i class="fa fa-magic"/>
+                    </div>
+                    <div class="ld-header-title-area">
+                        <h2>Tableau de bord Traiteur</h2>
+                        <p>Vue d'ensemble de l'activité événementielle et logistique</p>
+                    </div>
+                </div>
+                <div class="ld-header-right">
+                    <button t-on-click="loadData" class="btn btn-primary ld-refresh-btn">
+                        <i class="fa fa-sync me-2"/> Actualiser
+                    </button>
+                </div>
+            </header>
+
+            <!-- ════════════════ Main Content ════════════════ -->
+            <main class="ld-content">
+
+                <!-- KPI Grid -->
+                <div class="ld-kpi-grid">
+                    <!-- Nouvelles demandes -->
+                    <div class="ld-kpi-card ld-kpi-gold" t-on-click="() => this._openAction('lagunes_traiteur.action_traiteur_demande')">
+                        <div class="ld-kpi-top">
+                            <span class="ld-kpi-value" t-esc="state.animated.new_demands"/>
+                            <div class="ld-kpi-icon-circle ld-gold-icon">
+                                <i class="fa fa-star"/>
+                            </div>
+                        </div>
+                        <span class="ld-kpi-label">Nouvelles Demandes</span>
+                    </div>
+
+                    <!-- Prestations en cours -->
+                    <div class="ld-kpi-card ld-kpi-blue">
+                        <div class="ld-kpi-top">
+                            <span class="ld-kpi-value" t-esc="state.animated.ongoing_prestas"/>
+                            <div class="ld-kpi-icon-circle ld-blue-icon">
+                                <i class="fa fa-truck"/>
+                            </div>
+                        </div>
+                        <span class="ld-kpi-label">Prestations en cours</span>
+                    </div>
+
+                    <!-- Taux de succès -->
+                    <div class="ld-kpi-card ld-kpi-green">
+                        <div class="ld-kpi-top">
+                            <span class="ld-kpi-value"><t t-esc="state.animated.conversion_rate"/>%</span>
+                            <div class="ld-kpi-icon-circle ld-green-icon">
+                                <i class="fa fa-check-circle"/>
+                            </div>
+                        </div>
+                        <span class="ld-kpi-label">Taux de Transformation</span>
+                    </div>
+
+                    <!-- CA Mensuel -->
+                    <div class="ld-kpi-card ld-kpi-purple">
+                        <div class="ld-kpi-top">
+                            <span class="ld-kpi-value" style="font-size: 24px;"><t t-esc="state.data.kpis.ca_mensuel"/></span>
+                            <div class="ld-kpi-icon-circle ld-purple-icon">
+                                <i class="fa fa-money"/>
+                            </div>
+                        </div>
+                        <span class="ld-kpi-label">CA Confirmé (Mois)</span>
+                    </div>
+
+                    <!-- Devis Envoyés -->
+                    <div class="ld-kpi-card ld-kpi-teal">
+                        <div class="ld-kpi-top">
+                            <span class="ld-kpi-value" t-esc="state.data.kpis.sent_quotes"/>
+                            <div class="ld-kpi-icon-circle ld-teal-icon">
+                                <i class="fa fa-paper-plane"/>
+                            </div>
+                        </div>
+                        <span class="ld-kpi-label">Devis Envoyés</span>
+                    </div>
+
+                    <!-- Devis Refusés -->
+                    <div class="ld-kpi-card ld-kpi-orange">
+                        <div class="ld-kpi-top">
+                            <span class="ld-kpi-value" t-esc="state.data.kpis.refused_quotes"/>
+                            <div class="ld-kpi-icon-circle ld-orange-icon">
+                                <i class="fa fa-times-circle"/>
+                            </div>
+                        </div>
+                        <span class="ld-kpi-label">Devis Refusés</span>
+                    </div>
+                </div>
+
+                <!-- Charts & Tables Layout -->
+                <div class="ld-sections">
+                    
+                    <!-- Left Column -->
+                    <div class="ld-col-left d-flex flex-column gap-4">
+                        
+                        <!-- Revenue Chart -->
+                        <div class="ld-section">
+                            <div class="ld-section-header">
+                                <h3 class="ld-section-title">
+                                    <i class="fa fa-chart-line"/> Évolution du CA (6 mois)
+                                </h3>
+                            </div>
+                            <div class="ld-chart-container">
+                                <canvas t-ref="traiteurRevenueChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Recent Demands Table -->
+                        <div class="ld-section">
+                            <div class="ld-section-header">
+                                <h3 class="ld-section-title">
+                                    <i class="fa fa-list-ul"/> Dernières Demandes
+                                </h3>
+                                <button class="btn btn-link btn-sm text-decoration-none" t-on-click="() => this._openAction('lagunes_traiteur.action_traiteur_demande')">
+                                    Voir tout <i class="fa fa-chevron-right ms-1"/>
+                                </button>
+                            </div>
+                            <div class="ld-table-container">
+                                <table class="ld-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Réf.</th>
+                                            <th>Entreprise</th>
+                                            <th>Type</th>
+                                            <th>Statut</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr t-foreach="state.data.recent_demands" t-as="rd" t-key="rd.id">
+                                            <td><strong><t t-esc="rd.reference"/></strong></td>
+                                            <td><t t-esc="rd.entreprise"/></td>
+                                            <td><t t-esc="rd.type"/></td>
+                                            <td>
+                                                <span t-attf-class="ld-badge ld-badge-{{rd.state}}" t-esc="rd.state_label"/>
+                                            </td>
+                                        </tr>
+                                        <tr t-if="!state.data.recent_demands.length">
+                                            <td colspan="4" class="text-center py-4 text-muted small">Aucune demande enregistrée.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column -->
+                    <div class="ld-col-right d-flex flex-column gap-4">
+                        
+                        <!-- Type Chart -->
+                        <div class="ld-section">
+                            <div class="ld-section-header">
+                                <h3 class="ld-section-title">
+                                    <i class="fa fa-chart-pie"/> Répartition par Type
+                                </h3>
+                            </div>
+                            <div class="ld-chart-container" style="min-height: 250px;">
+                                <canvas t-ref="traiteurTypeChart"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Upcoming Timeline -->
+                        <div class="ld-section flex-grow-1">
+                             <div class="ld-section-header">
+                                <h3 class="ld-section-title">
+                                    <i class="fa fa-calendar-check-o"/> Prochaines Prestations
+                                </h3>
+                            </div>
+                            
+                            <div class="ld-timeline px-4">
+                                <t t-foreach="state.data.timeline" t-as="item" t-key="item_index">
+                                    <div class="ld-timeline-item" t-att-class="{active: item_index === 0}">
+                                        <div class="ld-timeline-dot">
+                                            <i t-attf-class="fa {{item.icon or 'fa-circle'}}"/>
+                                        </div>
+                                        <div class="ld-timeline-content">
+                                            <div class="ld-timeline-title" t-esc="item.label"/>
+                                            <div class="ld-timeline-time">
+                                                <i class="fa fa-info-circle me-1"/> <t t-esc="item.sub"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </t>
+                                <div t-if="!state.data.timeline.length" class="text-center py-5 text-muted small">
+                                    Aucune prestation à venir.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </t>
+</templates>

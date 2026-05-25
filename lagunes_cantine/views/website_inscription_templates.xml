@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Page d'inscription employé -->
+    <template id="inscription_employe" name="Inscription Employé">
+        <t t-call="website.layout">
+            <div id="wrap" class="lagunes-frontend">
+                <div class="container mt-5 mb-5">
+                    <div class="row">
+                        <div class="col-lg-6 offset-lg-3">
+
+                            <div class="text-center mb-4">
+                                <h2 class="text-primary">Restaurant des Lagunes</h2>
+                                <p class="lead text-muted">Inscription à la cantine</p>
+                            </div>
+
+                            <div class="card shadow">
+                                <div class="card-header bg-primary text-white text-center py-3">
+                                    <h4 class="mb-0">
+                                        <i class="fa fa-building me-2" title="Entreprise"/>
+                                        <t t-esc="entreprise.name"/>
+                                    </h4>
+                                </div>
+                                <div class="card-body p-4">
+                                    <p class="text-muted mb-4">
+                                        Remplissez ce formulaire pour vous inscrire et accéder au service de cantine.
+                                    </p>
+
+                                    <!-- Formulaire -->
+                                    <div id="inscriptionForm">
+                                        <div class="mb-3">
+                                            <label for="prenom" class="form-label fw-bold">Prénom *</label>
+                                            <input type="text" class="form-control form-control-lg"
+                                                   id="prenom" placeholder="Votre prénom" required=""/>
+                                        </div>
+                                        <div class="mb-3">
+                                            <label for="nom" class="form-label fw-bold">Nom *</label>
+                                            <input type="text" class="form-control form-control-lg"
+                                                   id="nom" placeholder="Votre nom de famille" required=""/>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label for="email" class="form-label fw-bold">Adresse email *</label>
+                                            <input type="email" class="form-control form-control-lg"
+                                                   id="email" placeholder="votre.email@exemple.com" required=""/>
+                                            <div class="form-text">
+                                                Cet email servira à vous authentifier lors des commandes.
+                                            </div>
+                                        </div>
+                                        <div class="mb-4">
+                                            <label for="mot_de_passe" class="form-label fw-bold">Mot de passe *</label>
+                                            <input type="password" class="form-control form-control-lg"
+                                                   id="mot_de_passe" placeholder="Choisissez un mot de passe" required=""/>
+                                            <div class="form-text">
+                                                Ce mot de passe sera nécessaire pour vous connecter au site.
+                                            </div>
+                                        </div>
+
+                                        <div id="error_inscription" class="alert alert-danger d-none" role="alert"/>
+                                        <div id="success_inscription" class="alert alert-success d-none" role="alert"/>
+
+                                        <button type="button" id="btnInscrire"
+                                                class="btn btn-primary btn-lg w-100 py-3">
+                                            <i class="fa fa-user-plus me-2" title="S'inscrire"/>
+                                            M'inscrire
+                                        </button>
+                                    </div>
+
+                                    <!-- Message post-inscription -->
+                                    <div id="postInscription" class="d-none text-center mt-4">
+                                        <i class="fa fa-check-circle fa-4x text-success mb-3" title="Succès"/>
+                                        <h4 class="text-success">Inscription réussie !</h4>
+                                        <p class="text-muted">
+                                            Vous pouvez maintenant vous connecter à la cantine<br/>
+                                            en utilisant le code de votre entreprise et votre email.
+                                        </p>
+                                        <a href="/cantine" class="btn btn-primary mt-3">
+                                            <i class="fa fa-sign-in me-2" title="Se connecter"/>
+                                            Accéder au menu
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script type="text/javascript">
+                document.addEventListener('DOMContentLoaded', function() {
+                    const btn = document.getElementById('btnInscrire');
+                    const errorDiv = document.getElementById('error_inscription');
+                    const successDiv = document.getElementById('success_inscription');
+                    const form = document.getElementById('inscriptionForm');
+                    const postDiv = document.getElementById('postInscription');
+                    const token = '<t t-esc="token"/>';
+
+                    btn.addEventListener('click', function() {
+                        errorDiv.classList.add('d-none');
+                        successDiv.classList.add('d-none');
+
+                        const prenom = document.getElementById('prenom').value.trim();
+                        const nom = document.getElementById('nom').value.trim();
+                        const email = document.getElementById('email').value.trim();
+                        const mot_de_passe = document.getElementById('mot_de_passe').value.trim();
+
+                        if (!prenom || !nom || !email || !mot_de_passe) {
+                            errorDiv.textContent = 'Veuillez remplir tous les champs.';
+                            errorDiv.classList.remove('d-none');
+                            return;
+                        }
+
+                        btn.disabled = true;
+                        btn.innerHTML = '<i class="fa fa-spinner fa-spin me-2"/> Inscription en cours...';
+
+                        fetch('/cantine/inscription/submit', {
+                            method: 'POST',
+                            headers: {'Content-Type': 'application/json'},
+                            body: JSON.stringify({
+                                jsonrpc: '2.0',
+                                method: 'call',
+                                params: {token: token, nom: nom, prenom: prenom, email: email, mot_de_passe: mot_de_passe}
+                            })
+                        })
+                        .then(r => r.json())
+                        .then(data => {
+                            btn.disabled = false;
+                            btn.innerHTML = '<i class="fa fa-user-plus me-2"/> M\'inscrire';
+
+                            if (data.result &amp;&amp; data.result.success) {
+                                form.classList.add('d-none');
+                                postDiv.classList.remove('d-none');
+                            } else {
+                                errorDiv.textContent = (data.result &amp;&amp; data.result.message) || 'Erreur lors de l\'inscription.';
+                                errorDiv.classList.remove('d-none');
+                            }
+                        })
+                        .catch(() => {
+                            btn.disabled = false;
+                            btn.innerHTML = '<i class="fa fa-user-plus me-2"/> M\'inscrire';
+                            errorDiv.textContent = 'Erreur de connexion. Réessayez.';
+                            errorDiv.classList.remove('d-none');
+                        });
+                    });
+                });
+            </script>
+        </t>
+    </template>
+
+</odoo>

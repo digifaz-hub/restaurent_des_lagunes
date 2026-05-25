@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo noupdate="0">
+
+    <!-- ═══════════════════════════════════════════════════════════════════
+         CONFIGURATION TRAITEUR (produit générique + paramètres portail)
+         ═══════════════════════════════════════════════════════════════════ -->
+
+    <!-- Produit générique pour les lignes de devis traiteur -->
+    <record id="demo_product_prestation_traiteur" model="product.product">
+        <field name="name">Prestation Traiteur (générique)</field>
+        <field name="type">service</field>
+        <field name="list_price">5000.0</field>
+        <field name="categ_id" ref="lagunes_cantine.product_category_cantine"/>
+    </record>
+
+    <!-- Configuration traiteur société principale (Désactivé pour éviter UniqueViolation car généré auto)
+    <record id="demo_traiteur_config" model="lagunes.traiteur.config">
+        <field name="company_id" ref="base.main_company"/>
+        <field name="email_reception_demandes">traiteur@lagunes.ci</field>
+        <field name="delai_reponse_devis_jours">7</field>
+        <field name="jours_avance_menu">3</field>
+        <field name="titre_portail">Service Traiteur — Restaurant des Lagunes</field>
+        <field name="sous_titre_portail">Qualité et excellence pour vos événements</field>
+        <field name="couleur_primaire">#16166d</field>
+        <field name="produit_prestation_id" ref="demo_product_prestation_traiteur"/>
+    </record>
+    -->
+
+</odoo>

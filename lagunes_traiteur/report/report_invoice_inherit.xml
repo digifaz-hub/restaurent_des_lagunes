@@ -1,0 +1,200 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="report_invoice_document_lagunes_inherit" inherit_id="account.report_invoice_document">
+        <!-- Règle Odoo 18 : On vide les blocs d'adresse standards pour utiliser notre en-tête personnalisé -->
+        <xpath expr="//t[@t-set='address']" position="replace">
+            <t t-set="address"></t> <!-- On vide l'adresse standard -->
+        </xpath>
+        <xpath expr="//t[@t-set='information_block']" position="replace">
+            <t t-set="information_block"></t> <!-- On vide le bloc info standard -->
+        </xpath>
+
+        <!-- Application du style de base sur la page -->
+        <xpath expr="//div[hasclass('page')]" position="attributes">
+            <attribute name="style">font-family: Arial, Helvetica, sans-serif; font-size: 9.5pt; color: #000;</attribute>
+        </xpath>
+
+
+        <!-- Injection du CSS spécifique Lagunes -->
+        <xpath expr="//div[hasclass('page')]" position="before">
+            <style>
+                .lg-header-wrap { border: 2px solid #16166d; margin-bottom: 10px; }
+                .lg-top-row { display: table; width: 100%; padding: 6px 10px; background: #fff; border-bottom: 1px solid #16166d; }
+                .lg-top-left { display: table-cell; vertical-align: middle; width: 60%; }
+                .lg-company-name { font-size: 18pt; font-weight: bold; color: #16166d; letter-spacing: 1px; text-transform: uppercase; }
+                .lg-company-info { font-size: 7.5pt; color: #333; line-height: 1.5; margin-top: 2px; }
+                .lg-meta-table { width: 100%; border-collapse: collapse; font-size: 8pt; }
+                .lg-meta-table th { background: #16166d; color: #fff; font-weight: bold; border: 1px solid #16166d; padding: 4px 6px; text-align: center; }
+                .lg-meta-table td { border: 1px solid #16166d; padding: 4px 6px; text-align: center; font-size: 8.5pt; }
+                
+                /* Harmonisation du tableau de facture */
+                .o_main_table { margin-top: 20px !important; }
+                .o_main_table thead tr th { background-color: #16166d !important; color: white !important; border: 1px solid #16166d !important; padding: 8px !important; text-align: center !important; }
+                .o_main_table tbody tr td { border: 1px solid #bbb !important; padding: 6px 8px !important; vertical-align: middle !important; }
+                .o_main_table tbody tr:nth-child(even) td { background-color: #fafafa; }
+                
+                .o_main_table tbody tr.o_line_section td { background-color: #e0e1f0 !important; color: #16166d !important; font-weight: bold !important; }
+                
+                /* Totaux style Lagunes */
+                #total table { width: 100% !important; border-collapse: collapse !important; }
+                #total table tr td { border: 1px solid #bbb !important; padding: 4px 8px !important; }
+                #total table tr.o_total td { background-color: #e0e1f0 !important; color: #16166d !important; font-weight: bold !important; font-size: 11pt !important; }
+
+                
+                .lg-arrete { background: #e0e1f0; border: 1px solid #16166d; padding: 5px 10px; font-size: 8.5pt; margin-top: 8px; }
+                .lg-merci { font-style: italic; font-weight: bold; color: #16166d; font-size: 12pt; }
+            </style>
+        </xpath>
+
+        <!-- On remplace l'en-tête standard par le style Lagunes -->
+        <xpath expr="//div[@id='informations']" position="before">
+            <div class="lg-header-wrap">
+                <div class="lg-top-row">
+                    <div class="lg-top-left">
+                        <div class="lg-company-name"><t t-esc="o.company_id.name"/></div>
+                        <div class="lg-company-info">
+                            <t t-if="o.company_id.street"><t t-esc="o.company_id.street"/><br/></t>
+                            <t t-if="o.company_id.city"><t t-esc="o.company_id.city"/><t t-if="o.company_id.zip"> <t t-esc="o.company_id.zip"/></t><br/></t>
+                            <t t-if="o.company_id.phone">Tél : <t t-esc="o.company_id.phone"/>&#160;</t>
+                            <t t-if="o.company_id.email">e-mail : <t t-esc="o.company_id.email"/></t>
+                        </div>
+                    </div>
+                </div>
+                <table class="lg-meta-table">
+                    <thead>
+                        <tr>
+                            <th style="width:33%">MODALITÉ DE PAIEMENT</th>
+                            <th style="width:33%">FACTURE N°</th>
+                            <th style="width:33%">DATE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><t t-esc="o.invoice_payment_term_id.name or 'Comptant'"/></td>
+                            <td><strong><t t-esc="o.name"/></strong></td>
+                            <td><span t-field="o.invoice_date" t-options='{"widget": "date", "format": "dd/MM/yyyy"}'/></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!-- Bloc Client (FAO) -->
+                <style>
+                    .lg-fao-table { width: 100%; border-collapse: collapse; font-size: 8pt; margin-top: -1px; }
+                    .lg-fao-table th { background: #16166d; color: #fff; font-weight: bold; border: 1px solid #16166d; padding: 4px 8px; text-align: center; }
+                    .lg-fao-table td { border: 1px solid #16166d; padding: 4px 8px; vertical-align: middle; font-size: 8.5pt; }
+                </style>
+                <table class="lg-fao-table">
+                    <thead>
+                        <tr>
+                            <th style="width:40%"><t t-esc="o.partner_id.name"/></th>
+                            <th style="width:20%">REF CLIENT</th>
+                            <th style="width:40%">ADRESSE DE FACTURATION</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <t t-if="o.partner_id.phone">Tél : <t t-esc="o.partner_id.phone"/><br/></t>
+                                <t t-if="o.partner_id.email">Email : <t t-esc="o.partner_id.email"/></t>
+                            </td>
+                            <td style="text-align:center; font-weight:bold;"><t t-esc="o.partner_id.ref or '---'"/></td>
+                            <td>
+                                <t t-if="o.partner_id.street"><t t-esc="o.partner_id.street"/><br/></t>
+                                <t t-if="o.partner_id.city"><t t-esc="o.partner_id.city"/></t>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!-- Bandeau ACTIVITÉ -->
+                <style>
+                    .lg-activite-bar { background: #16166d; color: #fff; font-weight: bold; font-size: 9pt; text-align: center; padding: 4px 0; border: 1px solid #16166d; margin-top: 10px; letter-spacing: 1px; }
+                    .lg-activite-content { border: 1px solid #16166d; border-top: none; padding: 5px 10px; font-style: italic; font-size: 8.5pt; color: #16166d; font-weight: bold; }
+                </style>
+                <div class="lg-activite-bar">ACTIVITÉ / RÉFÉRENCE</div>
+                <div class="lg-activite-content">
+                    <t t-if="o.invoice_origin"><t t-esc="o.invoice_origin"/> — </t>
+                    <t t-if="o.narration">
+                        <t t-esc="o.narration"/>
+                    </t>
+                    <t t-else="">
+                        Prestation <t t-esc="o.company_id.name"/>
+                    </t>
+                </div>
+            </div>
+
+
+        </xpath>
+
+        <!-- Ajout du montant en lettres et du détail des plats -->
+        <xpath expr="//div[@id='total']" position="after">
+            <div class="lg-arrete mt-3">
+                <strong>Arrêter la présente facture à la somme de : </strong>
+                <t t-if="o.currency_id">
+                    <t t-esc="o.currency_id.amount_to_text(o.amount_total)"/>
+                </t>
+                <t t-else="">
+                    <t t-esc="'{:,.0f}'.format(o.amount_total).replace(',', ' ')"/> francs CFA
+                </t>
+            </div>
+        </xpath>
+
+
+        <!-- Harmonisation du tableau de facture avec colonnes Qté et Jours -->
+        <xpath expr="//table[@name='invoice_line_table']/thead/tr" position="replace">
+            <tr>
+                <th name="th_description" class="text-start"><span>DESCRIPTIONS</span></th>
+                <th name="th_quantity" class="text-center"><span>QUANTITÉ</span></th>
+                <th name="th_days" class="text-center"><span>JOURS</span></th>
+                <th name="th_priceunit" class="text-end"><span>PRIX UNIT.</span></th>
+                <th name="th_subtotal" class="text-end"><span>MONTANT</span></th>
+            </tr>
+        </xpath>
+
+        <xpath expr="//table[@name='invoice_line_table']/tbody//tr[1]" position="replace">
+            <tr t-att-class="'bg-200 fw-bold o_line_section' if line.display_type == 'line_section' else 'o_line_note' if line.display_type == 'line_note' else ''">
+                <t t-if="not line.display_type">
+                    <td name="td_name">
+                        <span t-field="line.name" t-options="{'widget': 'text'}"/>
+                        <!-- Détail des plats en puces (si traiteur) -->
+                        <t t-set="prestation" t-value="line.sale_line_ids[0].traiteur_prestation_id if line.sale_line_ids and line.sale_line_ids[0].traiteur_prestation_id else False"/>
+                        <t t-if="prestation">
+                            <ul style="margin: 2px 0 0 14px; padding: 0; list-style-type: disc; font-size: 8pt; color: #555;">
+                                <t t-foreach="prestation.plat_line_ids" t-as="plat_line">
+                                    <t t-if="not plat_line.logistique_id">
+                                        <li><t t-esc="plat_line.description"/> <t t-if="plat_line.quantite > 1">(x<t t-esc="int(plat_line.quantite)"/>)</t></li>
+                                    </t>
+                                </t>
+                            </ul>
+                        </t>
+                    </td>
+                    <td class="text-center">
+                        <span t-field="line.quantity"/>
+                    </td>
+                    <td class="text-center">
+                        <span t-field="line.sale_line_ids[0].traiteur_nb_jours if line.sale_line_ids else '1'"/>
+                    </td>
+                    <td class="text-end">
+                        <t t-set="nb_j" t-value="line.sale_line_ids[0].traiteur_nb_jours if line.sale_line_ids and line.sale_line_ids[0].traiteur_nb_jours > 0 else 1"/>
+                        <span t-esc="line.price_unit / nb_j" t-options='{"widget": "monetary", "display_currency": o.currency_id}'/>
+                    </td>
+                    <td class="text-end">
+                        <span t-field="line.price_subtotal"/>
+                    </td>
+                </t>
+                <t t-if="line.display_type == 'line_section'">
+                    <td colspan="5">
+                        <span t-field="line.name" t-options="{'widget': 'text'}"/>
+                    </td>
+                </t>
+            </tr>
+        </xpath>
+
+
+        <!-- Ajout du "Merci" en bas de page -->
+        <xpath expr="//div[@name='comment']" position="after">
+            <div class="mt-4">
+                <div class="lg-merci"><i>Merci pour votre confiance !</i></div>
+            </div>
+        </xpath>
+    </template>
+</odoo>
+

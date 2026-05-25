@@ -1,0 +1,11 @@
+# Icône du module
+
+Pour ajouter une icône au module, placez une image PNG (128x128px minimum) dans:
+`/static/description/icon.png`
+
+Vous pouvez utiliser:
+- Un logo du restaurant
+- Une icône de nourriture/cantine
+- Une icône personnalisée
+
+L'icône apparaîtra dans la liste des applications Odoo.

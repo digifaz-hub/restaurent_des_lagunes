@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <template id="website_traiteur_confirmation" name="Confirmation de demande">
+        <t t-call="website.layout">
+            <div id="wrap" class="bg-light min-vh-100 d-flex align-items-center">
+                <div class="container">
+                    <div class="row justify-content-center">
+                        <div class="col-md-8 text-center">
+                            <div class="card border-0 shadow-lg rounded-4 p-5">
+                                <div class="bg-success-subtle rounded-circle d-flex align-items-center justify-content-center mx-auto mb-4" style="width: 100px; height: 100px;">
+                                    <i class="fa fa-check fa-4x text-success"/>
+                                </div>
+                                <h1 class="fw-bold mb-3">Merci pour votre demande !</h1>
+                                <p class="lead text-muted mb-4">
+                                    Votre demande de prestation a bien été enregistrée sous la référence :<br/>
+                                    <span class="h3 fw-bold text-primary"><t t-esc="reference"/></span>
+                                </p>
+                                <div class="alert alert-info border-0 rounded-4 p-4 text-start">
+                                    <h5 class="fw-bold"><i class="fa fa-info-circle me-2"/>Et ensuite ?</h5>
+                                        Notre équipe va étudier votre demande et reviendra vers vous très prochainement par email.
+
+                                </div>
+                                <div class="mt-5">
+                                    <a href="/traiteur" class="btn btn-primary btn-lg rounded-pill px-5 shadow-sm">
+                                        <i class="fa fa-home me-2"/> Retour à l'accueil
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </t>
+    </template>
+</odoo>

@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<templates xml:space="preserve">
+
+    <t t-name="lagunes_cantine.Dashboard">
+        <div class="o_lagunes_dashboard">
+            
+            <!-- ════════════════ Header ════════════════ -->
+            <header class="ld-header">
+                <div class="ld-header-left">
+                    <div class="ld-header-icon-box">
+                        <i class="fa fa-cutlery"/>
+                    </div>
+                    <div class="ld-header-title-area">
+                        <h2>Dashboard Cantine</h2>
+                        <p>Aperçu de l'activité du jour et statistiques</p>
+                    </div>
+                </div>
+                <div class="ld-header-right">
+                    <button t-on-click="_onRefresh" class="btn btn-primary ld-refresh-btn">
+                        <i class="fa fa-sync me-2"/> Rafraîchir
+                    </button>
+                </div>
+            </header>
+
+            <!-- ════════════════ Feedback Areas ════════════════ -->
+            <div t-if="!state.loaded and !state.error" class="ld-loading">
+                <div class="ld-loading-spinner"/>
+                <span>Synchronisation des données...</span>
+            </div>
+
+            <div t-if="state.error" class="alert alert-danger d-flex align-items-center gap-3">
+                <i class="fa fa-exclamation-triangle fs-4"/>
+                <div>
+                    <strong>Erreur de chargement</strong><br/>
+                    <t t-esc="state.error"/>
+                </div>
+            </div>
+
+            <!-- ════════════════ Main Content ════════════════ -->
+            <main t-if="state.loaded" class="ld-content">
+
+                <!-- ════════════════ Alerts Section ════════════════ -->
+                <div t-if="state.data.commande_stock_insufficient > 0" class="ld-alerts-section mb-4">
+                    <div class="alert alert-danger d-flex align-items-start gap-3 mb-2">
+                        <i class="fa fa-exclamation-triangle fs-4"/>
+                        <div class="flex-grow-1">
+                            <div class="d-flex justify-content-between align-items-center mb-2">
+                                <strong class="fs-5">⚠️ Alertes Stock Insuffisant</strong>
+                                <span class="badge bg-danger fs-6">
+                                    <t t-esc="state.data.commande_stock_insufficient"/> commande(s)
+                                </span>
+                            </div>
+                            <p class="mb-2">
+                                Des commandes ont été validées avec un stock insuffisant. 
+                                La livraison de ces commandes nécessite une validation administrative.
+                            </p>
+                            <div t-if="state.data.commande_stock_insufficient_today > 0" class="text-danger">
+                                <i class="fa fa-warning me-1"/>
+                                Dont <strong><t t-esc="state.data.commande_stock_insufficient_today"/></strong> aujourd'hui
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Table des alertes stock -->
+                    <div t-if="stockAlerts.length > 0" class="ld-section ld-alert-detail">
+                        <div class="ld-section-header bg-danger-subtle">
+                            <h3 class="ld-section-title text-danger">
+                                <i class="fa fa-list"/> Détails des commandes en anomalie
+                            </h3>
+                            <button class="btn btn-danger btn-sm" t-on-click="() => this._openAction('lagunes_cantine.action_lagunes_commande')">
+                                <i class="fa fa-external-link me-1"/> Voir les commandes
+                            </button>
+                        </div>
+                        <div class="ld-table-container">
+                            <table class="ld-table">
+                                <thead>
+                                    <tr>
+                                        <th>Référence</th>
+                                        <th>Entreprise</th>
+                                        <th>Date</th>
+                                        <th>Forçage par</th>
+                                        <th>Statut</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr t-foreach="stockAlerts" t-as="alert" t-key="alert.id">
+                                        <td><strong><t t-esc="alert.reference"/></strong></td>
+                                        <td><t t-esc="alert.entreprise"/></td>
+                                        <td><t t-esc="formatDateShort(alert.date)"/></td>
+                                        <td><span class="text-danger"><t t-esc="alert.forced_by"/></span></td>
+                                        <td>
+                                            <span t-attf-class="ld-badge ld-badge-{{alert.state}}" t-esc="alert.state"/>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- KPI Grid -->
+                <div class="ld-kpi-grid">
+                    <!-- Cards with subtle left-border color indicators -->
+                    <div class="ld-kpi-card ld-kpi-blue" t-on-click="() => this._openAction('lagunes_cantine.action_lagunes_commande')">
+                        <div class="ld-kpi-top">
+                            <span class="ld-kpi-value" t-esc="state.animated.commande_today"/>
+                            <div class="ld-kpi-icon-circle ld-blue-icon">
+                                <i class="fa fa-shopping-cart"/>
+                            </div>
+                        </div>
+                        <span class="ld-kpi-label">Commandes du jour</span>
+                    </div>
+
+                    <div class="ld-kpi-card ld-kpi-orange">
+                        <div class="ld-kpi-top">
+                            <span class="ld-kpi-value" t-esc="state.animated.commande_today_preparing"/>
+                            <div class="ld-kpi-icon-circle ld-orange-icon">
+                                <i class="fa fa-fire"/>
+                            </div>
+                        </div>
+                        <span class="ld-kpi-label">Plats en préparation</span>
+                    </div>
+
+                    <div class="ld-kpi-card ld-kpi-green">
+                        <div class="ld-kpi-top">
+                            <span class="ld-kpi-value" t-esc="state.animated.commande_today_ready"/>
+                            <div class="ld-kpi-icon-circle ld-green-icon">
+                                <i class="fa fa-check-circle"/>
+                            </div>
+                        </div>
+                        <span class="ld-kpi-label">Prêtes à livrer</span>
+                    </div>
+
+                    <div class="ld-kpi-card ld-kpi-purple">
+                        <div class="ld-kpi-top">
+                            <span class="ld-kpi-value" t-esc="state.animated.entreprise_total"/>
+                            <div class="ld-kpi-icon-circle ld-purple-icon">
+                                <i class="fa fa-building"/>
+                            </div>
+                        </div>
+                        <span class="ld-kpi-label">Entreprises actives</span>
+                    </div>
+
+                    <div class="ld-kpi-card ld-kpi-gold">
+                        <div class="ld-kpi-top">
+                            <span class="ld-kpi-value"><t t-esc="state.animated.penetration_rate"/>%</span>
+                            <div class="ld-kpi-icon-circle ld-gold-icon">
+                                <i class="fa fa-users"/>
+                            </div>
+                        </div>
+                        <span class="ld-kpi-label">Taux de fréquentation</span>
+                    </div>
+
+                    <div class="ld-kpi-card ld-kpi-teal">
+                        <div class="ld-kpi-top">
+                            <span class="ld-kpi-value" t-esc="state.animated.tomorrow_forecast"/>
+                            <div class="ld-kpi-icon-circle ld-teal-icon">
+                                <i class="fa fa-forward"/>
+                            </div>
+                        </div>
+                        <span class="ld-kpi-label">Prévisionnel Demain</span>
+                    </div>
+                </div>
+
+                <!-- Charts & Tables Layout -->
+                <div class="ld-sections">
+                    
+                    <!-- Left Column: Volume and Orders -->
+                    <div class="ld-col-left d-flex flex-column gap-4">
+                        
+                        <!-- Chart Section -->
+                        <div class="ld-section">
+                            <div class="ld-section-header">
+                                <h3 class="ld-section-title">
+                                    <i class="fa fa-chart-bar"/> Volume par entreprise
+                                </h3>
+                                <div class="ld-sparkline-box" style="width: 120px; height: 30px;">
+                                    <canvas t-ref="chart_sparkline"></canvas>
+                                </div>
+                            </div>
+                            <div class="ld-chart-container">
+                                <canvas t-ref="chart_commandes"></canvas>
+                            </div>
+                        </div>
+
+                        <!-- Orders Table Table Section -->
+                        <div class="ld-section">
+                            <div class="ld-section-header">
+                                <h3 class="ld-section-title">
+                                    <i class="fa fa-list-ul"/> Dernières Commandes
+                                </h3>
+                                <button class="btn btn-link btn-sm text-decoration-none" t-on-click="() => this._openAction('lagunes_cantine.action_lagunes_commande')">
+                                    Voir tout <i class="fa fa-chevron-right ms-1"/>
+                                </button>
+                            </div>
+                            <div class="ld-table-container">
+                                <table class="ld-table">
+                                    <thead>
+                                        <tr>
+                                            <th>Réf.</th>
+                                            <th>Employé</th>
+                                            <th>Plat</th>
+                                            <th>Statut</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <tr t-foreach="lastOrders" t-as="order" t-key="order.id">
+                                            <td><t t-esc="order.reference"/></td>
+                                            <td><t t-esc="order.employee"/></td>
+                                            <td><t t-esc="order.plat"/></td>
+                                            <td>
+                                                <span t-attf-class="ld-badge ld-badge-{{order.state}}" t-esc="order.state_label"/>
+                                            </td>
+                                        </tr>
+                                        <tr t-if="!lastOrders.length">
+                                            <td colspan="4" class="text-center py-4 text-muted small">Aucune commande enregistrée aujourd'hui.</td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Right Column: Activity Timeline -->
+                    <div class="ld-col-right">
+                        <div class="ld-section h-100">
+                             <div class="ld-section-header">
+                                <h3 class="ld-section-title">
+                                    <i class="fa fa-bolt"/> Activité Récente
+                                </h3>
+                            </div>
+                            
+                            <div class="ld-timeline">
+                                <t t-foreach="recentActivity" t-as="act" t-key="act_index">
+                                    <div class="ld-timeline-item" t-att-class="{active: act_index === 0}">
+                                        <div class="ld-timeline-dot">
+                                            <i t-attf-class="fa {{act.icon or 'fa-circle'}}"/>
+                                        </div>
+                                        <div class="ld-timeline-content">
+                                            <div class="ld-timeline-title" t-esc="act.label"/>
+                                            <div class="ld-timeline-time">
+                                                <i class="fa fa-clock me-1"/> <t t-esc="formatTime(act)"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </t>
+                                <div t-if="!recentActivity.length" class="text-center py-5 text-muted small">
+                                    Aucune activité récente.
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- New Row: Profitability -->
+                    <div class="ld-row-full mt-4">
+                        <div class="ld-section">
+                            <div class="ld-section-header">
+                                <h3 class="ld-section-title">
+                                    <i class="fa fa-line-chart"/> Top 5 Rentabilité (Plats)
+                                </h3>
+                                <span class="badge bg-success-subtle text-success border border-success-subtle px-3 py-2 rounded-pill">
+                                    Meilleures marges ingrédients
+                                </span>
+                            </div>
+                            <div class="ld-profit-grid p-4 d-flex flex-wrap gap-4">
+                                <t t-foreach="topProfitability" t-as="plat" t-key="plat.name">
+                                    <div class="ld-profit-item flex-grow-1 p-3 rounded-4 bg-light shadow-sm border-start border-4 border-success">
+                                        <div class="small text-muted text-uppercase fw-bold"><t t-esc="plat.name"/></div>
+                                        <div class="d-flex justify-content-between align-items-end mt-2">
+                                            <div class="h4 mb-0 fw-bold text-success"><t t-esc="plat.margin"/>%</div>
+                                            <div class="small fw-bold text-primary"><t t-esc="plat.price"/> <small>FCFA</small></div>
+                                        </div>
+                                    </div>
+                                </t>
+                                <div t-if="!topProfitability.length" class="w-100 text-center py-4 text-muted small italic">
+                                    Données de rentabilité indisponibles (Vérifiez les ingrédients des plats).
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </t>
+
+</templates>

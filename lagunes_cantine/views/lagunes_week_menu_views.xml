@@ -1,0 +1,306 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Vue formulaire des menus hebdomadaires - DESIGN MODERNE -->
+    <record id="view_week_menu_form" model="ir.ui.view">
+        <field name="name">lagunes.week.menu.form</field>
+        <field name="model">lagunes.week.menu</field>
+        <field name="arch" type="xml">
+            <form string=" Menu hebdomadaire" class="o_lagunes_view">
+                <header>
+                    <button name="action_publish" type="object" string=" Publier"
+                            invisible="state != 'draft'" class="oe_highlight"/>
+                    <button name="action_close" type="object" string=" Fermer"
+                            invisible="state == 'closed'" class="btn-secondary"/>
+                    <!-- Remettre en brouillon : réservé aux managers cantine.
+                         Le contrôle serveur est dans action_reset_to_draft. -->
+                    <button name="action_reset_to_draft" type="object"
+                            string=" Remettre en brouillon"
+                            invisible="state == 'draft'"
+                            groups="lagunes_cantine.group_lagunes_manager"
+                            confirm="Voulez-vous vraiment remettre ce menu en brouillon ? Vous pourrez ensuite modifier les dates et les plats."
+                            class="btn-secondary"/>
+
+                    <!-- Exports -->
+                    <button name="%(lagunes_cantine.action_report_week_menu)d" type="action"
+                            string="Imprimer PDF" class="btn-secondary"/>
+                    <button name="action_export_excel" type="object"
+                            string="Exporter Excel" class="btn-secondary"/>
+
+                    <field name="state" widget="statusbar"
+                           statusbar_visible="draft,published,closed"/>
+                </header>
+                <sheet>
+                    <!-- En-tête moderne -->
+                    <div class="oe_title mb-4">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="lui-card-icon lui-icon-primary" style="width:60px;height:60px;">
+                                <i class="fa fa-calendar-week fa-lg" title="Menu"/>
+                            </div>
+                            <div>
+                                <label class="o_form_label" for="name">
+                                     Menu hebdomadaire
+                                </label>
+                                <h1 class="mb-0">
+                                    <field name="name" readonly="1" class="fw-bold text-primary"/>
+                                </h1>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row mt-3">
+                        <div class="col-md-6 mb-4">
+                            <div class="lui-card h-100 p-3 shadow-sm border-0" style="border-radius: 12px; background: #fff;">
+                                <div class="lui-card-icon lui-icon-primary mb-2">
+                                    <i class="fa fa-calendar-week" title="Semaine"/>
+                                </div>
+                                <h5 class="fw-bold mb-3"> Période de la Semaine</h5>
+                                <group>
+                                    <field name="week_start_date" widget="date" readonly="state != 'draft'" string=" Début de semaine"/>
+                                    <field name="week_end_date" widget="date" readonly="1" string=" Fin de semaine"/>
+                                </group>
+                                <div class="alert alert-light border mt-2" role="status">
+                                    <i class="fa fa-info-circle text-primary me-2" title="Info"/>
+                                    <small>La semaine couvre la période du Samedi au Vendredi</small>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-4">
+                            <div class="lui-card h-100 p-3 shadow-sm border-0" style="border-radius: 12px; background: #fff;">
+                                <div class="lui-card-icon lui-icon-secondary mb-2">
+                                    <i class="fa fa-users-gear" title="Configuration"/>
+                                </div>
+                                <h5 class="fw-bold mb-3"> Visibilité &amp; Portée</h5>
+                                <group>
+                                    <field name="is_global" widget="boolean_toggle"
+                                           readonly="state != 'draft'"
+                                           string=" Menu global"/>
+                                    <field name="partner_id" options="{'no_create': True}"
+                                           invisible="is_global"
+                                           readonly="state != 'draft'"
+                                           string=" Entreprise spécifique"/>
+                                </group>
+                                <div class="alert alert-light border mt-2" invisible="not is_global" role="status">
+                                    <i class="fa fa-globe text-success me-2" title="Global"/>
+                                    <small>Ce menu sera visible par toutes les entreprises</small>
+                                </div>
+                                <div class="alert alert-light border mt-2" invisible="is_global" role="status">
+                                    <i class="fa fa-building text-info me-2" title="Entreprise"/>
+                                    <small>Ce menu est réservé à l'entreprise sélectionnée</small>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <group>
+                        <field name="active" widget="boolean_toggle" string=" Menu actif"/>
+                        <field name="notes" placeholder="Notes générales affichées sur le site web (ex: Information sur les ingrédients, allergènes...)" string=" Notes générales"/>
+                    </group>
+
+                    <notebook>
+                        <!-- ══════════════════════════════════════════════════════════
+                             ONGLET 1 : Menus de la semaine (lignes du tableau)
+                             La colonne "Catégorie de menu" n'est pertinente que pour
+                             les plats de résistance. Un widget attrs masque/désactive
+                             ce champ pour les lignes Entrée et Dessert.
+                        ══════════════════════════════════════════════════════════ -->
+                        <page string="Menus de la semaine">
+                            <div class="alert alert-info py-2 px-3 mb-3" style="font-size:13px; border-left:3px solid #16166d;" role="status">
+                                <i class="fa fa-info-circle me-1" style="color:#16166d;" title="Info"/>
+                                <strong>Rappel :</strong> La colonne <em>Catégorie de menu</em> (Menu Africain, Européen…)
+                                n'est applicable qu'aux <strong>plats de résistance</strong>.
+                                Elle est automatiquement désactivée pour les lignes de type Entrée ou Dessert.
+                            </div>
+                            <field name="menu_line_ids" readonly="state != 'draft'">
+                                <list editable="bottom">
+                                    <field name="day"/>
+                                    <field name="plat_type_id" options="{'no_create': True}"/>
+                                    <field name="is_resistance" column_invisible="1"/>
+                                    <!--
+                                        La catégorie de menu ne s'applique qu'aux plats de résistance.
+                                        On utilise column_invisible pour masquer la colonne dans la liste
+                                        et attrs pour désactiver/effacer selon le type de plat.
+                                        Le champ est rendu en lecture seule (et vidé) pour les entrées/desserts.
+                                    -->
+                                    <field name="menu_category_id"
+                                           options="{'no_create': True}"
+                                           readonly="not is_resistance"
+                                           column_invisible="parent.state != 'draft'"
+                                           decoration-muted="not is_resistance"
+                                           optional="show"/>
+                                    <field name="plat_ids" widget="many2many_tags"
+                                           options="{'no_create': True}"/>
+                                    <field name="notes" optional="show"
+                                           placeholder="Note interne…"/>
+                                    <field name="notes_day" optional="show"
+                                           placeholder="Note affichée sur le site"/>
+                                </list>
+                            </field>
+                        </page>
+
+                        <!-- ══════════════════════════════════════════════════════════
+                             ONGLET 2 : Plats disponibles hors menu
+                             Permet de définir directement depuis le menu hebdomadaire
+                             les plats marqués "Disponible hors menu (global)".
+                             Ces plats apparaissent sur le portail même s'ils ne sont
+                             pas dans les lignes du tableau ci-dessus.
+                        ══════════════════════════════════════════════════════════ -->
+                        <page string="Plats hors menu du jour">
+                            <div class="alert alert-warning py-2 px-3 mb-3" style="font-size:13px; border-left:3px solid #f5a821;" role="status">
+                                <i class="fa fa-star me-1" style="color:#f5a821;" title="Important"/>
+                                <strong>Plats hors menu :</strong> les plats listés ci-dessous sont proposés
+                                sur le portail en dehors du menu de la semaine (section "Menu personnalisé").
+                                Activez ou désactivez l'option <em>Disponible hors menu</em> on chaque plat
+                                pour les faire apparaître ou disparaître.
+                            </div>
+
+                            <!-- Liste des plats actuellement marqués "hors menu" -->
+                            <div class="mb-3">
+                                <h6 class="fw-bold mb-2" style="color:#16166d;">
+                                    <i class="fa fa-list me-1" title="Liste"/> Plats actuellement disponibles hors menu
+                                </h6>
+                                <field name="hors_menu_plat_ids"
+                                       widget="many2many"
+                                       readonly="state != 'draft'"
+                                       options="{'no_create': False, 'no_open': False}"
+                                       domain="[('active', '=', True)]"
+                                       context="{'default_is_global_available': True}">
+                                    <list>
+                                        <field name="sequence" widget="handle"/>
+                                        <field name="image_128" widget="image" width="40"/>
+                                        <field name="name"/>
+                                        <field name="plat_type_id"/>
+                                        <field name="menu_category_id" optional="show"/>
+                                        <field name="prix_unitaire"/>
+                                        <field name="is_global_available" widget="boolean_toggle"/>
+                                        <field name="active" widget="boolean_toggle"/>
+                                    </list>
+                                </field>
+                            </div>
+
+                            <div class="alert alert-info py-2 px-3" style="font-size:12px; border-left:3px solid #17a2b8;" role="status">
+                                <i class="fa fa-lightbulb-o me-1" style="color:#17a2b8;" title="Astuce"/>
+                                Pour ajouter un plat hors menu, cliquez sur <strong>Ajouter une ligne</strong>
+                                et cochez <em>Disponible hors menu</em> sur la fiche du plat.
+                                Vous pouvez aussi ouvrir directement la liste des plats depuis
+                                <strong>Menus et Plats &gt; Plats</strong>.
+                            </div>
+                        </page>
+                    </notebook>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vue liste des menus hebdomadaires - DESIGN MODERNE -->
+    <record id="view_week_menu_list" model="ir.ui.view">
+        <field name="name">lagunes.week.menu.list</field>
+        <field name="model">lagunes.week.menu</field>
+        <field name="arch" type="xml">
+            <list string=" Menus hebdomadaires"
+                  class="o_lagunes_view"
+                  decoration-success="state == 'published' and not is_past"
+                  decoration-warning="state == 'published' and is_past"
+                  decoration-muted="state == 'closed'"
+                  multi_edit="1">
+                <field name="name" width="200" string=" Nom du menu"/>
+                <field name="week_start_date" widget="date" width="120" string=" Début"/>
+                <field name="week_end_date" widget="date" width="120" string=" Fin"/>
+                <field name="is_global" widget="boolean" width="100" string=" Global"/>
+                <field name="partner_id" optional="show" width="180" string=" Entreprise"/>
+                <field name="state" widget="badge" width="110" string=" Statut"/>
+                <field name="is_past" column_invisible="1"/>
+                <field name="active" widget="boolean_toggle" width="90" string=" Actif"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Vue recherche des menus hebdomadaires - DESIGN MODERNE -->
+    <record id="view_week_menu_search" model="ir.ui.view">
+        <field name="name">lagunes.week.menu.search</field>
+        <field name="model">lagunes.week.menu</field>
+        <field name="arch" type="xml">
+            <search string=" Rechercher dans les menus">
+                <field name="week_start_date" string=" Date de début"/>
+                <field name="partner_id" string=" Entreprise"/>
+                
+                <!-- ════════════════════════════════════════════════════════════════
+                     FILTRES PAR STATUT
+                ════════════════════════════════════════════════════════════════ -->
+                <filter string=" Brouillon" name="draft" domain="[('state', '=', 'draft')]"
+                        help="Menus en cours de préparation"/>
+                <filter string=" Publiés" name="published" domain="[('state', '=', 'published')]"
+                        help="Menus actuellement visibles par les employés"/>
+                <filter string=" Fermés" name="closed" domain="[('state', '=', 'closed')]"
+                        help="Menus clôturés"/>
+                <filter string=" Obsolètes (publiés mais dépassés)" name="obsolete"
+                        domain="[('state', '=', 'published'), ('is_past', '=', True)]"
+                        help="Menus encore publiés alors que la semaine est terminée"/>
+                
+                <!-- ════════════════════════════════════════════════════════════════
+                     FILTRES PAR TYPE
+                ════════════════════════════════════════════════════════════════ -->
+                <separator/>
+                <filter string=" Menus globaux" name="global" domain="[('is_global', '=', True)]"
+                        help="Menus visibles par toutes les entreprises"/>
+                <filter string=" Menus actifs" name="actifs" domain="[('active', '=', True)]"
+                        help="Menus actuellement actifs"/>
+                
+                <!-- ════════════════════════════════════════════════════════════════
+                     GROUPEMENTS
+                ════════════════════════════════════════════════════════════════ -->
+                <separator/>
+                <group expand="0" string=" Grouper par">
+                    <filter string=" Par semaine" name="group_week"
+                            context="{'group_by': 'week_start_date'}"/>
+                    <filter string=" Par statut" name="group_state"
+                            context="{'group_by': 'state'}"/>
+                    <filter string=" Par entreprise" name="group_partner"
+                            context="{'group_by': 'partner_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action pour les menus hebdomadaires - DESIGN MODERNE -->
+    <record id="action_week_menu" model="ir.actions.act_window">
+        <field name="name"> Menus hebdomadaires</field>
+        <field name="res_model">lagunes.week.menu</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_actifs': 1, 'search_default_published': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Aucun menu hebdomadaire créé</p>
+            <div class="p-3 bg-light rounded">
+                <h5 class="mb-3"><i class="fa fa-calendar-week text-primary me-2" title="Planification"/>Planifiez vos menus de la semaine</h5>
+                <p>Créez des menus hebdomadaires pour vos entreprises clientes. Chaque menu couvre la période Samedi → Vendredi.</p>
+                
+                <div class="row g-3 mb-3">
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-start gap-2">
+                            <i class="fa fa-globe text-success mt-1" title="Global"/>
+                            <div>
+                                <strong>Menus globaux</strong>
+                                <p class="small text-muted mb-0">Visibles par toutes les entreprises</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="d-flex align-items-start gap-2">
+                            <i class="fa fa-building text-info mt-1" title="Entreprise"/>
+                            <div>
+                                <strong>Menus spécifiques</strong>
+                                <p class="small text-muted mb-0">Réservés à une entreprise</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="alert alert-info mb-0 py-2">
+                    <i class="fa fa-lightbulb text-warning me-2"/>
+                    <strong>Workflow :</strong> Brouillon → Publié (visible par les employés) → Fermé
+                </div>
+            </div>
+        </field>
+    </record>
+
+</odoo>

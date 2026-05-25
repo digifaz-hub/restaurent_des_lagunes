@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ═══════════════════════════════════════════════════════════
+         STOCK INITIAL — Vue liste (lecture seule, accès depuis le menu Stock)
+         Le stock initial est principalement géré depuis l'onglet
+         "Stock initial" dans le formulaire du marché.
+         Cette vue permet une consultation globale.
+    ═══════════════════════════════════════════════════════════ -->
+    <record id="view_market_leftover_list" model="ir.ui.view">
+        <field name="name">lagunes.market.leftover.list</field>
+        <field name="model">lagunes.market.leftover</field>
+        <field name="arch" type="xml">
+            <list string="Stock initial du marché"
+                  create="false" delete="false" edit="false"
+                  decoration-warning="qty_remaining == 0"
+                  decoration-success="qty_remaining &gt; 0">
+                <field name="market_id"/>
+                <field name="article_id"/>
+                <field name="category_id" optional="show"/>
+                <field name="stock_current" string="Stock avant" readonly="1"/>
+                <field name="qty_remaining" string="Quantité restante"
+                       decoration-warning="qty_remaining == 0"
+                       decoration-success="qty_remaining &gt; 0"/>
+                <field name="uom_id" string="Unité" options="{'no_open': True, 'no_create': True}"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         RECHERCHE STOCK INITIAL
+    ═══════════════════════════════════════════════════════════ -->
+    <record id="view_market_leftover_search" model="ir.ui.view">
+        <field name="name">lagunes.market.leftover.search</field>
+        <field name="model">lagunes.market.leftover</field>
+        <field name="arch" type="xml">
+            <search string="Recherche stock initial">
+                <field name="article_id" string="Article"/>
+                <field name="market_id" string="Marché"/>
+                <filter name="has_qty" string="Avec stock initial"
+                        domain="[('qty_remaining', '&gt;', 0)]"/>
+                <filter name="no_qty" string="Consommé (qté = 0)"
+                        domain="[('qty_remaining', '=', 0)]"/>
+                <group expand="0" string="Regrouper par">
+                    <filter name="group_market" string="Marché"
+                            context="{'group_by': 'market_id'}"/>
+                    <filter name="group_article" string="Article"
+                            context="{'group_by': 'article_id'}"/>
+                    <filter name="group_category" string="Catégorie"
+                            context="{'group_by': 'category_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         ACTION
+    ═══════════════════════════════════════════════════════════ -->
+    <record id="action_market_leftover" model="ir.actions.act_window">
+        <field name="name">Stock initial</field>
+        <field name="res_model">lagunes.market.leftover</field>
+        <field name="view_mode">list</field>
+        <field name="search_view_id" ref="view_market_leftover_search"/>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">
+                Aucun stock initial enregistré
+            </p>
+            <p>
+                Le stock initial est saisi depuis l'onglet
+                <strong>Stock initial</strong>
+                dans le formulaire de chaque marché.
+            </p>
+        </field>
+    </record>
+</odoo>

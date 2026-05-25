@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <record id="view_traiteur_production_wizard_form" model="ir.ui.view">
+        <field name="name">lagunes.traiteur.production.wizard.form</field>
+        <field name="model">lagunes.traiteur.production.wizard</field>
+        <field name="arch" type="xml">
+            <form string="Générer la Fiche de Production">
+                <group>
+                    <p class="alert alert-info">
+                        Choisissez la date pour laquelle vous souhaitez consolider les besoins en ingrédients. 
+                        Le rapport inclura toutes les prestations confirmées ou acceptées pour ce jour.
+                    </p>
+                    <field name="date_production"/>
+                    <field name="company_id" invisible="1"/>
+                </group>
+                <footer>
+                    <button name="action_generate_report" string="Imprimer la Fiche" type="object" class="btn-primary" icon="fa-print"/>
+                    <button string="Annuler" class="btn-secondary" special="cancel"/>
+                </footer>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_traiteur_production_wizard" model="ir.actions.act_window">
+        <field name="name">Générer Fiche de Production</field>
+        <field name="res_model">lagunes.traiteur.production.wizard</field>
+        <field name="view_mode">form</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>

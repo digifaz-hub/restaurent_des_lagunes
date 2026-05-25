@@ -1,0 +1,186 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Format de papier paysage — DOIT être défini AVANT l'action qui le référence. -->
+    <record id="paperformat_landscape_menu" model="report.paperformat">
+        <field name="name">Paysage Menu Cantine</field>
+        <field name="default" eval="True"/>
+        <field name="format">A4</field>
+        <field name="page_height">0</field>
+        <field name="page_width">0</field>
+        <field name="orientation">Landscape</field>
+        <field name="margin_top">10</field>
+        <field name="margin_bottom">15</field>
+        <field name="margin_left">7</field>
+        <field name="margin_right">7</field>
+        <field name="header_line" eval="False"/>
+        <field name="header_spacing">0</field>
+        <field name="dpi">90</field>
+    </record>
+
+    <!-- Définition de l'action de rapport -->
+    <record id="action_report_week_menu" model="ir.actions.report">
+        <field name="name">Menu de la semaine</field>
+        <field name="model">lagunes.week.menu</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">lagunes_cantine.report_week_menu_template</field>
+        <field name="report_file">lagunes_cantine.report_week_menu_template</field>
+        <field name="print_report_name">'Menu_%s' % (object.name)</field>
+        <field name="binding_model_id" ref="model_lagunes_week_menu"/>
+        <field name="binding_type">report</field>
+        <field name="paperformat_id" ref="lagunes_cantine.paperformat_landscape_menu"/>
+    </record>
+
+    <!-- Template QWeb -->
+    <template id="report_week_menu_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="o">
+                <t t-call="web.basic_layout">
+                    <div class="page">
+                        <!-- Styles personnalisés pour le tableau -->
+                        <style>
+                            .menu-table {
+                                width: 100%;
+                                border-collapse: collapse;
+                                margin-top: 20px;
+                                table-layout: fixed;
+                            }
+                            .menu-table th, .menu-table td {
+                                border: 1px solid #000;
+                                padding: 8px;
+                                text-align: center;
+                                vertical-align: middle;
+                                word-wrap: break-word;
+                                background-color: #fff;
+                                color: #000;
+                            }
+                            .menu-table th {
+                                font-weight: bold;
+                            }
+                            .category-cell {
+                                font-weight: bold;
+                                width: 120px;
+                            }
+                            .day-header {
+                                font-weight: bold;
+                            }
+                            .notes-section {
+                                margin-top: 30px;
+                                border-top: 1px solid #000;
+                                padding-top: 10px;
+                            }
+                            .logo-container {
+                                text-align: center;
+                                margin-bottom: 20px;
+                            }
+                        </style>
+
+                        <!-- Logo de l'entreprise -->
+                        <div class="logo-container">
+                            <t t-if="o.company_id.logo">
+                                <img t-att-src="image_data_uri(o.company_id.logo)" style="max-height: 80px;" alt="Logo"/>
+                            </t>
+                            <h2 class="mt-2" style="font-weight: bold;">
+                                <t t-esc="o.name"/>
+                            </h2>
+                            <t t-if="not o.is_global and o.partner_id">
+                                <h4>Client : <t t-esc="o.partner_id.name"/></h4>
+                            </t>
+                        </div>
+
+                        <!-- Tableau du menu -->
+                        <table class="menu-table">
+                            <thead>
+                                <tr>
+                                    <th class="category-cell">CATÉGORIES</th>
+                                    <t t-foreach="[('0', 'SAMEDI'), ('1', 'DIMANCHE'), ('2', 'LUNDI'), ('3', 'MARDI'), ('4', 'MERCREDI'), ('5', 'JEUDI'), ('6', 'VENDREDI')]" t-as="day_info">
+                                        <th class="day-header">
+                                            <t t-esc="day_info[1]"/>
+                                            <t t-if="o.week_start_date">
+                                                <br/>
+                                                <small><t t-esc="(o.week_start_date + datetime.timedelta(days=int(day_info[0]))).strftime('%d/%m')"/></small>
+                                            </t>
+                                        </th>
+                                    </t>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <!-- On récupère tous les types et catégories présents dans le menu -->
+                                <t t-set="lines" t-value="o.menu_line_ids"/>
+                                
+                                <!-- 1. ENTRÉES -->
+                                <tr>
+                                    <td class="category-cell">ENTRÉES</td>
+                                    <t t-foreach="range(7)" t-as="d">
+                                        <td>
+                                            <t t-set="day_lines" t-value="lines.filtered(lambda l: int(l.day) == d and 'entr' in l.plat_type_id.name.lower())"/>
+                                            <t t-foreach="day_lines" t-as="line">
+                                                <t t-foreach="line.plat_ids" t-as="plat">
+                                                    <div style="margin-bottom: 4px;"><t t-esc="plat.display_name_website"/></div>
+                                                </t>
+                                            </t>
+                                        </td>
+                                    </t>
+                                </tr>
+
+                                <!-- 2. PLATS DE RÉSISTANCE (Groupés par catégorie de menu) -->
+                                <t t-set="all_cats" t-value="lines.mapped('menu_category_id').sorted('name')"/>
+                                <t t-foreach="all_cats" t-as="cat">
+                                    <tr>
+                                        <td class="category-cell"><t t-esc="cat.name"/></td>
+                                        <t t-foreach="range(7)" t-as="d">
+                                            <td>
+                                                <t t-set="day_lines" t-value="lines.filtered(lambda l: int(l.day) == d and l.menu_category_id == cat)"/>
+                                                <t t-foreach="day_lines" t-as="line">
+                                                    <t t-foreach="line.plat_ids" t-as="plat">
+                                                        <div style="margin-bottom: 4px;"><t t-esc="plat.display_name_website"/></div>
+                                                    </t>
+                                                </t>
+                                            </td>
+                                        </t>
+                                    </tr>
+                                </t>
+
+                                <!-- 3. DESSERTS -->
+                                <tr>
+                                    <td class="category-cell">DESSERTS</td>
+                                    <t t-foreach="range(7)" t-as="d">
+                                        <td>
+                                            <t t-set="day_lines" t-value="lines.filtered(lambda l: int(l.day) == d and 'dessert' in l.plat_type_id.name.lower())"/>
+                                            <t t-foreach="day_lines" t-as="line">
+                                                <t t-foreach="line.plat_ids" t-as="plat">
+                                                    <div style="margin-bottom: 4px;"><t t-esc="plat.display_name_website"/></div>
+                                                </t>
+                                            </t>
+                                        </td>
+                                    </t>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <!-- Notes générales -->
+                        <t t-if="o.notes">
+                            <div class="notes-section">
+                                <h5 style="font-weight: bold;">Notes :</h5>
+                                <p style="white-space: pre-line;"><t t-esc="o.notes"/></p>
+                            </div>
+                        </t>
+
+                        <!-- Notes par jour (optionnel, si on veut les inclure en bas) -->
+                        <t t-set="day_notes" t-value="lines.filtered(lambda l: l.notes_day)"/>
+                        <t t-if="day_notes">
+                            <div class="mt-4" style="font-size: 0.9em;">
+                                <t t-foreach="day_notes.sorted('day')" t-as="dn">
+                                    <div class="mb-1">
+                                        <strong><t t-esc="dn.get_day_display()"/> :</strong> <t t-esc="dn.notes_day"/>
+                                    </div>
+                                </t>
+                            </div>
+                        </t>
+                    </div>
+                </t>
+            </t>
+        </t>
+    </template>
+
+</odoo>

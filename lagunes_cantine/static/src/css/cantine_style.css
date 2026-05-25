@@ -1,0 +1,366 @@
+/* Custom Premium Styles for Lagunes Cantine */
+
+:root {
+    --cantine-primary: #16166d;
+    --cantine-secondary: #E65A2B;
+    --cantine-accent: #f8c12c;
+    --glass-bg: rgba(255, 255, 255, 0.7);
+}
+
+.lagunes-frontend {
+    font-family: 'Outfit', sans-serif;
+}
+
+/* Glassmorphism */
+.glass-card {
+    background: var(--glass-bg);
+    backdrop-filter: blur(15px);
+    -webkit-backdrop-filter: blur(15px);
+    border: 1px solid rgba(255, 255, 255, 0.3);
+    border-radius: 30px;
+}
+
+/* Hero carousel — hauteur responsive */
+.cantine-hero {
+    height: 70vh;
+    min-height: 500px;
+}
+
+@media (max-width: 991.98px) {
+    .cantine-hero {
+        height: 60vh;
+        min-height: 400px;
+    }
+
+    .cantine-hero .display-1 {
+        font-size: 2.5rem;
+    }
+
+    .cantine-hero .fs-3 {
+        font-size: 1.1rem !important;
+    }
+}
+
+@media (max-width: 575.98px) {
+    .cantine-hero {
+        height: 50vh;
+        min-height: 350px;
+    }
+
+    .cantine-hero .display-1 {
+        font-size: 1.9rem;
+    }
+}
+
+/* Fix <picture> inside carousel-item : on force pleine couverture */
+.cantine-hero .carousel-item picture,
+.cantine-hero .ken-burns-img picture {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
+
+/* Ken Burns Animation */
+.ken-burns-img {
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+}
+
+.carousel-item.active .ken-burns-img img {
+    animation: kenburns 20s ease-out both;
+}
+
+@keyframes kenburns {
+    0% {
+        transform: scale(1) translate(0, 0);
+    }
+
+    100% {
+        transform: scale(1.2) translate(-20px, -10px);
+    }
+}
+
+/* Respect du reduced-motion (accessibilité) */
+@media (prefers-reduced-motion: reduce) {
+    .carousel-item.active .ken-burns-img img {
+        animation: none;
+    }
+
+    .carousel-fade .carousel-item {
+        transition: none;
+    }
+}
+
+.text-shadow-lg {
+    text-shadow: 2px 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.text-shadow {
+    text-shadow: 1px 2px 5px rgba(0, 0, 0, 0.3);
+}
+
+.gradient-text {
+    background: linear-gradient(135deg, var(--cantine-primary) 0%, var(--cantine-secondary) 100%);
+    -webkit-background-clip: text;
+    background-clip: text;
+    -webkit-text-fill-color: transparent;
+}
+
+/* Dish Cards Styles */
+.dish-card {
+    border-radius: 25px !important;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.dish-card:hover {
+    transform: translateY(-12px);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15) !important;
+}
+
+.dish-card .dish-img-container {
+    position: relative;
+    height: 220px;
+    overflow: hidden;
+}
+
+.dish-card img {
+    transition: transform 0.5s ease;
+}
+
+.dish-card:hover img {
+    transform: scale(1.03);
+    box-shadow: 0 10px 20px rgba(22, 22, 109, 0.1) !important;
+}
+
+/* Transitions pour les formulaires */
+.animate__animated {
+    animation-duration: 0.8s;
+}
+
+.lagunes-frontend .btn-primary {
+    background: linear-gradient(135deg, var(--cantine-primary) 0%, #303099 100%);
+    border: none;
+    padding: 12px 30px;
+    border-radius: 15px;
+    font-weight: 600;
+    transition: all 0.3s ease;
+}
+
+.lagunes-frontend .btn-primary:hover {
+    transform: scale(1.05);
+    box-shadow: 0 10px 20px rgba(22, 22, 109, 0.3);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   WIZARD & STICKY LAYOUT
+   ═══════════════════════════════════════════════════════════════════ */
+
+.cantine-wizard-layout {
+    display: grid;
+    grid-template-columns: 350px 1fr;
+    gap: 30px;
+    align-items: start;
+}
+
+@media (max-width: 991px) {
+    .cantine-wizard-layout {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Sticky Sidebar */
+.sticky-menu-panel {
+    position: sticky;
+    top: 100px; /* Offset for Odoo Navbar */
+    background: white;
+    border: none;
+    border-radius: 20px;
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.08);
+    overflow: hidden;
+    max-height: calc(100vh - 120px);
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(0,0,0,0.05);
+}
+
+.sticky-menu-header {
+    background: linear-gradient(135deg, #16166d 0%, #2a2a72 100%);
+    color: white;
+    padding: 20px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.sticky-menu-content {
+    padding: 20px;
+    overflow-y: auto;
+    scrollbar-width: thin;
+    scrollbar-color: #cbd5e0 #f7fafc;
+}
+
+.day-strip {
+    transition: all 0.2s ease;
+}
+
+.today-highlight {
+    box-shadow: 0 4px 12px rgba(127, 145, 12, 0.15);
+    transform: scale(1.02);
+}
+
+/* Progress Bar */
+.wizard-progress {
+    display: flex;
+    justify-content: space-between;
+    margin-bottom: 50px;
+    position: relative;
+    max-width: 600px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.wizard-progress::before {
+    content: "";
+    position: absolute;
+    top: 50%;
+    left: 20px;
+    right: 20px;
+    height: 3px;
+    background: #edf2f7;
+    z-index: 1;
+    transform: translateY(-50%);
+}
+
+.progress-step {
+    width: 45px;
+    height: 45px;
+    border-radius: 50%;
+    background: white;
+    border: 3px solid #edf2f7;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 800;
+    z-index: 2;
+    color: #a0aec0;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 0 4px 10px rgba(0,0,0,0.05);
+}
+
+.progress-step.active {
+    border-color: #16166d;
+    color: #16166d;
+    transform: scale(1.15);
+    box-shadow: 0 10px 20px rgba(22, 22, 109, 0.15);
+}
+
+.progress-step.completed {
+    background: #16166d;
+    border-color: #16166d;
+    color: white;
+}
+
+/* Wizard steps : une seule étape visible à la fois */
+.wizard-step { display: none; }
+.wizard-step.active { display: block; }
+
+
+/* Dish Cards */
+.dish-card {
+    border-radius: 12px;
+    overflow: hidden;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border: 2px solid transparent !important;
+}
+
+.dish-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1) !important;
+}
+
+.dish-card.selected {
+    border-color: #7f910c !important;
+    background: #f9fdf0;
+}
+
+.dish-img-container {
+    height: 180px;
+    background: #f8fafc;
+    overflow: hidden;
+}
+
+.dish-img-container img {
+    transition: transform 0.5s ease;
+}
+
+/* Sticky Mobile Nav */
+@media (max-width: 767px) {
+    .wizard-step {
+        padding-bottom: 80px;
+    }
+    
+    .wizard-step .btn-next-step {
+        position: fixed;
+        bottom: 20px;
+        left: 20px;
+        right: 20px;
+        z-index: 1000;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.2) !important;
+        padding: 15px !important;
+    }
+}
+
+/* Sidebar — table compacte menu de la semaine */
+.sidebar-menu-table th,
+.sidebar-menu-table td {
+    font-size: 9px;
+    line-height: 1.2;
+    vertical-align: top;
+    padding: 3px 4px;
+}
+
+.sidebar-type-col {
+    min-width: 62px;
+    max-width: 62px;
+    font-size: 9px;
+    font-weight: 700;
+    padding: 4px 5px;
+    word-break: break-word;
+}
+
+.sidebar-type-entree   { color: #155724; background: #d1e7dd; }
+.sidebar-type-resistance { color: #16166d; background: #e8e9f5; }
+.sidebar-type-dessert  { color: #856404; background: #fff3cd; }
+
+.sidebar-cell-text {
+    font-size: 9px;
+    line-height: 1.2;
+}
+
+/* Bouton Précédent (wizard) */
+.btn-prev-step {
+    border-radius: 10px;
+    background-color: #ffffff;
+    color: #16166d;
+    border: 2px solid #16166d;
+    font-weight: 600;
+    transition: all 0.2s ease;
+}
+
+.btn-prev-step:hover,
+.btn-prev-step:focus {
+    background-color: #16166d;
+    color: #ffffff;
+    border-color: #16166d;
+}
+
+/* Empty states */
+.empty-step-msg {
+    border: 2px dashed #e2e8f0;
+    border-radius: 20px;
+    padding: 40px;
+    text-align: center;
+    color: #a0aec0;
+}

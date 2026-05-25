@@ -1,0 +1,100 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ═══════════════════════════════════════════════════════════
+         UNITÉS DE MESURE
+    ═══════════════════════════════════════════════════════════ -->
+    <!-- Catégories d'unités -->
+    <record id="view_market_uom_category_list" model="ir.ui.view">
+        <field name="name">lagunes.market.uom.category.list</field>
+        <field name="model">lagunes.market.uom.category</field>
+        <field name="arch" type="xml">
+            <list string="Catégories d'unités" editable="bottom">
+                <field name="name"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="action_market_uom_category" model="ir.actions.act_window">
+        <field name="name">Catégories d'unités</field>
+        <field name="res_model">lagunes.market.uom.category</field>
+        <field name="view_mode">list</field>
+    </record>
+
+    <!-- Unités de mesure -->
+    <record id="view_market_uom_list" model="ir.ui.view">
+        <field name="name">lagunes.market.uom.list</field>
+        <field name="model">lagunes.market.uom</field>
+        <field name="arch" type="xml">
+            <list string="Unités de mesure" editable="bottom">
+                <field name="name"/>
+                <field name="category_id"/>
+                <field name="uom_type"/>
+                <field name="factor"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_market_uom_form" model="ir.ui.view">
+        <field name="name">lagunes.market.uom.form</field>
+        <field name="model">lagunes.market.uom</field>
+        <field name="arch" type="xml">
+            <form string="Unité de mesure">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="ex : kg, litre, pièce, botte…"/></h1>
+                    </div>
+
+                    <!-- Alerte configuration -->
+                    <div class="alert alert-info mb-3" role="alert">
+                        <i class="fa fa-info-circle me-2" title="Information"/>
+                        <strong>Configuration des conversions :</strong><br/>
+                        Définissez une unité de <strong>référence</strong> par catégorie (ex: kg, L, pièce).<br/>
+                        Les autres unités se convertissent automatiquement vers cette référence.
+                    </div>
+
+                    <group>
+                        <group string="Identification">
+                            <field name="name"/>
+                            <field name="category_id" options="{'no_create': True}"/>
+                            <field name="active" widget="boolean_toggle"/>
+                        </group>
+                        <group string="Conversion">
+                            <field name="uom_type"/>
+                            <field name="factor" invisible="uom_type == 'reference'"
+                                   widget="float" options="{'decimal_precision': 4}"/>
+                        </group>
+                    </group>
+
+                    <!-- Explications selon le type -->
+                    <div class="alert alert-light border" invisible="uom_type != 'smaller'" role="status">
+                        <i class="fa fa-calculator me-2 text-primary" title="Calculatrice"/>
+                        <strong>Plus petite que la référence :</strong><br/>
+                        Ex: <strong>g</strong> vers <strong>kg</strong> → factor = 1000 (1000g = 1kg)<br/>
+                        Formule: qty / factor → référence
+                    </div>
+
+                    <div class="alert alert-light border" invisible="uom_type != 'bigger'" role="status">
+                        <i class="fa fa-calculator me-2 text-warning" title="Calculatrice"/>
+                        <strong>Plus grande que la référence :</strong><br/>
+                        Ex: <strong>tonne</strong> vers <strong>kg</strong> → factor = 1000 (1tonne = 1000kg)<br/>
+                        Formule: qty * factor → référence
+                    </div>
+
+                    <div class="alert alert-success" invisible="uom_type != 'reference'" role="status">
+                        <i class="fa fa-check-circle me-2" title="Succès"/>
+                        <strong>Unité de référence :</strong> C'est l'unité de base pour cette catégorie.<br/>
+                        Toutes les autres unités de la catégorie se convertissent vers cette unité.
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_market_uom" model="ir.actions.act_window">
+        <field name="name">Unités de mesure</field>
+        <field name="res_model">lagunes.market.uom</field>
+        <field name="view_mode">list,form</field>
+    </record>
+</odoo>

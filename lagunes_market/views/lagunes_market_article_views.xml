@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- ═══════════════════════════════════════════════════════════
+         CATÉGORIES D'ARTICLES
+    ═══════════════════════════════════════════════════════════ -->
+    <record id="view_market_article_category_list" model="ir.ui.view">
+        <field name="name">lagunes.market.article.category.list</field>
+        <field name="model">lagunes.market.article.category</field>
+        <field name="arch" type="xml">
+            <list string="Catégories d'articles" editable="bottom">
+                <field name="name"/>
+                <field name="active" widget="boolean_toggle"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_market_article_category_form" model="ir.ui.view">
+        <field name="name">lagunes.market.article.category.form</field>
+        <field name="model">lagunes.market.article.category</field>
+        <field name="arch" type="xml">
+            <form string="Catégorie d'article">
+                <sheet>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="Nom de la catégorie"/></h1>
+                    </div>
+                    <field name="active" widget="boolean_toggle"/>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="action_market_article_category" model="ir.actions.act_window">
+        <field name="name">Catégories d'articles</field>
+        <field name="res_model">lagunes.market.article.category</field>
+        <field name="view_mode">list,form</field>
+    </record>
+
+    <!-- ═══════════════════════════════════════════════════════════
+         ARTICLES
+    ═══════════════════════════════════════════════════════════ -->
+    <record id="view_market_article_list" model="ir.ui.view">
+        <field name="name">lagunes.market.article.list</field>
+        <field name="model">lagunes.market.article</field>
+        <field name="arch" type="xml">
+            <list string="Articles" decoration-muted="not active">
+                <field name="name"/>
+                <field name="category_id"/>
+                <field name="default_uom_id" string="Unité de mesure"/>
+                <field name="stock_qty" string="Stock actuel"/>
+                <field name="active" widget="boolean_toggle" optional="show"/>
+            </list>
+        </field>
+    </record>
+
+    <record id="view_market_article_form" model="ir.ui.view">
+        <field name="name">lagunes.market.article.form</field>
+        <field name="model">lagunes.market.article</field>
+        <field name="arch" type="xml">
+            <form string="Article de marché">
+                <sheet>
+                    <widget name="web_ribbon" title="Archivé" bg_color="bg-danger"
+                            invisible="active"/>
+                    <div class="oe_button_box" name="button_box">
+                        <button name="action_view_market_lines" type="object"
+                                class="oe_stat_button" icon="fa-shopping-cart">
+                            <field name="market_line_count" widget="statinfo" string="Achats"/>
+                        </button>
+                        <button name="action_view_stock_moves" type="object"
+                                class="oe_stat_button" icon="fa-exchange"
+                                invisible="not stock_qty">
+                            <div class="o_field_widget o_stat_info">
+                                <span class="o_stat_text">Mouvements</span>
+                                <span class="o_stat_text">de stock</span>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="oe_title">
+                        <label for="name"/>
+                        <h1><field name="name" placeholder="Nom de l'article"/></h1>
+                    </div>
+                    <group>
+                        <group>
+                            <field name="category_id" options="{'no_create': True}"/>
+                            <field name="default_uom_id" string="Unité de mesure" options="{'no_create': True}"/>
+                        </group>
+                        <group>
+                            <label for="stock_qty"/>
+                            <div class="o_row">
+                                <field name="stock_qty" class="oe_inline fw-bold text-primary" readonly="1"/>
+                                <field name="default_uom" class="oe_inline"/>
+                            </div>
+                            <field name="last_purchase_price" widget="monetary" options="{'currency_field': 'currency_id'}" class="fw-bold text-success"/>
+                            <field name="reorder_point" decoration-danger="stock_qty &lt; reorder_point"/>
+                            <field name="active" widget="boolean_toggle"/>
+                        </group>
+                    </group>
+                    <notebook>
+                        <page string="Historique des Achats" name="purchase_history">
+                            <label for="price_history_json" string="Évolution du prix d'achat"/>
+                            <field name="price_history_json" widget="lagunes_price_history_chart" nolabel="1"/>
+                            
+                            <div class="mt-4">
+                                <p class="text-muted italic">
+                                    <i class="fa fa-info-circle me-1"/> Les 20 derniers prix d'achat validés sont pris en compte pour l'analyse de tendance.
+                                </p>
+                                <button name="action_view_market_lines" type="object" string="Voir tous les détails d'achats" class="btn btn-outline-primary mb-3"/>
+                            </div>
+                        </page>
+
+                    </notebook>
+
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <record id="view_market_article_search" model="ir.ui.view">
+        <field name="name">lagunes.market.article.search</field>
+        <field name="model">lagunes.market.article</field>
+        <field name="arch" type="xml">
+            <search string="Recherche articles">
+                <field name="name" string="Article"/>
+                <field name="category_id"/>
+                <filter name="active" string="Actifs" domain="[('active', '=', True)]"/>
+                <filter name="archived" string="Archivés" domain="[('active', '=', False)]"/>
+                <group expand="0" string="Regrouper par">
+                    <filter name="group_category" string="Catégorie"
+                            context="{'group_by': 'category_id'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <record id="action_market_article" model="ir.actions.act_window">
+        <field name="name">Articles</field>
+        <field name="res_model">lagunes.market.article</field>
+        <field name="view_mode">list,form</field>
+        <field name="search_view_id" ref="view_market_article_search"/>
+        <field name="context">{'search_default_active': 1}</field>
+    </record>
+</odoo>

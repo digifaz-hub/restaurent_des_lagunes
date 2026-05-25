@@ -1,0 +1,281 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <!-- DEPRECATED : remplacé par action_report_traiteur_proposition_menu (modèle lagunes.traiteur.proposition).
+         Conservé sans binding pour ne pas casser les références historiques. -->
+    <record id="action_report_traiteur_menu_proposition" model="ir.actions.report">
+        <field name="name">Proposition de Menu (legacy)</field>
+        <field name="model">lagunes.traiteur.demande</field>
+        <field name="report_type">qweb-pdf</field>
+        <field name="report_name">lagunes_traiteur.report_menu_proposition_template</field>
+        <field name="report_file">lagunes_traiteur.report_menu_proposition_template</field>
+        <field name="print_report_name">'Proposition Menu - %s' % (object.reference)</field>
+        <field name="binding_model_id" eval="False"/>
+        <field name="binding_type">report</field>
+    </record>
+
+    <!-- Template du rapport Proposition de Menu -->
+    <template id="report_menu_proposition_template">
+        <t t-call="web.html_container">
+            <t t-foreach="docs" t-as="demande">
+                <t t-foreach="demande.jour_ids" t-as="jour">
+                    <t t-if="jour.prestation_ids">
+                        <div class="page" style="font-family: 'Helvetica', 'Arial', sans-serif; color: #333; font-size: 11px; page-break-after: always;">
+                            <style>
+                                .menu-table {
+                                    border-collapse: collapse;
+                                    width: 100%;
+                                    margin-bottom: 20px;
+                                    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+                                }
+                                .menu-table th, .menu-table td {
+                                    border: 1px solid #333;
+                                    padding: 8px;
+                                    vertical-align: top;
+                                }
+                                .blue-header {
+                                    background-color: #16166d;
+                                    color: white;
+                                    writing-mode: vertical-rl;
+                                    text-orientation: mixed;
+                                    text-align: center;
+                                    font-weight: bold;
+                                    font-size: 12px;
+                                    width: 40px;
+                                    white-space: nowrap;
+                                }
+                                .section-header {
+                                    background-color: #f8f9fa;
+                                    font-weight: bold;
+                                    text-align: center;
+                                    font-size: 11px;
+                                }
+                                .plat-list {
+                                    margin: 0;
+                                    padding-left: 15px;
+                                }
+                                .plat-list li {
+                                    margin-bottom: 3px;
+                                    line-height: 1.3;
+                                }
+                                .prestation-table {
+                                    width: 100%;
+                                    margin-bottom: 20px;
+                                }
+                                .clear-both {
+                                    clear: both;
+                                }
+                                @page {
+                                    size: A4 portrait;
+                                    margin: 1cm;
+                                }
+                            </style>
+
+                            <!-- HEADER -->
+                            <div style="text-align: center; margin-bottom: 20px; border-bottom: 2px solid #16166d; padding-bottom: 10px;">
+                                <h2 style="color: #16166d; margin: 0;">PROPOSITION DE MENU</h2>
+                                <h3 style="color: #666; margin: 5px 0;">
+                                    <span t-field="jour.jour_semaine"/> <span t-field="jour.date" t-options='{"widget": "date", "format": "dd/MM/yyyy"}'/>
+                                    <span style="font-weight: normal;">(</span><span t-field="jour.total_personnes"/><span style="font-weight: normal;"> personnes)</span>
+                                </h3>
+                            </div>
+
+                            <!-- TRAITEMENT DYNAMIQUE DES PRESTATIONS -->
+                            <t t-set="prestations_by_type" t-value="{}"/>
+                            <t t-foreach="jour.prestation_ids" t-as="prestation">
+                                <t t-set="type_name" t-value="prestation.type_prestation_id.name"/>
+                                <t t-if="not prestations_by_type.get(type_name)">
+                                    <t t-set="prestations_by_type" t-value="dict(prestations_by_type, **{type_name: []})"/>
+                                </t>
+                                <t t-set="prestations_by_type" t-value="dict(prestations_by_type, **{type_name: prestations_by_type[type_name] + [prestation]})"/>
+                            </t>
+
+                            <!-- AFFICHAGE DES PRESTATIONS PAR TYPE -->
+                            <t t-foreach="prestations_by_type" t-as="type_entry">
+                                <t t-set="type_name" t-value="type_entry[0]"/>
+                                <t t-set="prestations" t-value="type_entry[1]"/>
+                                
+                                <!-- SI C'EST UN REPAS COMPLET (contient des plats principaux) -->
+                                <t t-set="has_main_course" t-value="False"/>
+                                <t t-foreach="prestations" t-as="prestation">
+                                    <t t-foreach="prestation.plat_line_ids" t-as="line">
+                                        <t t-if="line.plat_type_id and line.plat_type_id.name == 'Plat de r&#233;sistance'">
+                                            <t t-set="has_main_course" t-value="True"/>
+                                        </t>
+                                    </t>
+                                </t>
+                                
+                                <t t-if="has_main_course">
+                                    <!-- TABLEAU REPAS COMPLET -->
+                                    <div class="prestation-table">
+                                        <table class="menu-table">
+                                            <tr>
+                                                <td class="blue-header" rowspan="2">
+                                                    <div style="transform: rotate(-90deg); transform-origin: center;">
+                                                        <t t-esc="type_name.upper()"/><br/>
+                                                        <t t-foreach="prestations" t-as="p" t-if="p.heure_prestation">
+                                                            <t t-esc="('%02d'%int(p.heure_prestation)) + 'h' + ('%02d'%int((p.heure_prestation % 1) * 60)) if p.heure_prestation % 1 else ('%02d'%int(p.heure_prestation)) + 'h'"/><br/>
+                                                        </t>
+                                                        (<t t-esc="prestations[0].nb_personnes"/> PERS.)
+                                                    </div>
+                                                </td>
+                                                <td class="section-header">ENTR&#201;ES</td>
+                                                <td class="section-header">PLATS DE R&#201;SISTANCE</td>
+                                                <td class="section-header">ACCOMPAGNEMENTS</td>
+                                                <td class="section-header">DESSERTS</td>
+                                            </tr>
+                                            <tr>
+                                                <!-- ENTRÉES -->
+                                                <td>
+                                                    <ul class="plat-list">
+                                                        <t t-set="entrees" t-value="[]"/>
+                                                        <t t-foreach="prestations" t-as="prestation">
+                                                            <t t-foreach="prestation.plat_line_ids" t-as="line">
+                                                                <t t-if="line.plat_type_id and line.plat_type_id.name == 'Entr&#233;e'">
+                                                                    <t t-set="entrees" t-value="entrees + [line.description]"/>
+                                                                </t>
+                                                            </t>
+                                                        </t>
+                                                        <t t-foreach="entrees" t-as="entree">
+                                                            <li><t t-esc="entree"/></li>
+                                                        </t>
+                                                        <t t-if="not entrees">
+                                                            <li style="color: #999;">Aucune entrée</li>
+                                                        </t>
+                                                    </ul>
+                                                </td>
+                                                <!-- PLATS PRINCIPAUX -->
+                                                <td>
+                                                    <ul class="plat-list">
+                                                        <t t-set="plats_principaux" t-value="[]"/>
+                                                        <t t-foreach="prestations" t-as="prestation">
+                                                            <t t-foreach="prestation.plat_line_ids" t-as="line">
+                                                                <t t-if="line.plat_id and line.plat_type_id and line.plat_type_id.name == 'Plat de r&#233;sistance'">
+                                                                    <t t-set="plats_principaux" t-value="plats_principaux + [line.plat_id.name]"/>
+                                                                </t>
+                                                                <t t-if="not line.plat_id and line.plat_type_id and line.plat_type_id.name == 'Plat de r&#233;sistance'">
+                                                                    <t t-set="plats_principaux" t-value="plats_principaux + [line.description]"/>
+                                                                </t>
+                                                            </t>
+                                                        </t>
+                                                        <t t-foreach="plats_principaux" t-as="plat">
+                                                            <li><t t-esc="plat"/></li>
+                                                        </t>
+                                                        <t t-if="not plats_principaux">
+                                                            <li style="color: #999;">Aucun plat principal</li>
+                                                        </t>
+                                                    </ul>
+                                                </td>
+                                                <!-- ACCOMPAGNEMENTS -->
+                                                <td>
+                                                    <ul class="plat-list">
+                                                        <t t-set="accompagnements" t-value="[]"/>
+                                                        <t t-foreach="prestations" t-as="prestation">
+                                                            <t t-foreach="prestation.plat_line_ids" t-as="line">
+                                                                <!-- Accompagnement explicite via le champ accompagnement_id -->
+                                                                <t t-if="line.accompagnement_id">
+                                                                    <t t-set="accompagnements" t-value="accompagnements + [line.accompagnement_id.name]"/>
+                                                                </t>
+                                                                <!-- Accompagnement via le type de plat -->
+                                                                <t t-if="not line.accompagnement_id and line.plat_type_id and 'accompagnement' in line.plat_type_id.name.lower()">
+                                                                    <t t-set="accompagnements" t-value="accompagnements + [line.description]"/>
+                                                                </t>
+                                                                <!-- Détection par mot-clé si non catégorisé -->
+                                                                <t t-if="not line.accompagnement_id and not line.plat_type_id and ('riz' in line.description.lower() or 'atti&#233;k&#233;' in line.description.lower() or 'l&#233;gume' in line.description.lower() or 'saut&#233;' in line.description.lower())">
+                                                                    <t t-set="accompagnements" t-value="accompagnements + [line.description]"/>
+                                                                </t>
+                                                            </t>
+                                                        </t>
+                                                        <t t-foreach="accompagnements" t-as="accomp">
+                                                            <li><t t-esc="accomp"/></li>
+                                                        </t>
+                                                        <t t-if="not accompagnements">
+                                                            <li style="color: #999;">Aucun accompagnement</li>
+                                                        </t>
+                                                    </ul>
+                                                </td>
+                                                <!-- DESSERTS -->
+                                                <td>
+                                                    <ul class="plat-list">
+                                                        <t t-set="desserts" t-value="[]"/>
+                                                        <t t-foreach="prestations" t-as="prestation">
+                                                            <t t-foreach="prestation.plat_line_ids" t-as="line">
+                                                                <t t-if="line.plat_type_id and line.plat_type_id.name == 'Dessert'">
+                                                                    <t t-set="desserts" t-value="desserts + [line.description]"/>
+                                                                </t>
+                                                            </t>
+                                                        </t>
+                                                        <t t-foreach="desserts" t-as="dessert">
+                                                            <li><t t-esc="dessert"/></li>
+                                                        </t>
+                                                        <t t-if="not desserts">
+                                                            <li style="color: #999;">Aucun dessert</li>
+                                                        </t>
+                                                    </ul>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </t>
+                                
+                                <!-- SINON C'EST UNE COLLATION/PAUSE -->
+                                <t t-if="not has_main_course">
+                                    <!-- TABLEAU COLLATION/PAUSE -->
+                                    <div class="prestation-table">
+                                        <table class="menu-table">
+                                            <tr>
+                                                <td class="blue-header">
+                                                    <div style="transform: rotate(-90deg); transform-origin: center;">
+                                                        <t t-esc="type_name.upper()"/><br/>
+                                                        <t t-foreach="prestations" t-as="p" t-if="p.heure_prestation">
+                                                            <t t-esc="('%02d'%int(p.heure_prestation)) + 'h' + ('%02d'%int((p.heure_prestation % 1) * 60)) if p.heure_prestation % 1 else ('%02d'%int(p.heure_prestation)) + 'h'"/><br/>
+                                                        </t>
+                                                        (<t t-esc="prestations[0].nb_personnes"/> PERS.)
+                                                    </div>
+                                                </td>
+                                                <td class="section-header"><t t-esc="type_name.upper()"/></td>
+                                            </tr>
+                                            <tr>
+                                                <td colspan="2">
+                                                    <ul class="plat-list">
+                                                        <t t-set="collation_items" t-value="[]"/>
+                                                        <t t-foreach="prestations" t-as="prestation">
+                                                            <t t-foreach="prestation.plat_line_ids" t-as="line">
+                                                                <t t-set="collation_items" t-value="collation_items + [line.description]"/>
+                                                            </t>
+                                                        </t>
+                                                        <t t-foreach="collation_items" t-as="item">
+                                                            <li><t t-esc="item"/></li>
+                                                        </t>
+                                                        <t t-if="not collation_items">
+                                                            <t t-if="'café' in type_name.lower() or 'pause' in type_name.lower()">
+                                                                <li>Assortiment de mini viennoiseries<br/>(croissant, pain au chocolat, pain aux raisins)</li>
+                                                                <li>Boissons chaudes<br/>(café, thé, chocolat chaud)</li>
+                                                                <li>Boissons fraîches<br/>(jus de fruits)</li>
+                                                            </t>
+                                                            <t t-if="'collation' in type_name.lower() or 'goûter' in type_name.lower()">
+                                                                <li>Fruits frais de saison<br/>(mangue, ananas, etc.)</li>
+                                                                <li>Petits fours salés<br/>(mini burger, brochettes, etc.)</li>
+                                                                <li>Boissons fraîches<br/>(eau, bissap, jus de gingembre)</li>
+                                                            </t>
+                                                        </t>
+                                                    </ul>
+                                                </td>
+                                            </tr>
+                                        </table>
+                                    </div>
+                                </t>
+                            </t>
+
+                            <div class="clear-both"></div>
+
+                            <!-- FOOTER -->
+                            <div style="text-align: center; margin-top: 30px; font-size: 10px; color: #666;">
+                                <strong>Restaurant des Lagunes</strong> - Proposition de menu g&#233;n&#233;r&#233;e le <t t-esc="datetime.datetime.now().strftime('%d/%m/%Y')"/>
+                            </div>
+                        </div>
+                    </t>
+                </t>
+            </t>
+        </t>
+    </template>
+</odoo>

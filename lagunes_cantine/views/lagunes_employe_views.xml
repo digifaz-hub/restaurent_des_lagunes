@@ -1,0 +1,283 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <!-- Vue liste des employés - DESIGN MODERNE -->
+    <record id="view_lagunes_employe_list" model="ir.ui.view">
+        <field name="name">lagunes.employe.list</field>
+        <field name="model">lagunes.employe</field>
+        <field name="arch" type="xml">
+            <list string="Employés"
+                  decoration-muted="not active"
+                  multi_edit="1"
+                  create="1" edit="1" delete="1" class="o_lagunes_view">
+                <!-- Entreprise -->
+                <field name="entreprise_id" width="180" string="Entreprise"/>
+                
+                <!-- Identité -->
+                <field name="prenom" width="130" string="Prénom"/>
+                <field name="nom" width="130" string="Nom"/>
+                <field name="email" width="200" string="Email"/>
+                
+                <!-- Droits -->
+                <field name="peut_commander_pour_autres" widget="boolean" optional="show" width="120" string="Cmd pour autres"/>
+                <field name="nb_personnes_autorisees" optional="hide" width="100" string="Nb pers."/>
+                <field name="max_commandes_par_jour" optional="show" width="100" string="Max/jour"/>
+                
+                <!-- Dates et statut -->
+                <field name="date_inscription" widget="date" width="130" string="Inscription"/>
+                <field name="active" widget="boolean_toggle" width="80" string="Actif"/>
+            </list>
+        </field>
+    </record>
+
+    <!-- Vue formulaire des employés - DESIGN MODERNE -->
+    <record id="view_lagunes_employe_form" model="ir.ui.view">
+        <field name="name">lagunes.employe.form</field>
+        <field name="model">lagunes.employe</field>
+        <field name="arch" type="xml">
+            <form string="Employé" class="o_lagunes_view">
+                <header>
+                    <button name="action_desactiver" type="object"
+                            string="Désactiver" class="btn-warning"
+                            invisible="not active"
+                            confirm="Désactiver cet employé ? Il ne pourra plus se connecter."/>
+                    <button name="action_activer" type="object"
+                            string="Réactiver" class="oe_highlight"
+                            invisible="active"/>
+                </header>
+                <sheet>
+                    <!-- En-tête moderne -->
+                    <div class="oe_title mb-4">
+                        <div class="d-flex align-items-center gap-3">
+                            <div class="lui-card-icon lui-icon-primary" style="width:60px;height:60px;">
+                                <i class="fa fa-user fa-lg" title="Utilisateur"/>
+                            </div>
+                            <div>
+                                <label class="o_form_label" for="display_name_full">
+                                    Employé inscrit
+                                </label>
+                                <h1 class="mb-0">
+                                    <field name="display_name_full" readonly="1" class="fw-bold text-primary"/>
+                                </h1>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="row g-4">
+                        <!-- Informations personnelles -->
+                        <div class="col-md-6">
+                            <div class="card border-0 bg-light h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title mb-3">
+                                        <i class="fa fa-id-card text-primary me-2" title="ID"/>
+                                        Informations personnelles
+                                    </h5>
+                                    <group>
+                                        <field name="prenom" string="Prénom"/>
+                                        <field name="nom" string="Nom"/>
+                                        <field name="email" string="Email"/>
+                                        <field name="active" widget="boolean_toggle" string="Compte actif"/>
+                                    </group>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Rattachement -->
+                        <div class="col-md-6">
+                            <div class="card border-0 bg-light h-100">
+                                <div class="card-body">
+                                    <h5 class="card-title mb-3">
+                                        <i class="fa fa-building text-success me-2" title="Bâtiment"/>
+                                        Rattachement
+                                    </h5>
+                                    <group>
+                                        <field name="entreprise_id" options="{'no_create': True}" string="Entreprise"/>
+                                        <field name="date_inscription" widget="date" readonly="1" string="Date d'inscription"/>
+                                        <div class="alert alert-light border mt-2" invisible="active" role="status">
+                                            <i class="fa fa-exclamation-triangle text-warning me-2" title="Attention"/>
+                                            <strong>Compte désactivé</strong> - L'employé ne peut plus se connecter ni commander
+                                        </div>
+                                    </group>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Droits de commande -->
+                    <div class="mt-4">
+                        <h3 class="o_horizontal_separator">
+                            <i class="fa fa-shopping-cart me-2" title="Panier"/>
+                            Droits de commande
+                        </h3>
+                        <div class="card border-0 bg-light">
+                            <div class="card-body">
+                                <group>
+                                    <field name="peut_commander_pour_autres"
+                                           widget="boolean_toggle"
+                                           string="Peut commander pour d'autres"
+                                           help="Activer pour permettre à cet employé de commander pour d'autres personnes."/>
+                                </group>
+                                
+                                <!-- Message si ne peut pas commander pour autres -->
+                                <div class="alert alert-light border py-3 px-3" colspan="2"
+                                     invisible="peut_commander_pour_autres">
+                                    <i class="fa fa-info-circle text-primary me-2"/>
+                                    Cet employé peut uniquement commander <strong>pour lui-même</strong> 
+                                    (1 commande maximum par jour).
+                                </div>
+                                
+                                <!-- Configuration si peut commander pour autres -->
+                                <div invisible="not peut_commander_pour_autres">
+                                    <group>
+                                        <field name="nb_personnes_autorisees"
+                                               string="Nombre de personnes supplémentaires"
+                                               help="En plus de lui-même. Ex: 2 = il commande pour lui + 2 autres = 3 commandes max/jour."/>
+                                    </group>
+                                    <div class="alert alert-success py-3 px-3 mt-2">
+                                        <i class="fa fa-check-circle text-success me-2"/>
+                                        Cet employé peut commander pour <strong><field name="nb_personnes_autorisees" readonly="1"/> personne(s) supplémentaire(s)</strong>.
+                                        <br/>
+                                        <span class="text-muted">Limite journalière : <strong><field name="max_commandes_par_jour" readonly="1"/> commande(s)</strong></span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Restrictions -->
+                    <div class="mt-4">
+                        <h3 class="o_horizontal_separator">
+                            <i class="fa fa-ban me-2" title="Restrictions"/>
+                            Restrictions spécifiques
+                        </h3>
+                        <div class="alert alert-light border mb-3" role="status">
+                            <i class="fa fa-info-circle text-primary me-2" title="Info"/>
+                            Ces restrictions s'appliquent en complément des règles de l'entreprise. 
+                            Laissez vide pour utiliser les paramètres par défaut de l'entreprise.
+                        </div>
+                        <div class="row g-4">
+                            <div class="col-md-6">
+                                <group string="Types de plats autorisés">
+                                    <field name="plat_type_ids"
+                                           widget="many2many_tags"
+                                           options="{'no_create': True}"
+                                           nolabel="1"
+                                           help="Types de plats autorisés. Si vide, les règles de l'entreprise s'appliquent."/>
+                                </group>
+                            </div>
+                            <div class="col-md-6">
+                                <group string="Catégories de menus autorisées">
+                                    <field name="menu_category_ids"
+                                           widget="many2many_tags"
+                                           options="{'no_create': True}"
+                                           nolabel="1"
+                                           help="Catégories de menus autorisées. Si vide, les règles de l'entreprise s'appliquent."/>
+                                </group>
+                            </div>
+                        </div>
+                    </div>
+                </sheet>
+            </form>
+        </field>
+    </record>
+
+    <!-- Vue recherche des employés - DESIGN MODERNE -->
+    <record id="view_lagunes_employe_search" model="ir.ui.view">
+        <field name="name">lagunes.employe.search</field>
+        <field name="model">lagunes.employe</field>
+        <field name="arch" type="xml">
+            <search string="Rechercher dans les employés">
+                <!-- Champs de recherche -->
+                <field name="nom" string="Nom"/>
+                <field name="prenom" string="Prénom"/>
+                <field name="email" string="Email"/>
+                <field name="entreprise_id" string="Entreprise"/>
+                
+                <!-- ════════════════════════════════════════════════════════════════
+                     FILTRES PAR STATUT
+                ════════════════════════════════════════════════════════════════ -->
+                <filter string="Actifs" name="actifs" domain="[('active', '=', True)]"
+                        help="Employés pouvant se connecter et commander"/>
+                <filter string="Inactifs" name="inactifs" domain="[('active', '=', False)]"
+                        help="Employés dont le compte est désactivé"/>
+                
+                <!-- ════════════════════════════════════════════════════════════════
+                     FILTRES PAR DROITS
+                ════════════════════════════════════════════════════════════════ -->
+                <separator/>
+                <filter string="Peut commander pour autres" name="pour_autres"
+                        domain="[('peut_commander_pour_autres', '=', True)]"
+                        help="Employés habilités à commander pour plusieurs personnes"/>
+                
+                <!-- ════════════════════════════════════════════════════════════════
+                     GROUPEMENTS
+                ════════════════════════════════════════════════════════════════ -->
+                <separator/>
+                <group expand="0" string="Grouper par">
+                    <filter string="Entreprise" name="group_entreprise"
+                            context="{'group_by': 'entreprise_id'}"/>
+                    <filter string="Statut actif" name="group_active"
+                            context="{'group_by': 'active'}"/>
+                </group>
+            </search>
+        </field>
+    </record>
+
+    <!-- Action principale - DESIGN MODERNE -->
+    <record id="action_lagunes_employe" model="ir.actions.act_window">
+        <field name="name">Employés</field>
+        <field name="res_model">lagunes.employe</field>
+        <field name="view_mode">list,form</field>
+        <field name="context">{'search_default_actifs': 1}</field>
+        <field name="help" type="html">
+            <p class="o_view_nocontent_smiling_face">Aucun employé enregistré</p>
+            <div class="p-3 bg-light rounded">
+                <h5 class="mb-3"><i class="fa fa-users text-primary me-2" title="Employés"/>Gérez les employés inscrits</h5>
+                <p>Les employés peuvent s'inscrire automatiquement via le lien d'inscription de leur entreprise, ou être créés manuellement ici.</p>
+                
+                <div class="row g-3 mb-3">
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-start gap-2">
+                            <i class="fa fa-link text-success mt-1" title="Lien"/>
+                            <div>
+                                <strong>Inscription auto</strong>
+                                <p class="small text-muted mb-0">Via le lien entreprise</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-start gap-2">
+                            <i class="fa fa-plus text-info mt-1" title="Plus"/>
+                            <div>
+                                <strong>Création manuelle</strong>
+                                <p class="small text-muted mb-0">Ajoutez un employé ici</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="d-flex align-items-start gap-2">
+                            <i class="fa fa-cog text-warning mt-1" title="Réglages"/>
+                            <div>
+                                <strong>Gestion des droits</strong>
+                                <p class="small text-muted mb-0">Commandes pour autres</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="alert alert-info mb-0 py-2" role="status">
+                    <i class="fa fa-lightbulb text-warning me-2" title="Astuce"/>
+                    <strong>Astuce :</strong> Le lien d'inscription se trouve dans la fiche de l'entreprise cliente
+                </div>
+            </div>
+        </field>
+    </record>
+
+    <!-- Action export employés -->
+    <record id="action_export_employes" model="ir.actions.act_url">
+        <field name="name">Exporter les employés (Excel)</field>
+        <field name="url">/lagunes/export/employes</field>
+        <field name="target">new</field>
+    </record>
+
+</odoo>
